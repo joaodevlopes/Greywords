@@ -1,0 +1,11 @@
+# The site itself (static files from `npm run build`), published as a Cloudflare Worker with assets:
+#   npm run deploy:site   →   https://greywords.greywords.workers.dev
+# The image intermediary is a separate Worker (wrangler.toml, `npm run deploy:images`).
+name = "greywords"
+compatibility_date = "2026-10-01"
+# public address on workers.dev; no extra preview addresses per version
+workers_dev = true
+preview_urls = false
+
+[assets]
+directory = "./dist"

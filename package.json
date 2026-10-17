@@ -10,7 +10,9 @@
     "test": "node --test \"src/**/*.test.js\" \"server/**/*.test.js\" \"worker/**/*.test.js\" \"catalog/**/*.test.mjs\"",
     "check:ui": "node node_modules/beds/scripts/check-consumer.mjs src",
     "catalog": "node catalog/build.mjs",
-    "catalog:check": "node catalog/check.mjs"
+    "catalog:check": "node catalog/check.mjs",
+    "deploy:images": "npx wrangler deploy",
+    "deploy:site": "npm run build && npx wrangler deploy --config wrangler.site.toml"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",

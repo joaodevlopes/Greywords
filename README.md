@@ -64,6 +64,15 @@ Passo a passo em [catalog/HOW-TO.md](catalog/HOW-TO.md).
 - Frases de exemplo: [Tatoeba](https://tatoeba.org), licenças CC BY 2.0 FR e CC0, com o autor e o link de cada frase
 - Lista de palavras comuns: [New General Service List](https://www.newgeneralservicelist.com) (Browne, Culligan e Phillips), CC BY-SA 4.0, em `catalog/ngsl/`
 
+## No ar
+
+https://greywords.greywords.workers.dev. Hospedado na conta grátis do Cloudflare: o site é um Worker só com arquivos estáticos (`wrangler.site.toml`), e o intermediário de imagens é outro Worker (`wrangler.toml`).
+
+```bash
+npm run deploy:site     # build + publicar o site
+npm run deploy:images   # publicar o intermediário (a chave fica em: npx wrangler secret put UNSPLASH_ACCESS_KEY)
+```
+
 ## Rodar
 
 ```bash

@@ -58,7 +58,8 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `scripts/app-audit.mjs` | Auditoria do app com dados de exemplo (contraste por aba, transição, métricas) em Edge headless |
 | `scripts/edge-check.mjs` | Confere a página em Edge headless via CDP (`reduced`, `mobile`, `hover`, `SHOT=`); use quando o painel do navegador estiver oculto |
 | `server/images.js` | Intermediário de imagens (Unsplash): busca, crédito com `utm`, registro de download; usado pelo plugin do Vite (`/api/images` no `npm run dev`) e pelo Worker |
-| `worker/` + `wrangler.toml` | Worker do Cloudflare que publica o intermediário (cache de 24 h, CORS) |
+| `worker/` + `wrangler.toml` | Worker do Cloudflare que publica o intermediário (`greywords-images`, CORS só para o site; o cache de 24 h não vale em workers.dev) · `npm run deploy:images` |
+| `wrangler.site.toml` + `.env.production` | Site publicado como Worker com arquivos (`dist`) em https://greywords.greywords.workers.dev; `VITE_IMAGES_API` aponta para o intermediário · `npm run deploy:site` |
 | `src/brand/palette.css` | Tokens `--gw-*` da paleta (claro/escuro); `contrast.js` + teste conferem AA |
 | `src/App.jsx` | Shell do app: abas Busca / Palavras / Revisão / Vídeos / Progresso, estado e persistência |
 | `src/components/Search.jsx` | Busca: imagens com contexto (espera a definição até 2 s), definição + tradução, escolha de até 3 imagens, "Refinar imagens", "Esconder" imagem, frases de exemplo (no painel; palavra abstrata: no lugar da grade, com "Ver imagens mesmo assim"), salvar com até 2 frases |

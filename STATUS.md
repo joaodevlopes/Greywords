@@ -35,16 +35,16 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 ## Onde paramos (próximos passos, em ordem)
 
-Atualizado em 2026-10-17, depois das specs 004 e 005.
+Atualizado em 2026-10-17, depois da publicação do site (https://greywords.greywords.workers.dev).
 
-1. **Publicação do site, a próxima** (ainda não decidido onde):
-   - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);
-   - pôr o endereço do Worker no build (`VITE_IMAGES_API`) e em `ALLOWED_ORIGINS`;
+1. **Depois da publicação, a próxima:**
+   - **Cache das buscas no Workers KV** (grátis): a Cache API não funciona em `*.workers.dev`, então hoje cada busca no site gasta 1 das 50 por hora do Unsplash;
    - pedir o modo produção do Unsplash (grátis, cerca de 5.000 buscas por hora), com o endereço do site e capturas do crédito;
-   - subir o repositório no GitHub.
+   - subir o repositório no GitHub (e pôr o link do `CREDITS.md` no rodapé).
 2. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
 
 **Feito recentemente:**
+- **Site publicado** em https://greywords.greywords.workers.dev (Worker com arquivos estáticos) e intermediário de imagens em `https://greywords-images.greywords.workers.dev`, na conta Cloudflare do usuário. Publicar de novo: `npm run deploy:site` e `npm run deploy:images`.
 - **Spec 005 implementada:** etapa B no app (paleta, abas, métricas, confete, escolha de imagem com mola, esqueleto com brilho e cartão que vira), verificada em claro, escuro, movimento reduzido e 375 px. JS 175,7 KB gzip.
 - **Spec 004 implementada:** frases reais do Tatoeba na busca (no lugar das imagens nas palavras abstratas), até 2 salvas com a palavra, no dicionário e na revisão com lacuna; exemplos do dicionário de reserva. Landing com "8 serviços".
 - **Spec 003 implementada:** imagens do Unsplash por um intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), com crédito, registro de uso e Openverse/Wikimedia de reserva; busca com contexto, "Refinar" e "Esconder". **Medição: 82/180 (45,6%) → 173/180 (96,1%), 0 impróprias.**
@@ -57,7 +57,7 @@ Atualizado em 2026-10-17, depois das specs 004 e 005.
 | [000-mvp](specs/000-mvp/requirements.md) | Busca por imagem, dicionário, revisão SM-2, landing | implementado |
 | [001-calendario-meta](specs/001-calendario-meta/requirements.md) | Aba Progresso: meta semanal, check-in, calendário, sequência | implementado |
 | [002-videos-nicho](specs/002-videos-nicho/requirements.md) | Aba Vídeos: talks do TED por nicho e nível, catálogo gerado offline | T1–T3, T6–T11 feitas; T12 quase toda; **faltam T4 (usuário), T5, T13** |
-| [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); falta só publicar o Worker (T9a) |
+| [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); Worker publicado; falta o cache em KV |
 | [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | **implementado** (2026-10-17) |
 | [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | **implementado** (2026-10-17) |
 
@@ -81,7 +81,8 @@ Atualizado em 2026-10-17, depois das specs 004 e 005.
   - **Cota do Unsplash:** o modo demo dá **50 buscas por hora para o app inteiro**. O modo produção é **grátis** (cerca de 5.000 por hora) e se pede no painel depois de publicar o site.
   - Quando a cota acaba, o app cai no Openverse sem erro.
   - **Cuidado nos testes:** cada busca real gasta cota; o intermediário do dev guarda buscas em memória por 24 h.
-- **Intermediário de imagens** (`server/images.js`): a chave nunca vai para o navegador. No dev é um plugin do Vite em `/api/images`; em produção, um Worker do Cloudflare (`worker/`, `wrangler.toml`), ainda **não publicado**. O app usa `VITE_IMAGES_API` no build; sem ele, só o Openverse.
+- **Intermediário de imagens** (`server/images.js`): a chave nunca vai para o navegador. No dev é um plugin do Vite em `/api/images`; em produção, o Worker `greywords-images` (`worker/`, `wrangler.toml`), publicado. O app usa `VITE_IMAGES_API` no build (vem do `.env.production`, que não é segredo); sem ele, só o Openverse.
+- **Hospedagem:** Cloudflare, conta grátis do usuário. O site é um Worker só com arquivos (`wrangler.site.toml`), porque o Pages agora faz parte dos Workers. Endereço: https://greywords.greywords.workers.dev.
 - **Openverse sem chave** (agora reserva): 20 requisições/min e 200/dia por IP; até 2 consultas por busca, só fotos.
 - **Tatoeba** (spec 004): a API `api.tatoeba.org/unstable` funciona no navegador, sem chave; usar `trans:lang=por&showtrans=matching` (~9 KB); `showtrans=all` pesa ~105 KB.
 - **Medição das imagens** (spec 003): "antes" (Openverse + Wikimedia) = **82/180 certeiras (45,6%)**; "depois" (Unsplash) = **173/180 (96,1%)**; 0 impróprias nas duas. O usuário usa o botão "Imprópria" para marcar as erradas: confira as imagens antes de registrar.
@@ -112,6 +113,8 @@ Atualizado em 2026-10-17, depois das specs 004 e 005.
 - **Tatoeba lento:** em 2026-10-17 chegou a levar de 11 a 25 s por chamada (mais tarde, de 1 a 3 s). O app usa 6 s de limite e cai nos exemplos do dicionário. O teste com a API real só roda com `LIVE_APIS=1`.
 - **Marcação de imagens pelo usuário:** ele usa o botão "Imprópria" para as erradas. Antes de registrar "impróprias", olhe as imagens.
 - O **Dialog do BEDS ignora cliques enquanto está abrindo** (`data-phase` diferente de `open`): o clique cai no fundo e fecha o diálogo. Nos roteiros headless, espere cerca de 1,5 s depois de abrir.
+- **`wrangler pages project create`** agora cria um Worker e, se houver `wrangler.toml` na pasta, publica o código dele (aconteceu com o intermediário). O site usa `wrangler deploy --config wrangler.site.toml`.
+- **Cache API não funciona em `*.workers.dev`** (só com domínio próprio): o `caches.default` do Worker de imagens não guarda nada lá.
 - O `localStorage` é separado por porta: dados de teste em `:5180` não aparecem em `:5173`.
 
 ## Mapa rápido de arquivos novos (o mapa completo está no CLAUDE.md)

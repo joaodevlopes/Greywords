@@ -1,6 +1,6 @@
 # 003 — Imagens mais certeiras na busca: tarefas
 
-Status: implementado (2026-10-17), exceto a T9a (publicar o Worker), que fica para a publicação do site
+Status: implementado (2026-10-17); Worker publicado, falta o cache funcionar em `workers.dev` (ver T9a)
 
 Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run build` passando; as de interface também com `npm run check:ui` (0 violações).
 A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação ser justa (R4.3).
@@ -96,10 +96,21 @@ A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação s
   - Sem `VITE_IMAGES_API` no build de produção, o app vai direto ao Openverse (teste). No dev o intermediário é `/api/images`.
   - `imageCredit` (2 testes) e 5 testes do caminho Unsplash/reserva/registro de uso; 179 testes no total.
 
-- [ ] **T9a — Publicar o intermediário**:
+- [x] **T9a — Publicar o intermediário**:
   - **O usuário:** cria a conta grátis no Cloudflare, roda `npx wrangler login` e guarda a chave como segredo (`npx wrangler secret put UNSPLASH_ACCESS_KEY`).
   - **Claude:** faz o deploy, coloca o endereço no build (`VITE_IMAGES_API`) e testa.
   *Pronto quando:* o build de produção busca no Unsplash pelo Worker; com o Worker fora do ar (simulado), o site usa o Openverse; repetir a mesma busca não gasta cota (cache). — R1.5, R1.7
+  *Feito (2026-10-17):*
+  - **Conta e segredo:** o usuário criou a conta, fez o `wrangler login`, guardou a chave como segredo e registrou o subdomínio `greywords.workers.dev`.
+  - **Worker** `greywords-images` em `https://greywords-images.greywords.workers.dev`, com `ALLOWED_ORIGINS` = endereço do site, `workers_dev = true` e `preview_urls = false`.
+  - **Site** em https://greywords.greywords.workers.dev: Worker só com arquivos (`wrangler.site.toml`, `[assets]` de `dist`), e `VITE_IMAGES_API` vem do `.env.production`. O Pages agora faz parte dos Workers: o `wrangler pages project create` publicou, por engano, o código do intermediário como Worker `greywords`, e o deploy do site o substituiu.
+  - Comandos: `npm run deploy:images` e `npm run deploy:site` (que faz o build e publica).
+  - **Conferido:**
+    - `curl` no Worker: 200 com 3 fotos do Unsplash e crédito. `Access-Control-Allow-Origin` sempre é o site, então outra origem não lê pelo navegador.
+    - O `dist` não tem a chave nem a página de prévia do dev.
+    - No site publicado (Edge headless), a landing carrega as capturas e mostra "8 serviços". "river" traz 12 fotos de `images.unsplash.com` com crédito ao fotógrafo, a definição e frases do Tatoeba com autor. Sem erros no console.
+    - Com o Worker bloqueado, o site usa a reserva: 12 imagens e a legenda do Openverse/Wikimedia.
+  - **Pendente: o cache não vale em `workers.dev`.** Duas buscas iguais não vieram do cache (as respostas têm horários diferentes). Pela documentação do Cloudflare, a Cache API não tem efeito em `*.workers.dev`, só em domínio próprio. Enquanto isso, cada busca gasta 1 das 50 por hora. **Correção proposta:** guardar as buscas no Workers KV (grátis: 100 mil leituras e mil gravações por dia) por 24 h.
 
 - [x] **T10a — Medição do "depois" (Unsplash)**: variante `unsplash` em `bench/images/run.mjs`, com página de 20 palavras × 9 fotos no formato do "antes" → **o usuário marca as certeiras** → `medicao.md` com antes × depois por palavra e no total.
   *Pronto quando:* o total melhorou em relação ao "antes" (82/180) e nenhuma imagem imprópria apareceu; o número entra no `medicao.md`. — R4.3, R4.4

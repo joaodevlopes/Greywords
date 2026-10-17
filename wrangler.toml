@@ -3,7 +3,10 @@
 name = "greywords-images"
 main = "worker/index.js"
 compatibility_date = "2026-10-01"
+# public address on workers.dev; no extra preview addresses per version
+workers_dev = true
+preview_urls = false
 
 [vars]
-# Comma-separated sites allowed to read the API from the browser (set when the site has an address).
-ALLOWED_ORIGINS = ""
+# Comma-separated sites allowed to read the API from the browser (the published site, wrangler.site.toml).
+ALLOWED_ORIGINS = "https://greywords.greywords.workers.dev"
