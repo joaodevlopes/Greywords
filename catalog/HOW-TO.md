@@ -1,5 +1,17 @@
 # Como adicionar um talk ao catálogo (curadoria manual)
 
+## Jeito rápido: a página de curadoria (desde 2026-10-17)
+
+Os 24 talks (3 por nicho) já estão no `sources.json`, com o vídeo conferido no canal oficial do TED. Falta só a transcrição e a duração de cada um:
+
+1. Rode `npm run dev` e abra `http://localhost:5173/#/dev/curadoria`.
+2. Em cada talk: "Abrir no TED" (ou "Procurar no TED", se o link der erro). Confira o endereço, copie a transcrição inteira, cole na página, confira a duração e clique em "Salvar".
+3. Quando os 24 estiverem salvos, rode `npm run catalog:check` e `npm run catalog` (ou peça no chat).
+
+A página grava `catalog/transcripts/<slug>.txt` (fora do git) e a duração no `sources.json`, pelo servidor de desenvolvimento. Ela não acessa o TED.com: os links só abrem o site no seu navegador.
+
+## Jeito manual (para acrescentar talks fora da lista)
+
 Os Termos de Uso do TED.com proíbem coletar conteúdo com programas automáticos. Por isso **você** copia os dados à mão, no navegador, e o script só lê os arquivos locais. Ver `specs/002-videos-nicho/design.md`, "Achados da T1".
 
 ## Passo a passo (uns 3 minutos por talk)

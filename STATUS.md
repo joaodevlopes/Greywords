@@ -12,7 +12,7 @@ App gratuito (React + Vite, dados só no navegador; um intermediário pequeno gu
 cd C:\Users\joaog\OneDrive\Documentos\englishPlataform
 npm install          # se faltar node_modules
 npm run dev          # http://localhost:5173   (#/ landing · #/app app)
-npm test             # 221 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
+npm test             # 226 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
 npm run build
 npm run check:ui     # contrato do BEDS: precisa dar 0 violations
 ```
@@ -40,7 +40,7 @@ Atualizado em 2026-10-17, depois da publicação do site (https://greywords.grey
 1. **Depois da publicação, a próxima:**
    - **modo produção do Unsplash: pedido enviado em 2026-10-17**; a análise leva de 5 a 10 dias úteis, e a resposta chega por e-mail. Aprovado, a mesma chave passa a 1.000 por hora, sem mudar código. Se pedirem ajustes, o texto e as capturas estão em `unsplash-pedido/` (fora do git);
    - subir o repositório no GitHub (e pôr o link do `CREDITS.md` no rodapé).
-2. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
+2. **Spec 002 (vídeos), curadoria simplificada:** os 24 talks (3 por nicho) já estão no `catalog/sources.json`, com o vídeo conferido. **Falta o usuário colar as transcrições** na página `#/dev/curadoria` (`npm run dev`), cerca de 1 min por talk. Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí", publicar o site de novo e verificar com dados reais (T13).
 
 **Feito recentemente:**
 - **Site publicado** em https://greywords.greywords.workers.dev (Worker com arquivos estáticos) e intermediário de imagens em `https://greywords-images.greywords.workers.dev`, na conta Cloudflare do usuário. Publicar de novo: `npm run deploy:site` e `npm run deploy:images`.

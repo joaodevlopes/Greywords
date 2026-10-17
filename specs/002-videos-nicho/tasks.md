@@ -17,8 +17,22 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
 - [x] **T3 — Leitura das fontes locais**: `catalog/sources.json` (formato validado) e `catalog/transcripts/<tedSlug>.txt` (no `.gitignore`); limpeza de marcações como "(Laughter)" e "(Applause)"; conferência do `youtubeId` pelo oEmbed do YouTube (canal "TED"); `catalog/HOW-TO.md` com o passo a passo da curadoria.
   *Pronto quando:* com 2 talks de exemplo, entradas incompletas, transcrição faltando e vídeo de outro canal geram erros claros; o script não faz nenhuma requisição ao TED.com. — R2.2, R7.4
 
-- [ ] **T4 — Curadoria (feita por você, com o HOW-TO)**: escolher cerca de 5 talks por nicho nos 8 nichos, preencher `sources.json` e colar cada transcrição. Claude pode sugerir talks por nicho, mas não acessa o TED.
-  *Pronto quando:* a validação da T3 passa para todas as entradas; nichos com menos talks ficam registrados aqui. — R1.2, R2.2, D7
+- [ ] **T4 — Curadoria simplificada** (reescrita e aprovada em 2026-10-17; antes eram ~5 talks por nicho, com 6 campos preenchidos à mão, cerca de 2 h):
+  - **Claude:**
+    - escolhe **3 talks por nicho (24)**;
+    - acha o vídeo de cada um no canal oficial do TED no YouTube, por buscador, e confere pelo oEmbed público. Nenhum acesso ao TED.com por script;
+    - preenche o `sources.json` com slug do TED, título, palestrante, `youtubeId` e nichos;
+    - cria a página de curadoria só no dev (`#/dev/curadoria`): lista dos talks, "Abrir no TED" no navegador do usuário, campo para colar a transcrição, duração sugerida pelos horários da transcrição (editável) e "Salvar", que grava `catalog/transcripts/<slug>.txt` e a duração no `sources.json` por um endpoint do servidor de desenvolvimento.
+  - **Usuário:** para cada talk, abre no TED, copia a transcrição, cola e salva (cerca de 1 min por talk). Dá para fazer em partes.
+  *Pronto quando:* a validação da T3 (`npm run catalog:check`) passa para todas as entradas; talks trocados ou nichos com menos de 3 ficam registrados aqui. — R1.2, R2.2, D7
+  *Parte do Claude feita (2026-10-17):*
+  - **24 talks no `sources.json`**, 3 por nicho. Cada vídeo foi achado por buscador e conferido pelo oEmbed (`author_name` = "TED").
+    - Trocado: "Kenneth Cukier — Big data is better data" só existe no canal "ASEGA Legal"; entrou "Dan Pink — The puzzle of motivation" (`rrkrvAUbU9Y`).
+    - Em vários talks, o primeiro resultado da busca era um reenvio de outro canal e foi descartado pelo oEmbed.
+  - **Slugs do TED:** escritos no formato que o TED usa (palestrante + título), sem conferir no TED.com. O do J.J. Abrams (`j_j_abrams_mystery_box`) apareceu num resultado de busca. A página mostra o link para o usuário conferir, e colar o endereço certo corrige o slug.
+  - **Página `#/dev/curadoria`** (`src/dev/CurationPage.jsx`, só no dev). Lógica em `catalog/curation.mjs` (5 testes): slug pelo link, duração pelos horários da transcrição, validação. O endpoint `/api/curation` fica no `vite.config.js` e só aceita JSON da própria página (outra origem ou `text/plain` dá 403).
+  - **Conferido no Edge headless:** a página lista os 24 talks nos 8 nichos, sem rolagem lateral em 375 px. Colar uma transcrição de teste sugeriu a duração (16:55) e salvar gravou o arquivo e a duração. O teste foi desfeito.
+  - **Falta (usuário):** colar as 24 transcrições. Depois, T5.
 
 - [ ] **T5 — Gerar o catálogo (`catalog/build.mjs`, `npm run catalog`)**: escreve `public/catalog.json` e imprime a distribuição de palavras/min e % pouco comuns; calibrar os cortes de nível.
   *Pronto quando:* JSON com todos os vídeos válidos, sem transcrição, menor que 200 KB; cortes finais e a distribuição anotados neste arquivo; os três níveis aparecem em quantidade razoável. — R3.1, R3.2, R6.1

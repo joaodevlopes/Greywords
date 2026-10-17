@@ -1,13 +1,254 @@
 {
   "niches": [
-    { "id": "tech", "label": "Tecnologia" },
-    { "id": "games", "label": "Games" },
-    { "id": "science", "label": "Ciência" },
-    { "id": "food", "label": "Culinária" },
-    { "id": "travel", "label": "Viagem" },
-    { "id": "sports", "label": "Esportes" },
-    { "id": "film", "label": "Cinema e séries" },
-    { "id": "business", "label": "Negócios e dados" }
+    {
+      "id": "tech",
+      "label": "Tecnologia"
+    },
+    {
+      "id": "games",
+      "label": "Games"
+    },
+    {
+      "id": "science",
+      "label": "Ciência"
+    },
+    {
+      "id": "food",
+      "label": "Culinária"
+    },
+    {
+      "id": "travel",
+      "label": "Viagem"
+    },
+    {
+      "id": "sports",
+      "label": "Esportes"
+    },
+    {
+      "id": "film",
+      "label": "Cinema e séries"
+    },
+    {
+      "id": "business",
+      "label": "Negócios e dados"
+    }
   ],
-  "talks": []
+  "talks": [
+    {
+      "tedSlug": "tim_urban_inside_the_mind_of_a_master_procrastinator",
+      "title": "Inside the mind of a master procrastinator",
+      "speaker": "Tim Urban",
+      "youtubeId": "arj7oStGLkU",
+      "niches": [
+        "tech"
+      ]
+    },
+    {
+      "tedSlug": "fei_fei_li_how_we_re_teaching_computers_to_understand_pictures",
+      "title": "How we're teaching computers to understand pictures",
+      "speaker": "Fei-Fei Li",
+      "youtubeId": "40riCqvRoMs",
+      "niches": [
+        "tech"
+      ]
+    },
+    {
+      "tedSlug": "zeynep_tufekci_we_re_building_a_dystopia_just_to_make_people_click_on_ads",
+      "title": "We're building a dystopia just to make people click on ads",
+      "speaker": "Zeynep Tufekci",
+      "youtubeId": "iFTWM7HV2UI",
+      "niches": [
+        "tech"
+      ]
+    },
+    {
+      "tedSlug": "jane_mcgonigal_gaming_can_make_a_better_world",
+      "title": "Gaming can make a better world",
+      "speaker": "Jane McGonigal",
+      "youtubeId": "dE1DuBesGYM",
+      "niches": [
+        "games"
+      ]
+    },
+    {
+      "tedSlug": "jane_mcgonigal_the_game_that_can_give_you_10_extra_years_of_life",
+      "title": "The game that can give you 10 extra years of life",
+      "speaker": "Jane McGonigal",
+      "youtubeId": "lfBpsV1Hwqs",
+      "niches": [
+        "games"
+      ]
+    },
+    {
+      "tedSlug": "tom_chatfield_7_ways_games_reward_the_brain",
+      "title": "7 ways games reward the brain",
+      "speaker": "Tom Chatfield",
+      "youtubeId": "KyamsZXXF2w",
+      "niches": [
+        "games"
+      ]
+    },
+    {
+      "tedSlug": "sir_ken_robinson_do_schools_kill_creativity",
+      "title": "Do schools kill creativity?",
+      "speaker": "Sir Ken Robinson",
+      "youtubeId": "iG9CE55wbtY",
+      "niches": [
+        "science"
+      ]
+    },
+    {
+      "tedSlug": "amy_cuddy_your_body_language_may_shape_who_you_are",
+      "title": "Your body language may shape who you are",
+      "speaker": "Amy Cuddy",
+      "youtubeId": "Ks-_Mh1QhMc",
+      "niches": [
+        "science"
+      ]
+    },
+    {
+      "tedSlug": "bill_gates_the_next_outbreak_we_re_not_ready",
+      "title": "The next outbreak? We're not ready",
+      "speaker": "Bill Gates",
+      "youtubeId": "6Af6b_wyiwI",
+      "niches": [
+        "science"
+      ]
+    },
+    {
+      "tedSlug": "jamie_oliver_teach_every_child_about_food",
+      "title": "Teach every child about food",
+      "speaker": "Jamie Oliver",
+      "youtubeId": "go_QOzc79Uc",
+      "niches": [
+        "food"
+      ]
+    },
+    {
+      "tedSlug": "dan_barber_how_i_fell_in_love_with_a_fish",
+      "title": "How I fell in love with a fish",
+      "speaker": "Dan Barber",
+      "youtubeId": "4EUAMe2ixCI",
+      "niches": [
+        "food"
+      ]
+    },
+    {
+      "tedSlug": "carolyn_steel_how_food_shapes_our_cities",
+      "title": "How food shapes our cities",
+      "speaker": "Carolyn Steel",
+      "youtubeId": "CLWRclarri0",
+      "niches": [
+        "food"
+      ]
+    },
+    {
+      "tedSlug": "pico_iyer_where_is_home",
+      "title": "Where is home?",
+      "speaker": "Pico Iyer",
+      "youtubeId": "3m6dV7Xo3Vc",
+      "niches": [
+        "travel"
+      ]
+    },
+    {
+      "tedSlug": "taiye_selasi_don_t_ask_where_i_m_from_ask_where_i_m_a_local",
+      "title": "Don't ask where I'm from, ask where I'm a local",
+      "speaker": "Taiye Selasi",
+      "youtubeId": "LYCKzpXEW6E",
+      "niches": [
+        "travel"
+      ]
+    },
+    {
+      "tedSlug": "chimamanda_ngozi_adichie_the_danger_of_a_single_story",
+      "title": "The danger of a single story",
+      "speaker": "Chimamanda Ngozi Adichie",
+      "youtubeId": "D9Ihs241zeg",
+      "niches": [
+        "travel"
+      ]
+    },
+    {
+      "tedSlug": "angela_lee_duckworth_grit_the_power_of_passion_and_perseverance",
+      "title": "Grit: The power of passion and perseverance",
+      "speaker": "Angela Lee Duckworth",
+      "youtubeId": "H14bBuluwB8",
+      "niches": [
+        "sports"
+      ]
+    },
+    {
+      "tedSlug": "wendy_suzuki_the_brain_changing_benefits_of_exercise",
+      "title": "The brain-changing benefits of exercise",
+      "speaker": "Wendy Suzuki",
+      "youtubeId": "BHY0FxzoKZE",
+      "niches": [
+        "sports"
+      ]
+    },
+    {
+      "tedSlug": "david_epstein_are_athletes_really_getting_faster_better_stronger",
+      "title": "Are athletes really getting faster, better, stronger?",
+      "speaker": "David Epstein",
+      "youtubeId": "8COaMKbNrX0",
+      "niches": [
+        "sports"
+      ]
+    },
+    {
+      "tedSlug": "andrew_stanton_the_clues_to_a_great_story",
+      "title": "The clues to a great story",
+      "speaker": "Andrew Stanton",
+      "youtubeId": "KxDwieKpawg",
+      "niches": [
+        "film"
+      ]
+    },
+    {
+      "tedSlug": "j_j_abrams_mystery_box",
+      "title": "The mystery box",
+      "speaker": "J.J. Abrams",
+      "youtubeId": "vpjVgF5JDq8",
+      "niches": [
+        "film"
+      ]
+    },
+    {
+      "tedSlug": "james_cameron_before_avatar_a_curious_boy",
+      "title": "Before Avatar ... a curious boy",
+      "speaker": "James Cameron",
+      "youtubeId": "PVfd6fg7QsM",
+      "niches": [
+        "film"
+      ]
+    },
+    {
+      "tedSlug": "hans_rosling_the_best_stats_you_ve_ever_seen",
+      "title": "The best stats you've ever seen",
+      "speaker": "Hans Rosling",
+      "youtubeId": "hVimVzgtD6w",
+      "niches": [
+        "business"
+      ]
+    },
+    {
+      "tedSlug": "david_mccandless_the_beauty_of_data_visualization",
+      "title": "The beauty of data visualization",
+      "speaker": "David McCandless",
+      "youtubeId": "pLqjQ55tz-U",
+      "niches": [
+        "business"
+      ]
+    },
+    {
+      "tedSlug": "dan_pink_the_puzzle_of_motivation",
+      "title": "The puzzle of motivation",
+      "speaker": "Dan Pink",
+      "youtubeId": "rrkrvAUbU9Y",
+      "niches": [
+        "business"
+      ]
+    }
+  ]
 }

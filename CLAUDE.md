@@ -76,6 +76,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `src/imageQuery.js` | Consultas de imagem com contexto: classe gramatical, palavras da definição, gerúndio (spec 003) |
 | `bench/images/` | Medição de relevância das imagens (`node bench/images/run.mjs antes|unsplash|...`, `stock.mjs` compara bancos lado a lado); resultados em `specs/003-imagens-certeiras/medicao.md` (antes 82/180, Unsplash 173/180) |
 | `src/videos.js` | Ordenação por nível, filtros, duração, palavras-chave novas (funções puras, testadas) |
+| `src/dev/CurationPage.jsx` + `catalog/curation.mjs` | Página `#/dev/curadoria` (só no dev): colar a transcrição de cada talk; o endpoint `/api/curation` do `vite.config.js` grava `catalog/transcripts/` e a duração no `sources.json` |
 | `src/dev/catalog.sample.json` | Catálogo de exemplo, só em `npm run dev` enquanto não existe `public/catalog.json` (fora do build) |
 | `catalog/` | Pipeline offline do catálogo: `text.mjs` (métricas e nível), `sources.mjs` (validação), `catalog.mjs` (montagem), `build.mjs` / `check.mjs` (CLI), `ngsl/` (lista NGSL, CC BY-SA) |
 | `src/components/WordInfo.jsx` | Bloco de palavra: pronúncia, definições, tradução escondida |

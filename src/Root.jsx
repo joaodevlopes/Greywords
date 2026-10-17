@@ -3,8 +3,9 @@ import { DesignSystemProvider } from 'beds'
 import App from './App.jsx'
 import Landing from './landing/Landing.jsx'
 
-// Dev-only preview page (left out of the build): #/dev/examples
+// Dev-only pages (left out of the build): #/dev/examples and #/dev/curadoria
 const ExamplesPreview = import.meta.env.DEV ? lazy(() => import('./dev/ExamplesPreview.jsx')) : null
+const CurationPage = import.meta.env.DEV ? lazy(() => import('./dev/CurationPage.jsx')) : null
 
 export const BRAND_COLOR = '#e8590c'
 const THEME_KEY = 'greywords:theme'
@@ -24,6 +25,7 @@ function initialTheme() {
 function routeFromHash() {
   const hash = window.location.hash
   if (ExamplesPreview && hash.startsWith('#/dev/examples')) return 'dev-examples'
+  if (CurationPage && hash.startsWith('#/dev/curadoria')) return 'dev-curation'
   return hash.startsWith('#/app') ? 'app' : 'landing'
 }
 
@@ -56,6 +58,10 @@ export default function Root() {
       {route === 'dev-examples' ? (
         <Suspense fallback={null}>
           <ExamplesPreview />
+        </Suspense>
+      ) : route === 'dev-curation' ? (
+        <Suspense fallback={null}>
+          <CurationPage />
         </Suspense>
       ) : route === 'app' ? (
         <App />
