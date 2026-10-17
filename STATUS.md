@@ -12,7 +12,7 @@ App gratuito (React + Vite, dados só no navegador; um intermediário pequeno gu
 cd C:\Users\joaog\OneDrive\Documentos\englishPlataform
 npm install          # se faltar node_modules
 npm run dev          # http://localhost:5173   (#/ landing · #/app app)
-npm test             # 214 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
+npm test             # 219 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
 npm run build
 npm run check:ui     # contrato do BEDS: precisa dar 0 violations
 ```
@@ -38,13 +38,13 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 Atualizado em 2026-10-17, depois da publicação do site (https://greywords.greywords.workers.dev).
 
 1. **Depois da publicação, a próxima:**
-   - **Cache das buscas no Workers KV** (grátis): a Cache API não funciona em `*.workers.dev`, então hoje cada busca no site gasta 1 das 50 por hora do Unsplash;
    - pedir o modo produção do Unsplash (grátis, cerca de 5.000 buscas por hora), com o endereço do site e capturas do crédito;
    - subir o repositório no GitHub (e pôr o link do `CREDITS.md` no rodapé).
 2. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
 
 **Feito recentemente:**
 - **Site publicado** em https://greywords.greywords.workers.dev (Worker com arquivos estáticos) e intermediário de imagens em `https://greywords-images.greywords.workers.dev`, na conta Cloudflare do usuário. Publicar de novo: `npm run deploy:site` e `npm run deploy:images`.
+- **Cache das buscas no Workers KV** (24 h): palavra já buscada não gasta a cota do Unsplash; `X-Greywords-Cache` diz hit/miss.
 - **Spec 005 implementada:** etapa B no app (paleta, abas, métricas, confete, escolha de imagem com mola, esqueleto com brilho e cartão que vira), verificada em claro, escuro, movimento reduzido e 375 px. JS 175,7 KB gzip.
 - **Spec 004 implementada:** frases reais do Tatoeba na busca (no lugar das imagens nas palavras abstratas), até 2 salvas com a palavra, no dicionário e na revisão com lacuna; exemplos do dicionário de reserva. Landing com "8 serviços".
 - **Spec 003 implementada:** imagens do Unsplash por um intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), com crédito, registro de uso e Openverse/Wikimedia de reserva; busca com contexto, "Refinar" e "Esconder". **Medição: 82/180 (45,6%) → 173/180 (96,1%), 0 impróprias.**
@@ -57,7 +57,7 @@ Atualizado em 2026-10-17, depois da publicação do site (https://greywords.grey
 | [000-mvp](specs/000-mvp/requirements.md) | Busca por imagem, dicionário, revisão SM-2, landing | implementado |
 | [001-calendario-meta](specs/001-calendario-meta/requirements.md) | Aba Progresso: meta semanal, check-in, calendário, sequência | implementado |
 | [002-videos-nicho](specs/002-videos-nicho/requirements.md) | Aba Vídeos: talks do TED por nicho e nível, catálogo gerado offline | T1–T3, T6–T11 feitas; T12 quase toda; **faltam T4 (usuário), T5, T13** |
-| [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); Worker publicado; falta o cache em KV |
+| [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); Worker publicado, com cache em KV |
 | [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | **implementado** (2026-10-17) |
 | [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | **implementado** (2026-10-17) |
 
@@ -114,7 +114,7 @@ Atualizado em 2026-10-17, depois da publicação do site (https://greywords.grey
 - **Marcação de imagens pelo usuário:** ele usa o botão "Imprópria" para as erradas. Antes de registrar "impróprias", olhe as imagens.
 - O **Dialog do BEDS ignora cliques enquanto está abrindo** (`data-phase` diferente de `open`): o clique cai no fundo e fecha o diálogo. Nos roteiros headless, espere cerca de 1,5 s depois de abrir.
 - **`wrangler pages project create`** agora cria um Worker e, se houver `wrangler.toml` na pasta, publica o código dele (aconteceu com o intermediário). O site usa `wrangler deploy --config wrangler.site.toml`.
-- **Cache API não funciona em `*.workers.dev`** (só com domínio próprio): o `caches.default` do Worker de imagens não guarda nada lá.
+- **Cache API não funciona em `*.workers.dev`** (só com domínio próprio). Por isso o Worker de imagens guarda as buscas no Workers KV (`IMAGE_CACHE`). O plano grátis do KV permite mil gravações por dia, ou seja, mil palavras novas por dia.
 - O `localStorage` é separado por porta: dados de teste em `:5180` não aparecem em `:5173`.
 
 ## Mapa rápido de arquivos novos (o mapa completo está no CLAUDE.md)

@@ -44,6 +44,6 @@ Cada critério ganha um código (`R1.2`) para ser citado no design, nas tarefas 
 | [000-mvp](000-mvp/requirements.md) — busca por imagem, dicionário, revisão, landing | implementado (documentado depois) |
 | [001-calendario-meta](001-calendario-meta/requirements.md) — calendário, check-in e meta semanal | implementado |
 | [002-videos-nicho](002-videos-nicho/requirements.md) — vídeos por nicho com nível pelas legendas | requisitos aprovados · [design](002-videos-nicho/design.md) aprovado · [tarefas](002-videos-nicho/tasks.md) em implementação |
-| [003-imagens-certeiras](003-imagens-certeiras/requirements.md) — imagens da busca pelo significado, sem conteúdo impróprio (Unsplash) | implementado (2026-10-17); Worker publicado, cache pendente em workers.dev · [medição](003-imagens-certeiras/medicao.md): 45,6% → 96,1% |
+| [003-imagens-certeiras](003-imagens-certeiras/requirements.md) — imagens da busca pelo significado, sem conteúdo impróprio (Unsplash) | implementado (2026-10-17), Worker publicado · [medição](003-imagens-certeiras/medicao.md): 45,6% → 96,1% |
 | [004-frases-exemplo](004-frases-exemplo/requirements.md) — frases reais de exemplo (Tatoeba) na busca e na revisão | implementado (2026-10-17) · [verificação](004-frases-exemplo/tasks.md#verificação) |
 | [005-identidade-efeitos](005-identidade-efeitos/requirements.md) — paleta própria, landing mais informativa, efeitos (21st.dev) na landing e no app | implementado (2026-10-17) · [verificação](005-identidade-efeitos/tasks.md#verificação) |

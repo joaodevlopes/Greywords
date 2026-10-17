@@ -1,6 +1,6 @@
 # 003 — Imagens mais certeiras na busca: tarefas
 
-Status: implementado (2026-10-17); Worker publicado, falta o cache funcionar em `workers.dev` (ver T9a)
+Status: implementado (2026-10-17), com o Worker publicado
 
 Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run build` passando; as de interface também com `npm run check:ui` (0 violações).
 A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação ser justa (R4.3).
@@ -110,7 +110,14 @@ A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação s
     - O `dist` não tem a chave nem a página de prévia do dev.
     - No site publicado (Edge headless), a landing carrega as capturas e mostra "8 serviços". "river" traz 12 fotos de `images.unsplash.com` com crédito ao fotógrafo, a definição e frases do Tatoeba com autor. Sem erros no console.
     - Com o Worker bloqueado, o site usa a reserva: 12 imagens e a legenda do Openverse/Wikimedia.
-  - **Pendente: o cache não vale em `workers.dev`.** Duas buscas iguais não vieram do cache (as respostas têm horários diferentes). Pela documentação do Cloudflare, a Cache API não tem efeito em `*.workers.dev`, só em domínio próprio. Enquanto isso, cada busca gasta 1 das 50 por hora. **Correção proposta:** guardar as buscas no Workers KV (grátis: 100 mil leituras e mil gravações por dia) por 24 h.
+  - **Problema encontrado (resolvido logo depois): o cache não valia em `workers.dev`.** Duas buscas iguais não vieram do cache (as respostas têm horários diferentes). Pela documentação do Cloudflare, a Cache API não tem efeito em `*.workers.dev`, só em domínio próprio. Enquanto isso, cada busca gasta 1 das 50 por hora. **Correção proposta:** guardar as buscas no Workers KV (grátis: 100 mil leituras e mil gravações por dia) por 24 h.
+  - **Cache em KV (2026-10-17):**
+    - Namespace `IMAGE_CACHE` ligado no `wrangler.toml`.
+    - O Worker guarda cada busca com resultado por 24 h (`expirationTtl`), com a chave `search:<consulta em minúsculas>|<n>`. Nunca guarda erro nem "limited".
+    - O CORS é calculado a cada pedido, não vem do cache. O cabeçalho `X-Greywords-Cache` diz `hit` ou `miss`.
+    - Se o KV falhar, a busca segue normal. O `caches.default` saiu.
+    - 5 testes novos em `worker/index.test.js`: acerto, chave normalizada, erro e "limited" não guardados, sem KV e com KV quebrado, e `/download` fora do cache.
+    - **Conferido no Worker publicado:** "lighthouse" 3 vezes deu `miss`, `hit` e `hit`. "Lighthouse " (maiúscula e espaço) também deu `hit`, com as 12 fotos e o crédito. Agora uma palavra já buscada nas últimas 24 h não gasta a cota do Unsplash.
 
 - [x] **T10a — Medição do "depois" (Unsplash)**: variante `unsplash` em `bench/images/run.mjs`, com página de 20 palavras × 9 fotos no formato do "antes" → **o usuário marca as certeiras** → `medicao.md` com antes × depois por palavra e no total.
   *Pronto quando:* o total melhorou em relação ao "antes" (82/180) e nenhuma imagem imprópria apareceu; o número entra no `medicao.md`. — R4.3, R4.4

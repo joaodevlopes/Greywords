@@ -1,5 +1,5 @@
 # Cloudflare Worker for the image intermediary (spec 003, T7a/T9a).
-# Deploy:  npx wrangler login  →  npx wrangler secret put UNSPLASH_ACCESS_KEY  →  npx wrangler deploy
+# Deploy:  npx wrangler login  →  npx wrangler secret put UNSPLASH_ACCESS_KEY  →  npm run deploy:images
 name = "greywords-images"
 main = "worker/index.js"
 compatibility_date = "2026-10-01"
@@ -10,3 +10,8 @@ preview_urls = false
 [vars]
 # Comma-separated sites allowed to read the API from the browser (the published site, wrangler.site.toml).
 ALLOWED_ORIGINS = "https://greywords.greywords.workers.dev"
+
+# Searches kept for 24 h (worker/index.js); the edge Cache API does nothing on workers.dev.
+[[kv_namespaces]]
+binding = "IMAGE_CACHE"
+id = "bc497a2d527d4f6aa6014f1fa225e828"
