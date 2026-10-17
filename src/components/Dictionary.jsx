@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
 import { Badge, Button, Dialog, EmptyState, SearchField, Select, Text } from 'beds'
-import { UNSPLASH_HOME, imageCredit } from '../imageQuery.js'
+import { imageCredit } from '../imageQuery.js'
 import { dueLabel, isDue, status } from '../srs.js'
 import Examples from './Examples.jsx'
+import UnsplashCredit from './UnsplashCredit.jsx'
 import WordInfo from './WordInfo.jsx'
 
 const SORTS = [
@@ -130,25 +131,7 @@ export default function Dictionary({ words, onRemove, onExport, onGoSearch, onGo
                 ))}
               </div>
             )}
-            {open.images.some((img) => img.source === 'unsplash') && (
-              <p className="gw-image-credit">
-                {open.images
-                  .filter((img) => img.source === 'unsplash')
-                  .map((img, i) => (
-                    <span key={img.id}>
-                      {i > 0 && ' · '}
-                      Foto de{' '}
-                      <a href={img.creditLink} target="_blank" rel="noreferrer">
-                        {img.credit}
-                      </a>
-                    </span>
-                  ))}{' '}
-                no{' '}
-                <a href={UNSPLASH_HOME} target="_blank" rel="noreferrer">
-                  Unsplash
-                </a>
-              </p>
-            )}
+            <UnsplashCredit images={open.images} />
             <WordInfo
               word={open.word}
               audio={open.audio}

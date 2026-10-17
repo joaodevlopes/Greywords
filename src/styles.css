@@ -1139,3 +1139,13 @@ img {
   outline: 2px solid var(--gw-brand);
   outline-offset: 6px;
 }
+
+/* review card: the photos and their credit (Unsplash API guidelines) */
+.gw-flash-media {
+  display: grid;
+  gap: var(--es-space-3);
+}
+
+.gw-flash-media .gw-image-credit {
+  text-align: end;
+}

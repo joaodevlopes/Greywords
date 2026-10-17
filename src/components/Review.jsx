@@ -6,6 +6,7 @@ import { celebrate } from '../fx/celebrate.js'
 import FlipSwap from '../fx/FlipSwap.jsx'
 import { isAbstract } from '../imageQuery.js'
 import { speak } from '../speak.js'
+import UnsplashCredit from './UnsplashCredit.jsx'
 import WordInfo from './WordInfo.jsx'
 
 const GRADES = [
@@ -175,10 +176,13 @@ export default function Review({ words, onGrade, onGoSearch }) {
                     )}
                   </div>
                 ) : card.images.length > 0 ? (
-                  <div className={`gw-flash-imgs n${card.images.length}`}>
-                    {card.images.map((img) => (
-                      <img key={img.id} src={img.thumb} alt="" />
-                    ))}
+                  <div className="gw-flash-media">
+                    <div className={`gw-flash-imgs n${card.images.length}`}>
+                      {card.images.map((img) => (
+                        <img key={img.id} src={img.thumb} alt="" />
+                      ))}
+                    </div>
+                    <UnsplashCredit images={card.images} />
                   </div>
                 ) : (
                   firstDef && <p className="gw-flash-def">{mask(firstDef.definition, card.word)}</p>

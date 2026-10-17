@@ -10,6 +10,7 @@ import {
   primaryPos,
   refineSuggestions,
   toGerund,
+  unsplashCredits,
 } from './imageQuery.js'
 
 // Definitions shaped like src/api.js returns them (texts from dictionaryapi.dev / Wiktionary style).
@@ -152,5 +153,20 @@ describe('imageCredit (spec 003, R1.6)', () => {
   it('keeps title and author for the other sources', () => {
     assert.equal(imageCredit({ source: 'openverse', title: 'River', credit: 'Bob' }), 'River — Bob')
     assert.equal(imageCredit({ title: 'Old image' }), 'Old image')
+  })
+})
+
+describe('unsplashCredits (Unsplash API guidelines: attribution)', () => {
+  const us = (id, credit, creditLink) => ({ id, source: 'unsplash', credit, creditLink })
+  it('lists each Unsplash photographer once, in order, with the profile link', () => {
+    const images = [us('us:1', 'Ana', 'https://unsplash.com/@ana?x'), { id: 'ov:1', source: 'openverse', credit: 'Bob' }, us('us:2', 'Ana', 'https://unsplash.com/@ana?x'), us('us:3', 'Caio', 'https://unsplash.com/@caio?x')]
+    assert.deepEqual(unsplashCredits(images), [
+      { name: 'Ana', link: 'https://unsplash.com/@ana?x' },
+      { name: 'Caio', link: 'https://unsplash.com/@caio?x' },
+    ])
+  })
+  it('is empty without Unsplash photos', () => {
+    assert.deepEqual(unsplashCredits([{ id: 'w:1', source: 'wikimedia', credit: 'X' }]), [])
+    assert.deepEqual(unsplashCredits(undefined), [])
   })
 })

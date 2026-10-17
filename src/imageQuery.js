@@ -168,3 +168,20 @@ export function imageCredit(img) {
   if (img?.source === 'unsplash') return `Foto de ${img.credit} no Unsplash`
   return [img?.title, img?.credit].filter(Boolean).join(' — ')
 }
+
+/**
+ * Photographers to credit for the Unsplash photos on screen (Unsplash API guidelines: name the photographer,
+ * link to their Unsplash profile and to Unsplash). One entry per photographer, in the order shown.
+ */
+export function unsplashCredits(images) {
+  const seen = new Set()
+  const out = []
+  for (const img of images ?? []) {
+    if (img?.source !== 'unsplash' || !img.credit) continue
+    const id = img.creditLink || img.credit
+    if (seen.has(id)) continue
+    seen.add(id)
+    out.push({ name: img.credit, link: img.creditLink || null })
+  }
+  return out
+}

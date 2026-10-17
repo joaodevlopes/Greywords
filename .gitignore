@@ -16,3 +16,4 @@ bench/images/cache/
 # Local tool state
 .claude/
 .wrangler/
+unsplash-pedido/

@@ -12,7 +12,7 @@ App gratuito (React + Vite, dados só no navegador; um intermediário pequeno gu
 cd C:\Users\joaog\OneDrive\Documentos\englishPlataform
 npm install          # se faltar node_modules
 npm run dev          # http://localhost:5173   (#/ landing · #/app app)
-npm test             # 219 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
+npm test             # 221 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
 npm run build
 npm run check:ui     # contrato do BEDS: precisa dar 0 violations
 ```
@@ -38,12 +38,13 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 Atualizado em 2026-10-17, depois da publicação do site (https://greywords.greywords.workers.dev).
 
 1. **Depois da publicação, a próxima:**
-   - pedir o modo produção do Unsplash (grátis, cerca de 5.000 buscas por hora), com o endereço do site e capturas do crédito;
+   - **pedido do modo produção do Unsplash: com o usuário.** Texto, capturas e passo a passo em `unsplash-pedido/PEDIDO.md` (pasta fora do git). Quando vier a resposta, ajustar o que pedirem;
    - subir o repositório no GitHub (e pôr o link do `CREDITS.md` no rodapé).
 2. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
 
 **Feito recentemente:**
 - **Site publicado** em https://greywords.greywords.workers.dev (Worker com arquivos estáticos) e intermediário de imagens em `https://greywords-images.greywords.workers.dev`, na conta Cloudflare do usuário. Publicar de novo: `npm run deploy:site` e `npm run deploy:images`.
+- **Crédito do Unsplash visível com links** na busca, na revisão e no dicionário (`UnsplashCredit.jsx`), como pedem as regras da API. Antes, a busca só mostrava o fotógrafo ao passar o mouse, e a revisão não tinha crédito.
 - **Cache das buscas no Workers KV** (24 h): palavra já buscada não gasta a cota do Unsplash; `X-Greywords-Cache` diz hit/miss.
 - **Spec 005 implementada:** etapa B no app (paleta, abas, métricas, confete, escolha de imagem com mola, esqueleto com brilho e cartão que vira), verificada em claro, escuro, movimento reduzido e 375 px. JS 175,7 KB gzip.
 - **Spec 004 implementada:** frases reais do Tatoeba na busca (no lugar das imagens nas palavras abstratas), até 2 salvas com a palavra, no dicionário e na revisão com lacuna; exemplos do dicionário de reserva. Landing com "8 serviços".

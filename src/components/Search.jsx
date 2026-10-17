@@ -3,10 +3,11 @@ import { motion, useReducedMotion } from 'motion/react'
 import { Button, EmptyState, IconButton, Notice, SearchField, Surface, Text } from 'beds'
 import { fetchDefinition, fetchExamples, fetchImagesFor, fetchTranslation, orTimeout, trackImageUse } from '../api.js'
 import { dictionaryExamples, examplesToSave, mergeExamples, togglePicked } from '../examples.js'
-import { UNSPLASH_HOME, buildQueries, imageCredit, isAbstract, mergeRefined, refineSuggestions } from '../imageQuery.js'
+import { buildQueries, imageCredit, isAbstract, mergeRefined, refineSuggestions } from '../imageQuery.js'
 import { newCard } from '../srs.js'
 import SkeletonGrid from '../fx/Skeleton.jsx'
 import Examples from './Examples.jsx'
+import UnsplashCredit from './UnsplashCredit.jsx'
 import WordInfo from './WordInfo.jsx'
 
 const SUGGESTIONS = ['sun', 'whisper', 'river', 'climb', 'blanket', 'thunder', 'stubborn']
@@ -400,13 +401,7 @@ export default function Search({ words, hidden = {}, onHide, onSave, seed, onSee
                   </form>
                 </div>
                 {visible.some((img) => img.source === 'unsplash') ? (
-                  <p className="gw-image-credit">
-                    Fotos:{' '}
-                    <a href={UNSPLASH_HOME} target="_blank" rel="noreferrer">
-                      Unsplash
-                    </a>
-                    . Passe o mouse para ver o fotógrafo.
-                  </p>
+                  <UnsplashCredit images={visible} />
                 ) : (
                   <Text variant="caption" tone="secondary">
                     Imagens do Openverse e Wikimedia Commons, com licenças abertas. Passe o mouse para ver o autor.

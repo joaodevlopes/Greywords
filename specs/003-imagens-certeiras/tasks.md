@@ -111,6 +111,7 @@ A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação s
     - No site publicado (Edge headless), a landing carrega as capturas e mostra "8 serviços". "river" traz 12 fotos de `images.unsplash.com` com crédito ao fotógrafo, a definição e frases do Tatoeba com autor. Sem erros no console.
     - Com o Worker bloqueado, o site usa a reserva: 12 imagens e a legenda do Openverse/Wikimedia.
   - **Problema encontrado (resolvido logo depois): o cache não valia em `workers.dev`.** Duas buscas iguais não vieram do cache (as respostas têm horários diferentes). Pela documentação do Cloudflare, a Cache API não tem efeito em `*.workers.dev`, só em domínio próprio. Enquanto isso, cada busca gasta 1 das 50 por hora. **Correção proposta:** guardar as buscas no Workers KV (grátis: 100 mil leituras e mil gravações por dia) por 24 h.
+  - **Crédito ajustado para o pedido de produção (2026-10-17):** as regras da API pedem o fotógrafo com link para o perfil sempre que a foto aparece. Na busca, ele só aparecia ao passar o mouse e sem link; na revisão, não aparecia. Agora `UnsplashCredit.jsx` mostra "Fotos de A, B e C no Unsplash" com links e UTM nos três lugares. Conferido no site publicado, com capturas para o pedido.
   - **Cache em KV (2026-10-17):**
     - Namespace `IMAGE_CACHE` ligado no `wrangler.toml`.
     - O Worker guarda cada busca com resultado por 24 h (`expirationTtl`), com a chave `search:<consulta em minúsculas>|<n>`. Nunca guarda erro nem "limited".
