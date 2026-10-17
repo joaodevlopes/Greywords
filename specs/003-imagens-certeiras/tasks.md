@@ -160,5 +160,5 @@ Auditoria da landing (claro no desktop, escuro em 375 px): nenhuma falha de cont
 
 **Não verificado / pendente:**
 - **T9a:** o Worker do Cloudflare só foi testado em simulação. Publicar junto com o site; o usuário cria a conta.
-- **Modo produção do Unsplash** (grátis, cerca de 5.000 por hora): pedir no painel do app depois de publicar o site, com o endereço e capturas mostrando o crédito.
+- **Modo produção do Unsplash** (grátis, 1.000 por hora): pedir no painel do app depois de publicar o site, com o endereço e capturas mostrando o crédito.
 - Safari e Firefox não testados.

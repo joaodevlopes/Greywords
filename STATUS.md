@@ -79,7 +79,7 @@ Atualizado em 2026-10-17, depois da publicação do site (https://greywords.grey
 - **NGSL** (lista de palavras comuns, CC BY-SA 4.0) em `catalog/ngsl/`, usada para medir a dificuldade das transcrições.
 - **Fotos: Unsplash** (spec 003). O Openverse trazia fotos fora do tema (1 em 12 para "study"), e nenhuma consulta resolveu.
   - Alternativas descartadas: o Pexels pausou chaves novas; o Pixabay desaconselha usar o link deles de forma permanente.
-  - **Cota do Unsplash:** o modo demo dá **50 buscas por hora para o app inteiro**. O modo produção é **grátis** (cerca de 5.000 por hora) e se pede no painel depois de publicar o site.
+  - **Cota do Unsplash:** o modo demo dá **50 buscas por hora para o app inteiro**. O modo produção é **grátis** (1.000 por hora, segundo o formulário do pedido) e se pede no painel depois de publicar o site.
   - Quando a cota acaba, o app cai no Openverse sem erro.
   - **Cuidado nos testes:** cada busca real gasta cota; o intermediário do dev guarda buscas em memória por 24 h.
 - **Intermediário de imagens** (`server/images.js`): a chave nunca vai para o navegador. No dev é um plugin do Vite em `/api/images`; em produção, o Worker `greywords-images` (`worker/`, `wrangler.toml`), publicado. O app usa `VITE_IMAGES_API` no build (vem do `.env.production`, que não é segredo); sem ele, só o Openverse.

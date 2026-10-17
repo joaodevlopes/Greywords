@@ -119,7 +119,7 @@ As URLs de crédito levam `?utm_source=greywords&utm_medium=referral`, como o Un
 ### Limites
 
 - **Modo demo:** 50 buscas por hora **para o app inteiro**. Com o cache de 24 h, palavras repetidas não gastam cota. Quando passar do limite, o app cai no Openverse sem erro.
-- **Produção** (cerca de 5.000 por hora): o pedido é feito pelo usuário no painel do Unsplash, com capturas mostrando o crédito e o registro de download (tarefa de fechamento).
+- **Produção** (1.000 por hora, segundo o formulário do pedido): o pedido é feito pelo usuário no painel do Unsplash, com capturas mostrando o crédito e o registro de download (tarefa de fechamento).
 
 ### Medição (R4)
 
