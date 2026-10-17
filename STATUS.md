@@ -35,20 +35,19 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 ## Onde paramos (próximos passos, em ordem)
 
-Atualizado em 2026-10-17, depois da T13 da spec 005.
+Atualizado em 2026-10-17, depois das specs 004 e 005.
 
-1. **Spec 005 (efeitos), etapa B, a próxima:** **T12 feita** (imagem escolhida encolhe e o número "salta"; esqueleto com brilho de 12 quadros). **T13 feita** (o cartão da revisão vira; notas valem no meio da virada). Próxima: T14 (verificação final, refazer as capturas da landing e marcar a spec como implementada). A T14 fecha a spec e refaz as capturas da landing (o app mudou com as frases).
-2. **Publicação do site** (ainda não decidido onde):
+1. **Publicação do site, a próxima** (ainda não decidido onde):
    - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);
    - pôr o endereço do Worker no build (`VITE_IMAGES_API`) e em `ALLOWED_ORIGINS`;
    - pedir o modo produção do Unsplash (grátis, cerca de 5.000 buscas por hora), com o endereço do site e capturas do crédito;
    - subir o repositório no GitHub.
-3. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
+2. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
 
 **Feito recentemente:**
+- **Spec 005 implementada:** etapa B no app (paleta, abas, métricas, confete, escolha de imagem com mola, esqueleto com brilho e cartão que vira), verificada em claro, escuro, movimento reduzido e 375 px. JS 175,7 KB gzip.
 - **Spec 004 implementada:** frases reais do Tatoeba na busca (no lugar das imagens nas palavras abstratas), até 2 salvas com a palavra, no dicionário e na revisão com lacuna; exemplos do dicionário de reserva. Landing com "8 serviços".
 - **Spec 003 implementada:** imagens do Unsplash por um intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), com crédito, registro de uso e Openverse/Wikimedia de reserva; busca com contexto, "Refinar" e "Esconder". **Medição: 82/180 (45,6%) → 173/180 (96,1%), 0 impróprias.**
-- **Spec 005, etapa A (landing) e T10–T11** prontas e verificadas.
 - **Git:** repositório criado (branch `main`). Commits só com o usuário como autor, sem menção a IA (skill git-autoria-unica). Ainda não está no GitHub.
 
 ## Specs
@@ -60,7 +59,7 @@ Atualizado em 2026-10-17, depois da T13 da spec 005.
 | [002-videos-nicho](specs/002-videos-nicho/requirements.md) | Aba Vídeos: talks do TED por nicho e nível, catálogo gerado offline | T1–T3, T6–T11 feitas; T12 quase toda; **faltam T4 (usuário), T5, T13** |
 | [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); falta só publicar o Worker (T9a) |
 | [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | **implementado** (2026-10-17) |
-| [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | etapa A pronta; etapa B: T10–T13 feitas; falta a T14 (verificação final) |
+| [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | **implementado** (2026-10-17) |
 
 ## O que existe hoje no app
 

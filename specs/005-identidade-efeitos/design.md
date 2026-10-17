@@ -1,6 +1,6 @@
 # 005 — Identidade visual e efeitos: design
 
-Status: aprovado (2026-10-17)
+Status: implementado (2026-10-17)
 
 ## Visão geral
 

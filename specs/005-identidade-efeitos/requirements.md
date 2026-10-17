@@ -1,6 +1,6 @@
 # 005 — Identidade visual e efeitos: requisitos
 
-Status: aprovado (2026-10-17)
+Status: implementado (2026-10-17)
 
 ## Objetivo
 

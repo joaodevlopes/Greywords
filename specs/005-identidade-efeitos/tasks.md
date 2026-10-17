@@ -1,6 +1,6 @@
 # 005 — Identidade visual e efeitos: tarefas
 
-Status: aprovado (2026-10-17)
+Status: implementado (2026-10-17)
 
 Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test`, `npm run build` e `npm run check:ui` passando (0 violações). As de tela também passam pelo navegador em claro, escuro, 375 px e com movimento reduzido emulado.
 Cada efeito baseado no 21st.dev ganha um comentário de crédito no topo do arquivo e uma linha no `CREDITS.md` **na mesma tarefa** em que entra.
@@ -76,8 +76,9 @@ Cada efeito baseado no 21st.dev ganha um comentário de crédito no topo do arqu
       - Com movimento reduzido: ângulo sempre 0°, o verso aparece no quadro seguinte, foco e notas iguais. Sem erros no console.
       - JS: 175,7 KB gzip.
 
-- [ ] **T14 — Verificação final**: percorrer R4 e R5 no app, conferir de novo o orçamento e o `check:ui`, atualizar o `CREDITS.md` (B1, B2, B4, B5) e o `CLAUDE.md`, e marcar a spec como `implementado`.
+- [x] **T14 — Verificação final**: percorrer R4 e R5 no app, conferir de novo o orçamento e o `check:ui`, atualizar o `CREDITS.md` (B1, B2, B4, B5) e o `CLAUDE.md`, e marcar a spec como `implementado`.
   - *Pronto quando:* todos os critérios estão conferidos e listados abaixo, com o que não deu para verificar dito explicitamente.
+  - *Feito (2026-10-17):* ver "Etapa B — app (T14)" abaixo. `CREDITS.md` com B1, B2, B4 e B5 (B3 e B6 são próprios); `CLAUDE.md` com `Skeleton.jsx` e `FlipSwap.jsx`; capturas da landing refeitas.
 
 ## Verificação
 
@@ -97,7 +98,7 @@ Em cada uma, o script fez quatro coisas:
 | --- | --- |
 | R1.1 Paleta própria nos dois temas | ✅ tokens `--gw-*`; landing em claro e escuro conferida |
 | R1.2 Contraste AA | ✅ 0 falhas nos textos medidos, nas 6 combinações; teste da paleta com 11 pares de texto e 3 de gráfico. Sobre o degradê do hero (que a varredura não enxerga), o caso pior é texto secundário em cima da mancha laranja mais forte: 4,57:1 no claro e 5,93:1 no escuro, ainda AA |
-| R1.3 Landing e app com a mesma paleta | ⏳ **pendente**: o app recebe a paleta na T10 (etapa B) |
+| R1.3 Landing e app com a mesma paleta | ✅ desde a T10: o app lê os mesmos tokens `--gw-*` (ver etapa B) |
 | R1.4 Greyhound como identidade | ✅ marca no hero, centro do diagrama "Como foi feito" e entrada correndo no fechamento |
 | R2.1 Mostrar o app real | ✅ demo interativa no hero e capturas reais de Revisão, Progresso e Palavras; sem captura de Vídeos |
 | R2.2 "Por que funciona" com fontes | ✅ 4 links, cada um para a fonte certa (Crossref e York University); aviso de que não é promessa |
@@ -251,3 +252,36 @@ Notas de implementação:
     - 3 cartas respondidas com Enter e 3: confete e "Sessão concluída";
     - com movimento reduzido: nenhum confete, o aviso aparece igual.
   - JS: 168,3 KB gzip (+5,9 KB do Toaster e do confete; limite 217). 135 testes.
+
+### Etapa B — app (T14, 2026-10-17)
+
+**Como foi feito:** servidor de desenvolvimento, em Edge headless via CDP:
+- `scripts/app-audit.mjs` com os dados de exemplo, em claro, escuro, movimento reduzido e 375 px;
+- roteiros próprios da T12 e da T13 (ângulo, escala e face gravados a cada quadro);
+- `scripts/landing-audit.mjs` de novo, com movimento reduzido e em 375 px no escuro, porque a landing mudou com a spec 004.
+
+| Critério | Resultado |
+| --- | --- |
+| R4.1 Flashcard vira ao revelar | ✅ clique, Enter e Espaço viram o cartão (0° a 90°, troca de face, −90° a 0°), também com a frente de frase com lacuna (T13) |
+| R4.2 Transição entre abas | ✅ nas 5 abas, logo depois do clique a aba nova já está montada e aparecendo (opacidade entre 0 e 1); depois, 1 |
+| R4.3 Retorno ao escolher imagem | ✅ a imagem escolhida vai a 94%; o número entra com mola e "salta" de novo quando a ordem muda (T12) |
+| R4.4 Esqueleto com brilho | ✅ 12 quadros com a mesma altura da grade final (920 px), brilho em sequência (T12) |
+| R4.5 Celebração | ✅ conferido de novo depois da T13: confete ao fim da sessão (com a nota dada no meio da virada) e "Sessão concluída"; a meta batida foi conferida na T11 |
+| R4.6 Métricas contam | ✅ no Progresso, logo depois de abrir, um número da métrica está no meio da contagem (1 ou 3); depois, 6 |
+| R4.7 Nada atrasa uma ação | ✅ `aria-pressed` muda no instante do clique; a nota dada 40 ms depois de revelar conta e corta a virada; a aba nova monta sem esperar a antiga sair |
+| R5.1 Menos movimento | ✅ abas e métricas diretas (opacidade 1 e valor final desde o início), esqueleto parado, sem escala nem salto ao escolher, cartão sem rotação, sem confete; na landing, 0 loops animados |
+| R5.2 Teclado, foco e leitor de tela | ✅ notas 1–4 e Enter/Espaço como antes. Depois de virar, o foco vai para o grupo "Resposta: palavra". O esqueleto tem "Buscando imagens…" para leitor de tela. Na landing, 68 paradas de Tab com foco visível |
+| R5.3 Loops pausam fora da tela | ✅ na landing, 0 loops rodando fora da tela; o brilho do esqueleto usa a mesma classe `.gw-fx-loop` |
+| R5.4 Orçamento e saltos de layout | ✅ JS 175,7 KB gzip (limite 217 KB; linha de base 157,4 KB). CLS da landing 0,004. O esqueleto do tamanho da grade tirou o salto que havia ao chegar das imagens (9 para 12 quadros) |
+| R5.5 375 px, claro e escuro | ✅ todas as abas do app e a landing sem rolagem lateral; contraste do app sem falhas em todas as abas (claro, escuro, reduzido e 375 px) |
+
+**Também conferido:**
+- `npm test`: 213 passam e 1 é pulado (o teste com a API real do Tatoeba).
+- `npm run check:ui`: 0 violações em 64 arquivos.
+- `npm run build` ok.
+- Capturas da landing refeitas com `scripts/capture.mjs`: saíram idênticas byte a byte, porque as telas mostradas (Revisão com imagens, Progresso, Palavras) não mudaram.
+
+**Não verificado:**
+- O brilho do esqueleto no tema escuro só foi conferido pelo valor do CSS (branco com 6% de opacidade), sem captura.
+- Os efeitos foram vistos em Edge (Chromium); Firefox e Safari não foram testados.
+- Não houve teste com leitor de tela real (NVDA ou VoiceOver); foram conferidos a árvore de acessibilidade e os rótulos.
