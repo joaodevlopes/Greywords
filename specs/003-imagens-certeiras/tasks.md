@@ -1,6 +1,6 @@
 # 003 — Imagens mais certeiras na busca: tarefas
 
-Status: aprovado (2026-10-16) — em implementação
+Status: implementado (2026-10-17), exceto a T9a (publicar o Worker), que fica para a publicação do site
 
 Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run build` passando; as de interface também com `npm run check:ui` (0 violações).
 A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação ser justa (R4.3).
@@ -105,13 +105,41 @@ A medição do "antes" (T2) vem **antes** de mexer no app, para a comparação s
   *Pronto quando:* o total melhorou em relação ao "antes" (82/180) e nenhuma imagem imprópria apareceu; o número entra no `medicao.md`. — R4.3, R4.4
   *Feito (2026-10-17):* **173/180 certeiras (96,1%) contra 82/180 (45,6%) no antes; 0 impróprias.** As 6 marcadas no botão "Imprópria" foram conferidas e são erradas (ver `medicao.md`). A coleta precisou esperar 1 hora porque a cota de demo do Unsplash, de 50 por hora, acabou com os testes do dia; o intermediário passou a tratar o 403 de limite do Unsplash como `limited`.
 
-- [ ] **T11a — Documentação e verificação final**:
+- [x] **T11a — Documentação e verificação final**:
   - `CLAUDE.md`: mapa (`server/`, `worker/`), modelo de dados (`hiddenImages`, `source`, `creditLink`), a regra de APIs com a exceção do Unsplash e os comandos.
   - README e `CREDITS.md`: crédito ao Unsplash.
   - Percorrer R1–R5 no navegador (claro, escuro, 375 px) e marcar a spec como `implementado`.
   - Deixar anotado o que o usuário precisa fazer para pedir o modo produção no Unsplash.
   *Pronto quando:* todos os critérios conferidos e listados abaixo, com o que não deu para verificar dito explicitamente.
 
-## Verificação
+## Verificação (T11a, 2026-10-17)
 
-(preenchido na T8)
+Conferido em Edge headless com o servidor real e as APIs reais (`npm run dev` com o intermediário), mais os testes automáticos.
+
+| Critério | Resultado |
+| --- | --- |
+| R1.1 Openverse só com fotos e filtro adulto | ✅ `category=photograph` e `mature=false` em toda chamada (teste e registro das chamadas) |
+| R1.2 Wikimedia só em falha ou vazio | ✅ testes; na reserva com o intermediário fora do ar, nenhuma chamada ao Wikimedia porque o Openverse respondeu |
+| R1.3 Esconder imagem | ✅ teclado e toque; some da grade e da seleção e não volta (T6, conferido de novo com o Unsplash) |
+| R1.4 Unsplash como fonte principal | ✅ "study": 1 chamada ao intermediário, 12 fotos do Unsplash, nenhuma ao Openverse |
+| R1.5 Chave fora do navegador | ✅ a chave (43 caracteres) não aparece em nenhum arquivo de `dist/` nem do repositório; ela vai no cabeçalho, nunca na URL (teste) |
+| R1.6 Crédito e registro de uso | ✅ "Foto de X no Unsplash" no título, legenda "Fotos: Unsplash" e créditos com `utm` no detalhe; salvar fez 3 chamadas a `/download` |
+| R1.7 Sem intermediário, continua funcionando | ✅ intermediário fora do ar (simulado): 12 imagens do Openverse, sem erro; cota esgotada (403 ou 429) vira `limited` e cai na reserva (teste) |
+| R2.1–R2.2 Busca com contexto | ✅ continua na reserva do Openverse ("person studying examination"). No Unsplash, a palavra sozinha bastou (96,1% certeiras) |
+| R2.3 Até 2 consultas, juntas sem repetir | ✅ testes |
+| R2.4 Palavra sozinha se o contexto falhar | ✅ testes; definição atrasada nos dois dicionários: imagens pela palavra em 2,1 s |
+| R2.5 Tempo parecido | ✅ imagens em cerca de 2,4 s no caminho mais lento (espera da definição + Openverse); com o Unsplash, 1 chamada |
+| R3.1–R3.3 Refinar | ✅ 2–4 sugestões e campo livre; 1 requisição por refinamento; palavra, definição e tradução continuam; escolhas no topo |
+| R4.1–R4.4 Medição | ✅ **82/180 (45,6%) → 173/180 (96,1%)**, 0 impróprias (`medicao.md`) |
+| R5.1 Palavras abstratas | ✅ "however": aviso "Aqui o que ensina é o contexto" e 3 imagens |
+
+Landing e documentação atualizadas:
+- landing: FAQ, rodapé, diagrama com o Unsplash (8 nós sem sobreposição), "7 serviços", "0 cadastros" (antes dizia "0 servidores", que deixou de ser verdade com o Worker) e gráfico antes × depois com legenda;
+- README, `CREDITS.md` e `CLAUDE.md`.
+
+Auditoria da landing (claro no desktop, escuro em 375 px): nenhuma falha de contraste, sem rolagem horizontal, loops pausados fora da tela e foco visível. Testes: 180. `check:ui`: 0 violações. JS: 172,3 KB gzip.
+
+**Não verificado / pendente:**
+- **T9a:** o Worker do Cloudflare só foi testado em simulação. Publicar junto com o site; o usuário cria a conta.
+- **Modo produção do Unsplash** (grátis, cerca de 5.000 por hora): pedir no painel do app depois de publicar o site, com o endereço e capturas mostrando o crédito.
+- Safari e Firefox não testados.

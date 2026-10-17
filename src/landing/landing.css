@@ -1174,9 +1174,51 @@
 
 .gw-bench-bars li {
   display: grid;
-  grid-template-columns: 11rem minmax(0, 1fr) 3rem;
+  grid-template-columns: 11rem minmax(0, 1fr) 6.5rem;
   align-items: center;
   gap: var(--es-space-6);
+}
+
+/* two series (before / after): thin muted bar above the brand bar, with a legend */
+.gw-bench-pair {
+  display: grid;
+  gap: 3px;
+}
+
+.gw-bench-pair .gw-bench-track:first-child {
+  height: 6px;
+}
+
+.gw-bench-bar.is-before {
+  background: var(--gw-border-strong);
+}
+
+.gw-bench-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--es-space-4) var(--es-space-9);
+  margin: 0 0 var(--es-space-6);
+  color: var(--gw-ink-soft);
+  font: 400 12px/18px var(--es-font);
+}
+
+.gw-bench-key {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--es-space-3);
+}
+
+.gw-bench-key::before {
+  content: '';
+  width: 14px;
+  height: 8px;
+  border-radius: 0 3px 3px 0;
+  background: var(--gw-brand);
+}
+
+.gw-bench-key.is-before::before {
+  height: 5px;
+  background: var(--gw-border-strong);
 }
 
 .gw-bench-label {
@@ -1220,7 +1262,7 @@
   }
 
   .gw-bench-bars li {
-    grid-template-columns: minmax(0, 1fr) 3rem;
+    grid-template-columns: minmax(0, 1fr) 6.5rem;
   }
 
   .gw-bench-label {

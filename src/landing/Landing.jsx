@@ -96,7 +96,7 @@ const FAQ = [
   {
     id: 'gratis',
     q: 'É grátis mesmo?',
-    a: 'Sim. O Greywords usa só serviços públicos e gratuitos: Openverse e Wikimedia Commons para imagens, Free Dictionary e Wiktionary para definições, MyMemory para tradução.',
+    a: 'Sim. O Greywords usa só serviços gratuitos: Unsplash para fotos (com Openverse e Wikimedia Commons de reserva), Free Dictionary e Wiktionary para definições, MyMemory para tradução.',
   },
   {
     id: 'conta',
@@ -126,7 +126,7 @@ const FAQ = [
   {
     id: 'imagens',
     q: 'De onde vêm as imagens?',
-    a: 'De bancos com licenças abertas. Às vezes vem algo fora de contexto, e por isso você escolhe quais ficam. O autor aparece ao passar o mouse.',
+    a: 'Do Unsplash, um banco de fotos gratuito, com crédito ao fotógrafo. Se ele estiver fora do ar ou no limite de buscas, as imagens vêm do Openverse e do Wikimedia Commons. Você escolhe quais ficam, pode refinar a busca e esconder as que não servem.',
   },
 ]
 
@@ -198,41 +198,43 @@ const SCIENCE = [
 
 // "Como foi feito": every outside service the app talks to (positions in a 100×56 box).
 const SERVICES = [
-  { id: 'openverse', label: 'Openverse', detail: 'imagens', x: 13, y: 8 },
-  { id: 'wikimedia', label: 'Wikimedia Commons', detail: 'imagens (reserva)', x: 13, y: 21 },
-  { id: 'dictionary', label: 'Free Dictionary', detail: 'definições e áudio', x: 13, y: 35 },
-  { id: 'wiktionary', label: 'Wiktionary', detail: 'definições (reserva)', x: 13, y: 48 },
+  { id: 'unsplash', label: 'Unsplash', detail: 'fotos, via intermediário', x: 13, y: 6 },
+  { id: 'openverse', label: 'Openverse', detail: 'fotos (reserva)', x: 13, y: 17 },
+  { id: 'wikimedia', label: 'Wikimedia Commons', detail: 'imagens (reserva)', x: 13, y: 28 },
+  { id: 'dictionary', label: 'Free Dictionary', detail: 'definições e áudio', x: 13, y: 39 },
+  { id: 'wiktionary', label: 'Wiktionary', detail: 'definições (reserva)', x: 13, y: 50 },
   { id: 'mymemory', label: 'MyMemory', detail: 'tradução', x: 87, y: 12 },
   { id: 'youtube', label: 'YouTube', detail: 'vídeos do TED', x: 87, y: 28 },
   { id: 'browser', label: 'Seu navegador', detail: 'onde ficam seus dados', x: 87, y: 44 },
 ]
 
 const STACK = [
-  'React 19 e Vite, sem servidor',
+  'React 19 e Vite; seus dados nunca saem do navegador',
   'Design system BEDS',
   'Revisão espaçada SM-2, com ajustes estilo Anki',
   'Dados em localStorage, com exportação em JSON',
+  'Intermediário de fotos num Worker do Cloudflare (guarda a chave do Unsplash, sem dados seus)',
   'Testes automáticos da lógica (node:test)',
 ]
 
-// Image relevance measured in spec 003 (specs/003-imagens-certeiras/medicao.md, "antes"):
-// 20 words × 9 images, marked without seeing the title.
-const IMAGE_BENCH = { hits: 82, total: 180, improper: 0 }
+// Image relevance measured in spec 003 (specs/003-imagens-certeiras/medicao.md): 20 words × 9 images,
+// marked without seeing the title. "before" = Openverse + Wikimedia; "after" = Unsplash.
+const IMAGE_BENCH = { before: 82, after: 173, total: 180, improper: 0 }
 const IMAGE_GROUPS = [
-  { id: 'verbos', label: 'Verbos', hits: 30, total: 45 },
-  { id: 'concretos', label: 'Substantivos concretos', hits: 25, total: 45 },
-  { id: 'adjetivos', label: 'Adjetivos', hits: 14, total: 36 },
-  { id: 'ambiguas', label: 'Palavras ambíguas', hits: 6, total: 18 },
-  { id: 'abstratos', label: 'Abstratas', hits: 5, total: 18 },
-  { id: 'gramaticais', label: 'Gramaticais', hits: 2, total: 18 },
+  { id: 'concretos', label: 'Substantivos concretos', before: 25, after: 45, total: 45 },
+  { id: 'verbos', label: 'Verbos', before: 30, after: 41, total: 45 },
+  { id: 'adjetivos', label: 'Adjetivos', before: 14, after: 33, total: 36 },
+  { id: 'ambiguas', label: 'Palavras ambíguas', before: 6, after: 18, total: 18 },
+  { id: 'abstratos', label: 'Abstratas', before: 5, after: 18, total: 18 },
+  { id: 'gramaticais', label: 'Gramaticais', before: 2, after: 18, total: 18 },
 ]
 // Only verifiable numbers (landing honesta). Where each one comes from:
 const NUMBERS = [
-  // src/api.js: Openverse, Wikimedia Commons, Free Dictionary, Wiktionary, MyMemory; VideoDialog.jsx: YouTube.
-  // Becomes 7 when Tatoeba lands (spec 004).
-  { id: 'servicos', value: 6, label: 'serviços públicos e gratuitos para imagens, definições, tradução e vídeos' },
-  // No backend, no account: data lives in localStorage (src/storage.js).
-  { id: 'cadastro', value: 0, label: 'cadastros e servidores: suas palavras ficam no seu navegador' },
+  // Unsplash (server/images.js); src/api.js: Openverse, Wikimedia Commons, Free Dictionary, Wiktionary,
+  // MyMemory; VideoDialog.jsx: YouTube. Becomes 8 when Tatoeba lands (spec 004).
+  { id: 'servicos', value: 7, label: 'serviços gratuitos para fotos, definições, tradução e vídeos' },
+  // No account: data lives in localStorage (src/storage.js); the image Worker keeps no user data.
+  { id: 'cadastro', value: 0, label: 'cadastros: suas palavras ficam só no seu navegador' },
   // MAX_PICK in src/components/Search.jsx.
   { id: 'imagens', value: 3, label: 'imagens por palavra, no máximo, escolhidas por você' },
   // Lemmas in catalog/ngsl/NGSL_12_lemmatized_for_research.csv (non-empty lines that are not "##" notes).
@@ -475,7 +477,7 @@ export default function Landing() {
               <h2 id="gw-built-title">
                 <TextEffect items="Como foi feito" inherit />
               </h2>
-              <p>Um projeto pessoal, aberto e gratuito, que roda inteiro no seu navegador e conversa só com serviços públicos.</p>
+              <p>Um projeto pessoal e gratuito. Suas palavras ficam no seu navegador; o app só conversa com serviços gratuitos.</p>
             </header>
             <figure className="gw-built-diagram">
               <AnimatedBeam
@@ -488,7 +490,7 @@ export default function Landing() {
                   </span>
                 }
               />
-              <figcaption>Tudo o que o app consulta fora do seu navegador. Nenhum pede chave ou cadastro.</figcaption>
+              <figcaption>Tudo o que o app consulta fora do seu navegador. Só o Unsplash pede chave, e ela fica no intermediário, nunca no site.</figcaption>
             </figure>
             <div className="gw-built-grid">
               <div className="gw-built-stack">
@@ -502,32 +504,44 @@ export default function Landing() {
               <figure className="gw-bench" aria-labelledby="gw-bench-title">
                 <h3 id="gw-bench-title">Medindo a qualidade das imagens</h3>
                 <p className="gw-bench-hero">
-                  <strong>{formatPercent(IMAGE_BENCH.hits, IMAGE_BENCH.total, 1)}</strong>
+                  <strong>{formatPercent(IMAGE_BENCH.after, IMAGE_BENCH.total, 1)}</strong>
                   <span>
-                    das imagens certeiras ({IMAGE_BENCH.hits} de {IMAGE_BENCH.total}) e{' '}
-                    {IMAGE_BENCH.improper === 0 ? 'nenhuma imprópria' : `${IMAGE_BENCH.improper} impróprias`}, em 20 palavras com 9 imagens
-                    cada, marcadas sem ver o título.
+                    das imagens certeiras com o Unsplash ({IMAGE_BENCH.after} de {IMAGE_BENCH.total}), contra{' '}
+                    {formatPercent(IMAGE_BENCH.before, IMAGE_BENCH.total, 1)} ({IMAGE_BENCH.before} de {IMAGE_BENCH.total}) com a fonte
+                    anterior. {IMAGE_BENCH.improper === 0 ? 'Nenhuma imprópria.' : `${IMAGE_BENCH.improper} impróprias.`} São 20 palavras
+                    com 9 imagens cada, marcadas sem ver o título.
                   </span>
+                </p>
+                <p className="gw-bench-legend" aria-hidden="true">
+                  <span className="gw-bench-key is-before">Antes (Openverse)</span>
+                  <span className="gw-bench-key is-after">Depois (Unsplash)</span>
                 </p>
                 <ul role="list" className="gw-bench-bars">
                   {IMAGE_GROUPS.map((g) => (
                     <li key={g.id}>
                       <span className="gw-bench-label">{g.label}</span>
-                      <span className="gw-bench-track" aria-hidden="true">
-                        <span className="gw-bench-bar" style={{ width: `${(g.hits / g.total) * 100}%` }} />
+                      <span className="gw-bench-pair" aria-hidden="true">
+                        <span className="gw-bench-track">
+                          <span className="gw-bench-bar is-before" style={{ width: `${(g.before / g.total) * 100}%` }} />
+                        </span>
+                        <span className="gw-bench-track">
+                          <span className="gw-bench-bar" style={{ width: `${(g.after / g.total) * 100}%` }} />
+                        </span>
                       </span>
                       <span className="gw-bench-value">
-                        {formatPercent(g.hits, g.total)}
+                        <span aria-hidden="true">
+                          {formatPercent(g.before, g.total)} → {formatPercent(g.after, g.total)}
+                        </span>
                         <span className="gw-visually-hidden">
-                          {' '}
-                          ({g.hits} de {g.total})
+                          antes {g.before} de {g.total}, depois {g.after} de {g.total}
                         </span>
                       </span>
                     </li>
                   ))}
                 </ul>
                 <figcaption>
-                  Palavras abstratas e gramaticais quase não têm imagem que ajude. Por isso vêm aí as frases de exemplo.
+                  A troca de fonte mais que dobrou os acertos. Para palavras como "however", frases de exemplo ensinam mais que
+                  fotos, e vêm aí.
                 </figcaption>
               </figure>
             </div>
@@ -623,7 +637,7 @@ export default function Landing() {
             ))}
           </nav>
           <p>
-            Projeto pessoal e gratuito. Imagens e definições de serviços abertos; créditos dentro do app. Vídeos: TED
+            Projeto pessoal e gratuito. Fotos do Unsplash; definições e traduções de serviços abertos; créditos dentro do app. Vídeos: TED
             (ted.com), licença CC BY–NC–ND 4.0. Lista de palavras comuns: New General Service List (Browne, Culligan e
             Phillips), licença CC BY-SA 4.0.
           </p>

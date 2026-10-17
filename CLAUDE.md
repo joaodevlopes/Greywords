@@ -70,7 +70,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `src/progress.js` | Datas em hora local, metas, resumo da semana, sequência (funções puras, testadas) |
 | `src/components/Videos.jsx` | Aba Vídeos: carrega `catalog.json`, filtros, estados; `VideoSetup`, `VideoCard`, `VideoDialog` |
 | `src/imageQuery.js` | Consultas de imagem com contexto: classe gramatical, palavras da definição, gerúndio (spec 003) |
-| `bench/images/` | Medição de relevância das imagens (`node bench/images/run.mjs <variante>`); resultados em `specs/003-imagens-certeiras/medicao.md` |
+| `bench/images/` | Medição de relevância das imagens (`node bench/images/run.mjs antes|unsplash|...`, `stock.mjs` compara bancos lado a lado); resultados em `specs/003-imagens-certeiras/medicao.md` (antes 82/180, Unsplash 173/180) |
 | `src/videos.js` | Ordenação por nível, filtros, duração, palavras-chave novas (funções puras, testadas) |
 | `src/dev/catalog.sample.json` | Catálogo de exemplo, só em `npm run dev` enquanto não existe `public/catalog.json` (fora do build) |
 | `catalog/` | Pipeline offline do catálogo: `text.mjs` (métricas e nível), `sources.mjs` (validação), `catalog.mjs` (montagem), `build.mjs` / `check.mjs` (CLI), `ngsl/` (lista NGSL, CC BY-SA) |

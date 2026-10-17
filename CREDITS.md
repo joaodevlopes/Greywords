@@ -2,6 +2,10 @@
 
 O Greywords usa apenas serviços, dados e código com licença aberta. Os créditos dos serviços (imagens, definições, tradução, vídeos, lista NGSL) estão no rodapé da landing e dentro do app. Este arquivo registra o código e as fontes que serviram de base para o visual.
 
+## Fotos
+
+As fotos da busca vêm do [Unsplash](https://unsplash.com/?utm_source=greywords&utm_medium=referral), pela [API do Unsplash](https://unsplash.com/developers). Cada foto mostra o crédito ao fotógrafo, com link, e salvar uma foto avisa o Unsplash do uso, como pedem as regras da API. As reservas são o [Openverse](https://openverse.org) e o [Wikimedia Commons](https://commons.wikimedia.org), com a licença e o autor de cada imagem.
+
 ## Efeitos visuais (spec 005)
 
 Os componentes abaixo foram encontrados no [21st.dev](https://21st.dev). Nenhum foi copiado como veio, porque eles usam Tailwind e lucide, que o design system do app não permite. Cada efeito foi **reescrito** em CSS próprio (`gw-fx-*`) e [Motion](https://motion.dev) (MIT), mantendo a ideia original. A licença de cada um foi conferida na página `.md` do componente no 21st.dev.

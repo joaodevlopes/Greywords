@@ -7,7 +7,7 @@ Plataforma gratuita para aprender vocabulário em inglês **pela imagem, não pe
 
 ## Como funciona
 
-1. **Buscar** — digite uma palavra. Aparecem imagens (Openverse + Wikimedia Commons), definição em inglês e pronúncia. A tradução fica escondida até você pedir.
+1. **Buscar** — digite uma palavra. Aparecem fotos do Unsplash (com Openverse e Wikimedia Commons de reserva), definição em inglês e pronúncia. A tradução fica escondida até você pedir. "Refinar imagens" troca a busca das fotos, e "Esconder" tira uma foto que não serve.
 2. **Escolher** — clique nas até 3 imagens que mais lembram a palavra. Elas viram a frente do flashcard.
 3. **Revisar** — repetição espaçada (SM-2, mesma família do Anki). Você vê as imagens, tenta lembrar a palavra e dá uma nota: Errei / Difícil / Bom / Fácil. O intervalo até a próxima revisão se ajusta.
 4. **Dicionário** — todas as palavras salvas, status (nova / aprendendo / dominada), filtro, detalhe e exportação em JSON.
@@ -25,14 +25,25 @@ Atalhos na revisão: `Enter` mostra a resposta, `1`–`4` dão a nota.
 - Identidade própria: paleta quente em tokens `--gw-*` (`src/brand/palette.css`, contraste AA conferido por teste) e títulos em Fraunces
 - Efeitos com [Motion](https://motion.dev) e CSS próprio (`src/fx/`), reescritos a partir de componentes MIT do [21st.dev](https://21st.dev); todos respeitam `prefers-reduced-motion` e pausam fora da tela
 - Dados no `localStorage` (exportáveis em JSON)
-- APIs gratuitas sem chave, todas com timeout e alternativa de reserva:
+- APIs gratuitas, todas com timeout e alternativa de reserva. Só o Unsplash pede chave, e ela fica num intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), nunca no navegador:
 
 | Dado | Principal | Reserva |
 | --- | --- | --- |
-| Imagens | Openverse | Wikimedia Commons |
-| Definição | dictionaryapi.dev | Wiktionary |
+| Imagens | Unsplash (pelo intermediário) | Openverse (só fotos), depois Wikimedia Commons |
+| Definição | dictionaryapi.dev | Wiktionary (pedido em paralelo se o primeiro demorar 1,2 s) |
 | Pronúncia | áudio do dictionaryapi.dev | `speechSynthesis` do navegador |
 | Tradução | MyMemory | — |
+
+### Qualidade das imagens (medida)
+
+20 palavras de teste, 9 imagens cada, marcadas sem ver o título ([medição completa](specs/003-imagens-certeiras/medicao.md)):
+
+| Fonte | Certeiras | Impróprias |
+| --- | --- | --- |
+| Openverse + Wikimedia (antes) | 82/180 (45,6%) | 0 |
+| Unsplash (depois) | 173/180 (96,1%) | 0 |
+
+Para rodar o intermediário no `npm run dev`, crie `.env.local` com `UNSPLASH_ACCESS_KEY=...` (Access Key de um app em [unsplash.com/developers](https://unsplash.com/developers)). Sem ela, o app usa o Openverse.
 
 ### Catálogo de vídeos (pipeline offline)
 
