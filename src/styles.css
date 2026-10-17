@@ -1070,3 +1070,13 @@ img {
   margin: 0 0 var(--es-space-8);
   font-family: var(--gw-font-display);
 }
+
+.gw-ex-more {
+  display: flex;
+}
+
+.gw-hint:focus-visible {
+  outline: 2px solid var(--gw-brand);
+  outline-offset: 4px;
+  border-radius: 4px;
+}

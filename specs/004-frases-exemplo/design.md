@@ -27,7 +27,7 @@ buscar "however"
 | `trans:lang=por` devolve só frases com tradução em português; resposta de ~9 KB | Primeira chamada; a segunda (`showtrans=none`, ~3 KB) só quando faltarem frases |
 | `showtrans=all` pesa ~105 KB | Não usar |
 | Sem "=" encontra variações ("They studied"); com "=" é exata | Variações por padrão; exata (`=however`) para palavras gramaticais (D2) |
-| A relevância põe primeiro frases de 1 palavra ("Study.", "Study!") | Filtro de 4 a 12 palavras antes de ordenar |
+| A relevância põe primeiro frases de 1 palavra ("Study.", "Study!"); para "study", as 30 primeiras tinham até 3 palavras | `word_count=4-12` na consulta (o Tatoeba filtra) e o mesmo filtro de 4 a 12 palavras no app |
 | Campo `is_unapproved` em cada frase | Só aprovadas (D1) |
 | A API se chama "unstable" | Adaptador isolado em `fetchExamples`; com falha, entram os exemplos do dicionário |
 

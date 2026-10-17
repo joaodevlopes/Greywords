@@ -61,7 +61,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `worker/` + `wrangler.toml` | Worker do Cloudflare que publica o intermediário (cache de 24 h, CORS) |
 | `src/brand/palette.css` | Tokens `--gw-*` da paleta (claro/escuro); `contrast.js` + teste conferem AA |
 | `src/App.jsx` | Shell do app: abas Busca / Palavras / Revisão / Vídeos / Progresso, estado e persistência |
-| `src/components/Search.jsx` | Busca: imagens com contexto (espera a definição até 2 s), definição + tradução, escolha de até 3 imagens, "Refinar imagens", "Esconder" imagem, salvar |
+| `src/components/Search.jsx` | Busca: imagens com contexto (espera a definição até 2 s), definição + tradução, escolha de até 3 imagens, "Refinar imagens", "Esconder" imagem, frases de exemplo (no painel; palavra abstrata: no lugar da grade, com "Ver imagens mesmo assim"), salvar com até 2 frases |
 | `src/components/Dictionary.jsx` | Lista de palavras, aviso de revisão, filtro/ordem, detalhe em Dialog, exportar JSON |
 | `src/components/Review.jsx` | Sessão de revisão com flashcard, palpite opcional, notas 1–4 |
 | `src/components/Progress.jsx` | Aba Progresso: meta semanal, semana atual, sequência, check-in de hoje |
@@ -78,7 +78,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `catalog/` | Pipeline offline do catálogo: `text.mjs` (métricas e nível), `sources.mjs` (validação), `catalog.mjs` (montagem), `build.mjs` / `check.mjs` (CLI), `ngsl/` (lista NGSL, CC BY-SA) |
 | `src/components/WordInfo.jsx` | Bloco de palavra: pronúncia, definições, tradução escondida |
 | `src/srs.js` | Algoritmo de revisão espaçada (SM-2 com ajustes estilo Anki) |
-| `src/api.js` | `fetchImagesFor` (Openverse só fotos, até 2 consultas; Wikimedia só em falha; `limited` no 429), `fetchDefinition` (dictionaryapi.dev, com Wiktionary em paralelo após 1,2 s), MyMemory (tradução), `orTimeout`. `fetchImages` antigo fica só para a medição do "antes" |
+| `src/api.js` | `fetchImagesFor` (Openverse só fotos, até 2 consultas; Wikimedia só em falha; `limited` no 429), `fetchDefinition` (dictionaryapi.dev, com Wiktionary em paralelo após 1,2 s), MyMemory (tradução), `fetchExamples` (Tatoeba, `word_count=4-12`, 6 s, cache na sessão), `orTimeout`. `fetchImages` antigo fica só para a medição do "antes" |
 | `src/storage.js` | Carregar/salvar/exportar estado; `migrate()` atualiza dados antigos |
 | `src/*.test.js` | Testes de lógica (`npm test`) |
 

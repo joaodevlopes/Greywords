@@ -250,7 +250,8 @@ export async function fetchExamples(word, { exact = false, max = 5 } = {}) {
   const key = `${w}|${exact}`
   if (examplesCache.has(key)) return examplesCache.get(key)
 
-  const base = { lang: 'eng', q: exact ? `=${w}` : w, sort: 'relevance', limit: '30' }
+  // relevance puts 1–3 word sentences first ("Study."); word_count leaves those out on Tatoeba's side
+  const base = { lang: 'eng', q: exact ? `=${w}` : w, sort: 'relevance', limit: '30', word_count: '4-12' }
   const url = (extra) => `${TATOEBA}?${new URLSearchParams({ ...base, ...extra })}`
   let answered = false
   let found = []

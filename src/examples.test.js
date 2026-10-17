@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { cloze, exampleCredit, findForm, fromDictionary, highlight, pickExamples, togglePicked, wordForms } from './examples.js'
+import { cloze, dictionaryExamples, exampleCredit, examplesToSave, findForm, fromDictionary, highlight, mergeExamples, pickExamples, togglePicked, wordForms } from './examples.js'
 
 const s = (id, text, translation = null, extra = {}) => ({ id, text, translation, owner: 'u', license: 'CC BY 2.0 FR', link: `https://tatoeba.org/en/sentences/show/${id}`, ...extra })
 
@@ -120,5 +120,46 @@ describe('exampleCredit (spec 004, R6.3)', () => {
     assert.equal(exampleCredit(s(1, 'I like to cook.')), 'Tatoeba · u')
     assert.equal(exampleCredit(s(2, 'I like to cook.', null, { owner: null, license: 'CC0 1.0' })), 'Tatoeba')
     assert.equal(exampleCredit(fromDictionary([{ example: 'She cooks well.' }])[0]), 'Dicionário')
+  })
+})
+
+describe('dictionaryExamples (spec 004, R1.5)', () => {
+  it('prefers good dictionary examples and falls back to all of them', () => {
+    const meanings = [{ example: 'Study.' }, { example: 'She studies biology at the university.' }]
+    assert.deepEqual(dictionaryExamples(meanings, 'study').map((e) => e.text), ['She studies biology at the university.'])
+    assert.deepEqual(dictionaryExamples([{ example: 'Study.' }], 'study').map((e) => e.text), ['Study.'])
+    assert.deepEqual(dictionaryExamples(undefined, 'study'), [])
+  })
+})
+
+describe('mergeExamples (spec 004, R2.1)', () => {
+  it('keeps the saved ones first and skips repeats by id or text', () => {
+    const saved = [s(1, 'I like to cook dinner.')]
+    const found = [s(1, 'I like to cook dinner.'), s(2, 'i like to cook dinner.'), s(3, 'We cook every Sunday.')]
+    assert.deepEqual(mergeExamples(saved, found).map((e) => e.id), [1, 3])
+    assert.deepEqual(mergeExamples(undefined, found.slice(2)).map((e) => e.id), [3])
+  })
+})
+
+describe('examplesToSave (spec 004, D3)', () => {
+  const list = [s(1, 'One cook here now.', 'Um'), s(2, 'Two cooks here now.'), s(3, 'Three cooks here now.')]
+  it('saves the chosen ones in order, at most 2, in the stored shape', () => {
+    const saved = examplesToSave(list, [3, 1])
+    assert.deepEqual(saved.map((e) => e.id), [3, 1])
+    assert.deepEqual(Object.keys(saved[1]).sort(), ['id', 'license', 'link', 'owner', 'text', 'translation'])
+    assert.equal(examplesToSave(list, [1, 2, 3]).length, 2)
+  })
+  it('saves the first one when nothing was chosen, nothing when there are none', () => {
+    assert.deepEqual(examplesToSave(list, []).map((e) => e.id), [1])
+    assert.deepEqual(examplesToSave([], []), [])
+  })
+  it('keeps what was saved while the list is still loading', () => {
+    const before = [s(9, 'Saved cook sentence here.')]
+    assert.deepEqual(examplesToSave(null, [], before), before)
+    assert.deepEqual(examplesToSave(undefined, [], undefined), [])
+  })
+  it('keeps the dictionary source mark', () => {
+    const dict = fromDictionary([{ example: 'She cooks very well indeed.' }])
+    assert.equal(examplesToSave(dict, [])[0].source, 'dictionary')
   })
 })

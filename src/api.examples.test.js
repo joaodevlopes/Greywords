@@ -40,6 +40,7 @@ describe('fetchExamples (spec 004, T2)', () => {
     assert.equal(calls[0].searchParams.get('trans:lang'), 'por')
     assert.equal(calls[0].searchParams.get('showtrans'), 'matching')
     assert.equal(calls[0].searchParams.get('q'), 'cook')
+    assert.equal(calls[0].searchParams.get('word_count'), '4-12')
     assert.equal(list.length, 5)
     assert.deepEqual(list[0], {
       id: 1,

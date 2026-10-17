@@ -104,3 +104,38 @@ export function exampleCredit(sentence) {
   if (sentence?.source === 'dictionary') return 'Dicionário'
   return sentence?.owner ? `Tatoeba · ${sentence.owner}` : 'Tatoeba'
 }
+
+/** Fallback when Tatoeba fails or has nothing (R1.5): the dictionary's examples, the good ones first. */
+export function dictionaryExamples(meanings, word, max = 5) {
+  const all = fromDictionary(meanings)
+  const good = pickExamples(all, word, max)
+  return good.length ? good : all.slice(0, max)
+}
+
+/** Sentences already saved with the word come first, then the new ones not already there (same id or text). */
+export function mergeExamples(saved, found) {
+  const list = [...(saved ?? [])]
+  const ids = new Set(list.map((s) => s.id))
+  const texts = new Set(list.map((s) => s.text.toLowerCase()))
+  for (const s of found ?? []) {
+    if (ids.has(s.id) || texts.has(s.text.toLowerCase())) continue
+    ids.add(s.id)
+    texts.add(s.text.toLowerCase())
+    list.push(s)
+  }
+  return list
+}
+
+const SAVED_FIELDS = ['id', 'text', 'translation', 'owner', 'license', 'link', 'source']
+const toSaved = (s) => Object.fromEntries(SAVED_FIELDS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]]))
+
+/**
+ * Sentences saved with the word (D3, at most `max`): the chosen ones in the order they were chosen;
+ * with none chosen, the first one. While the list is still loading (null), what was saved stays.
+ */
+export function examplesToSave(list, picked, saved = [], max = 2) {
+  if (!Array.isArray(list)) return (saved ?? []).slice(0, max)
+  const byId = new Map(list.map((s) => [s.id, s]))
+  const chosen = (picked ?? []).map((id) => byId.get(id)).filter(Boolean)
+  return (chosen.length ? chosen : list.slice(0, 1)).slice(0, max).map(toSaved)
+}

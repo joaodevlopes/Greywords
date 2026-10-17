@@ -37,8 +37,21 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
 
 ## Parte 2 — Telas (depois da T6 da spec 003)
 
-- [ ] **T4 — Busca**: exemplos em paralelo com o resto; bloco "Exemplos" no painel; palavra abstrata → exemplos no lugar da grade, com aviso e "Ver imagens mesmo assim"; salvar leva até 2 frases (sem escolha, a primeira).
+- [x] **T4 — Busca**: exemplos em paralelo com o resto; bloco "Exemplos" no painel; palavra abstrata → exemplos no lugar da grade, com aviso e "Ver imagens mesmo assim"; salvar leva até 2 frases (sem escolha, a primeira).
   *Pronto quando:* "study" mostra frases no painel sem atrasar as imagens; "however" mostra frases no lugar das imagens; escolher e salvar grava as frases; Tatoeba fora do ar (simulado) mostra os exemplos do dicionário. — R1.1–R1.5, R2.1, R3.1, R3.2
+  *Feito (2026-10-17):*
+  - As frases são buscadas em paralelo, depois de esperar a definição (até os mesmos 2 s das imagens) só para saber se a palavra é gramatical (busca exata, D2). Sem frases do Tatoeba (falha, demora acima de 6 s ou nenhuma boa), entram os exemplos do dicionário (`dictionaryExamples`).
+  - Palavra comum: bloco "Exemplos" no painel, **abaixo do botão de salvar**. Assim o botão não vai para o fim do painel com 5 frases; a dica do bloco diz que as escolhidas vão junto ao salvar.
+  - Palavra abstrata: aviso, frases e o botão "Ver imagens mesmo assim" no lugar da grade. Ao clicar, aparecem as imagens e o "Refinar", o foco vai para o título das imagens e **nenhuma imagem vem escolhida** (as 3 automáticas seriam ruins aqui). Se as imagens nunca foram abertas, salvar não grava imagem nova.
+  - Salvar grava até 2 frases (`examplesToSave`: as escolhidas, na ordem; sem escolha, a primeira; com as frases ainda carregando, mantém as já salvas). Palavra já salva: as frases dela aparecem primeiro e já marcadas (`mergeExamples`).
+  - Funções novas testadas em `examples.js`: `dictionaryExamples`, `mergeExamples`, `examplesToSave`.
+  - **Achado no teste:** para "study", a relevância do Tatoeba punha 30 frases de 1 a 3 palavras ("Study.", "I study law."), e o filtro de 4 a 12 palavras descartava todas. Agora a consulta pede `word_count=4-12` ao próprio Tatoeba (conferido com `curl` e em teste).
+  - **Conferido no Edge headless** (servidor de desenvolvimento, Tatoeba real):
+    - "study": imagens em 0,4 s e frases do Tatoeba em 2,8 s, no painel.
+    - Escolher a 2ª e a 3ª frase e salvar grava as duas no `localStorage`, com id, texto, tradução, autor, licença e link.
+    - "however": 5 frases no lugar da grade. "Ver imagens mesmo assim" mostra 3 imagens, nenhuma escolhida.
+    - Tatoeba bloqueado (`Network.setBlockedURLs`): "study" e "however" mostram os exemplos do dicionário com o crédito "Dicionário".
+    - Claro, escuro e 375 px sem rolagem lateral. Sem erros no console.
 
 - [ ] **T5 — Dados e dicionário**: `migrate()` garante `examples: []` em cada palavra (com teste); detalhe da palavra mostra as frases salvas.
   *Pronto quando:* palavras antigas carregam sem erro; o detalhe mostra frases, tradução escondida e crédito. — R2.2, R6.1, R6.2
