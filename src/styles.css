@@ -465,12 +465,12 @@ img {
 }
 
 /* after reveal, shrink images so the grade buttons stay in view */
-.gw-flash.is-revealed .gw-flash-imgs {
+.gw-flash[data-side='back'] .gw-flash-imgs {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: auto;
 }
 
-.gw-flash.is-revealed .gw-flash-imgs img {
+.gw-flash[data-side='back'] .gw-flash-imgs img {
   grid-row: auto;
   height: 104px;
   min-height: 0;
@@ -1117,4 +1117,25 @@ img {
 /* spec 005, B3: the chosen image shrinks inside its tile; keep its corners round */
 .gw-tile img {
   border-radius: inherit;
+}
+
+/* ---------- flashcard turn (spec 005, B1) ---------- */
+.gw-flip {
+  perspective: 1400px;
+}
+
+.gw-flash-answer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--es-space-9);
+  border-radius: var(--es-radius-10);
+}
+
+.gw-flash-answer:focus {
+  outline: none;
+}
+
+.gw-flash-answer:focus-visible {
+  outline: 2px solid var(--gw-brand);
+  outline-offset: 6px;
 }

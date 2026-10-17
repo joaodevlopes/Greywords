@@ -3,6 +3,7 @@ import { Badge, Button, EmptyState, IconButton, ProgressBar, Surface, Text, Text
 import { dueLabel, grade, intervalLabel, isDue } from '../srs.js'
 import { exampleCredit, highlight, reviewSentence } from '../examples.js'
 import { celebrate } from '../fx/celebrate.js'
+import FlipSwap from '../fx/FlipSwap.jsx'
 import { isAbstract } from '../imageQuery.js'
 import { speak } from '../speak.js'
 import WordInfo from './WordInfo.jsx'
@@ -31,6 +32,7 @@ export default function Review({ words, onGrade, onGoSearch }) {
   const [hint, setHint] = useState(false)
   const [session, setSession] = useState({ done: 0, again: 0 })
   const guessRef = useRef(null)
+  const answerRef = useRef(null)
 
   const live = queue.filter((k) => words[k])
   const card = live.length ? words[live[0]] : null
@@ -52,6 +54,11 @@ export default function Review({ words, onGrade, onGoSearch }) {
     if (!card || revealed) return
     setRevealed(true)
     speak(card.word, card.audio)
+  }
+
+  // once the back is on screen, focus moves to the answer (the field it replaced is gone)
+  function onFaceShown(face) {
+    if (face === 'back') answerRef.current?.focus({ preventScroll: true })
   }
 
   function answer(q) {
@@ -97,7 +104,9 @@ export default function Review({ words, onGrade, onGoSearch }) {
         description={[
           finished &&
             `${session.done} palavra${plural} revisada${plural}${session.again ? `, ${session.again} erro${session.again > 1 ? 's' : ''} no caminho` : ''}.`,
-          upcoming ? `Próxima revisão: ${dueLabel(upcoming.srs.due)} (${upcoming.word}).` : 'Salve palavras na busca para começar a revisar.',
+          upcoming
+            ? `Próxima revisão: ${dueLabel(upcoming.srs.due)} (${upcoming.word}).`
+            : 'Salve palavras na busca para começar a revisar.',
         ]
           .filter(Boolean)
           .join(' ')}
@@ -129,114 +138,128 @@ export default function Review({ words, onGrade, onGoSearch }) {
       </div>
 
       <Surface role="panel">
-        <div className={`gw-flash ${revealed ? 'is-revealed' : ''}`}>
-          {sentence ? (
-            <div className="gw-flash-sentence">
-              <p className="gw-flash-cloze" lang="en">
-                {parts.before}
-                {revealed ? (
-                  <mark className="gw-ex-mark">{parts.match}</mark>
-                ) : (
-                  <span className="gw-flash-blank">
-                    <span aria-hidden="true">_____</span>
-                    <span className="gw-visually-hidden">lacuna</span>
-                  </span>
-                )}
-                {parts.after}
-              </p>
-              {revealed && (
-                <div className="gw-flash-sentence-meta">
-                  <IconButton label="Ouvir a frase" icon="Play" onClick={() => speak(sentence.text)} />
-                  <span className="gw-ex-credit">
-                    {sentence.link ? (
-                      <a href={sentence.link} target="_blank" rel="noreferrer">
-                        {exampleCredit(sentence)}
-                        <span className="gw-visually-hidden"> (abre em nova aba)</span>
-                      </a>
-                    ) : (
-                      exampleCredit(sentence)
+        {/* spec 005, B1: the card turns over on reveal; "revealed" changes at once, so grades work mid-turn */}
+        <FlipSwap side={revealed ? 'back' : 'front'} className="gw-flash" onShown={onFaceShown}>
+          {(face) => {
+            const back = face === 'back'
+            return (
+              <>
+                {sentence ? (
+                  <div className="gw-flash-sentence">
+                    <p className="gw-flash-cloze" lang="en">
+                      {parts.before}
+                      {back ? (
+                        <mark className="gw-ex-mark">{parts.match}</mark>
+                      ) : (
+                        <span className="gw-flash-blank">
+                          <span aria-hidden="true">_____</span>
+                          <span className="gw-visually-hidden">lacuna</span>
+                        </span>
+                      )}
+                      {parts.after}
+                    </p>
+                    {back && (
+                      <div className="gw-flash-sentence-meta">
+                        <IconButton label="Ouvir a frase" icon="Play" onClick={() => speak(sentence.text)} />
+                        <span className="gw-ex-credit">
+                          {sentence.link ? (
+                            <a href={sentence.link} target="_blank" rel="noreferrer">
+                              {exampleCredit(sentence)}
+                              <span className="gw-visually-hidden"> (abre em nova aba)</span>
+                            </a>
+                          ) : (
+                            exampleCredit(sentence)
+                          )}
+                        </span>
+                      </div>
                     )}
-                  </span>
-                </div>
-              )}
-            </div>
-          ) : card.images.length > 0 ? (
-            <div className={`gw-flash-imgs n${card.images.length}`}>
-              {card.images.map((img) => (
-                <img key={img.id} src={img.thumb} alt="" />
-              ))}
-            </div>
-          ) : (
-            firstDef && <p className="gw-flash-def">{mask(firstDef.definition, card.word)}</p>
-          )}
+                  </div>
+                ) : card.images.length > 0 ? (
+                  <div className={`gw-flash-imgs n${card.images.length}`}>
+                    {card.images.map((img) => (
+                      <img key={img.id} src={img.thumb} alt="" />
+                    ))}
+                  </div>
+                ) : (
+                  firstDef && <p className="gw-flash-def">{mask(firstDef.definition, card.word)}</p>
+                )}
 
-          {!revealed && (
-            <>
-              {hintText && (
-                <div>
-                  {hint ? (
-                    <Text tone="secondary">{hintText}</Text>
-                  ) : (
-                    <Button label="Mostrar dica" variant="ghost" compact icon="CircleHelp" onClick={() => setHint(true)} />
-                  )}
-                </div>
-              )}
-              <form
-                className="gw-guess"
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  reveal()
-                }}
-              >
-                <TextField
-                  ref={guessRef}
-                  label="Qual é a palavra?"
-                  description="Opcional. Escrever ajuda a lembrar."
-                  value={guess}
-                  onChange={setGuess}
-                  autoComplete="off"
-                  spellCheck={false}
-                />
-                <Button label="Mostrar resposta" type="submit" variant="primary" />
-              </form>
-              <Text variant="caption" tone="secondary">
-                Enter mostra a resposta.
-              </Text>
-            </>
-          )}
+                {!back && (
+                  <>
+                    {hintText && (
+                      <div>
+                        {hint ? (
+                          <Text tone="secondary">{hintText}</Text>
+                        ) : (
+                          <Button label="Mostrar dica" variant="ghost" compact icon="CircleHelp" onClick={() => setHint(true)} />
+                        )}
+                      </div>
+                    )}
+                    <form
+                      className="gw-guess"
+                      onSubmit={(e) => {
+                        e.preventDefault()
+                        reveal()
+                      }}
+                    >
+                      <TextField
+                        ref={guessRef}
+                        label="Qual é a palavra?"
+                        description="Opcional. Escrever ajuda a lembrar."
+                        value={guess}
+                        onChange={setGuess}
+                        autoComplete="off"
+                        spellCheck={false}
+                      />
+                      <Button label="Mostrar resposta" type="submit" variant="primary" />
+                    </form>
+                    <Text variant="caption" tone="secondary">
+                      Enter mostra a resposta.
+                    </Text>
+                  </>
+                )}
 
-          {revealed && (
-            <>
-              {guess && (
-                <Badge
-                  label={correct ? 'Acertou' : `Você escreveu “${guess}”`}
-                  tone={correct ? 'success' : 'error'}
-                  purpose="status"
-                />
-              )}
-              <WordInfo
-                word={card.word}
-                phonetic={card.phonetic}
-                audio={card.audio}
-                meanings={card.meanings.slice(0, 2)}
-                translation={card.translation}
-              />
-              <div className="gw-grades" role="group" aria-label="Como foi lembrar essa palavra?">
-                {GRADES.map((g) => {
-                  const next = intervalLabel(grade(card.srs, g.q).interval)
-                  return (
-                    <div key={g.q} className="gw-grade">
-                      <Button label={g.label} variant={g.q === 4 ? 'primary' : 'secondary'} onClick={() => answer(g.q)} />
-                      <span className="gw-grade-next">
-                        {next} · tecla {g.key}
-                      </span>
+                {back && (
+                  <div
+                    ref={answerRef}
+                    className="gw-flash-answer"
+                    tabIndex={-1}
+                    role="group"
+                    aria-label={`Resposta: ${card.word}`}
+                  >
+                    {guess && (
+                      <Badge
+                        label={correct ? 'Acertou' : `Você escreveu “${guess}”`}
+                        tone={correct ? 'success' : 'error'}
+                        purpose="status"
+                      />
+                    )}
+                    <WordInfo
+                      word={card.word}
+                      phonetic={card.phonetic}
+                      audio={card.audio}
+                      meanings={card.meanings.slice(0, 2)}
+                      translation={card.translation}
+                    />
+                    <div className="gw-grades" role="group" aria-label="Como foi lembrar essa palavra?">
+                      {GRADES.map((g) => {
+                        const next = intervalLabel(grade(card.srs, g.q).interval)
+                        return (
+                          <div key={g.q} className="gw-grade">
+                            <Button label={g.label} variant={g.q === 4 ? 'primary' : 'secondary'} onClick={() => answer(g.q)} />
+                            <span className="gw-grade-next">
+                              {next} · tecla {g.key}
+                            </span>
+                          </div>
+                        )
+                      })}
                     </div>
-                  )
-                })}
-              </div>
-            </>
-          )}
-        </div>
+                  </div>
+                )}
+              </>
+            )
+          }}
+        </FlipSwap>
       </Surface>
     </section>
   )

@@ -639,7 +639,7 @@ export default function Landing() {
             Phillips), licença CC BY-SA 4.0.
           </p>
           <p>
-            Efeitos visuais reescritos a partir de componentes MIT do 21st.dev (Magic UI e Motion Primitives); o fundo
+            Efeitos visuais reescritos a partir de componentes MIT do 21st.dev (Magic UI, Motion Primitives, Animate UI e shadcn/ui); o fundo
             do topo se inspira na Aceternity UI. Títulos em Fraunces, licença OFL. Lista completa no arquivo CREDITS.md
             do projeto.
           </p>

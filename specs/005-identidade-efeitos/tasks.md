@@ -61,8 +61,20 @@ Cada efeito baseado no 21st.dev ganha um comentário de crédito no topo do arqu
       - Com movimento reduzido: o esqueleto fica parado, sem escala e sem salto, e escolher continua igual. Sem erros no console.
       - JS: 175,2 KB gzip, dentro do orçamento de 217 KB.
 
-- [ ] **T13 — Virar o flashcard** (só **depois da T6 da spec 004**, que também mexe na revisão): meia-volta em `rotateY` ao revelar (B1), também com a frente de frase com lacuna.
+- [x] **T13 — Virar o flashcard** (só **depois da T6 da spec 004**, que também mexe na revisão): meia-volta em `rotateY` ao revelar (B1), também com a frente de frase com lacuna.
   - *Pronto quando:* revelar por clique, Espaço ou Enter vira o cartão; as notas 1–4 funcionam durante a animação; o foco vai para o lugar certo depois de virar; com movimento reduzido a troca é direta. — R4.1, R4.7
+  - *Feito (2026-10-17):*
+    - `src/fx/FlipSwap.jsx`: meia-volta com `useAnimate` do motion. A frente gira de 0° a 90° em 0,14 s, a face troca, e o verso vem de −90° a 0° em 0,18 s; existe uma face por vez. Voltar para a frente (próxima carta) é imediato. Com movimento reduzido, a troca é direta.
+    - Na `Review.jsx`, o estado `revealed` muda na hora. Por isso as notas pelo teclado valem no meio da virada, e uma nota interrompe a animação.
+    - O conteúdo do verso fica num grupo "Resposta: palavra" (`tabIndex -1`), que recebe o foco quando aparece, porque o campo de palpite que tinha o foco sai da tela. O Tab segue daí para "Ouvir", "Ver tradução" e as notas.
+    - As regras `.is-revealed` viraram `[data-side='back']`.
+    - Crédito: Flip Card (Elliot Sutton, Animate UI, MIT, conferido na página `.md` do 21st.dev) no `CREDITS.md` e no rodapé da landing, junto com o shadcn/ui do B4.
+    - **Conferido no Edge headless** (ângulo e face gravados a cada quadro):
+      - Clique em "Mostrar resposta", Enter no campo (com palpite: "Acertou") e Espaço fora do campo: os três viram o cartão, chegando a 90°, voltando de cerca de −76° a 0° e trocando de face com cerca de 0,17 s. Nos três, o foco termina em "Resposta: …".
+      - Nota "3" 40 ms depois de revelar: a nota conta, a virada para (13°) e a sessão segue.
+      - A frente com frase e lacuna ("blanket") vira igual.
+      - Com movimento reduzido: ângulo sempre 0°, o verso aparece no quadro seguinte, foco e notas iguais. Sem erros no console.
+      - JS: 175,7 KB gzip.
 
 - [ ] **T14 — Verificação final**: percorrer R4 e R5 no app, conferir de novo o orçamento e o `check:ui`, atualizar o `CREDITS.md` (B1, B2, B4, B5) e o `CLAUDE.md`, e marcar a spec como `implementado`.
   - *Pronto quando:* todos os critérios estão conferidos e listados abaixo, com o que não deu para verificar dito explicitamente.

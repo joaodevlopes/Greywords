@@ -35,9 +35,9 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 ## Onde paramos (próximos passos, em ordem)
 
-Atualizado em 2026-10-17, depois da T12 da spec 005.
+Atualizado em 2026-10-17, depois da T13 da spec 005.
 
-1. **Spec 005 (efeitos), etapa B, a próxima:** **T12 feita** (imagem escolhida encolhe e o número "salta"; esqueleto com brilho de 12 quadros). Próxima: T13 (virar o flashcard; a frente pode ser imagem ou frase com lacuna). A T14 fecha a spec e refaz as capturas da landing (o app mudou com as frases).
+1. **Spec 005 (efeitos), etapa B, a próxima:** **T12 feita** (imagem escolhida encolhe e o número "salta"; esqueleto com brilho de 12 quadros). **T13 feita** (o cartão da revisão vira; notas valem no meio da virada). Próxima: T14 (verificação final, refazer as capturas da landing e marcar a spec como implementada). A T14 fecha a spec e refaz as capturas da landing (o app mudou com as frases).
 2. **Publicação do site** (ainda não decidido onde):
    - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);
    - pôr o endereço do Worker no build (`VITE_IMAGES_API`) e em `ALLOWED_ORIGINS`;
@@ -60,7 +60,7 @@ Atualizado em 2026-10-17, depois da T12 da spec 005.
 | [002-videos-nicho](specs/002-videos-nicho/requirements.md) | Aba Vídeos: talks do TED por nicho e nível, catálogo gerado offline | T1–T3, T6–T11 feitas; T12 quase toda; **faltam T4 (usuário), T5, T13** |
 | [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); falta só publicar o Worker (T9a) |
 | [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | **implementado** (2026-10-17) |
-| [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | etapa A pronta; etapa B: T10–T12 feitas; T13 liberada; T14 fecha |
+| [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | etapa A pronta; etapa B: T10–T13 feitas; falta a T14 (verificação final) |
 
 ## O que existe hoje no app
 
@@ -88,7 +88,7 @@ Atualizado em 2026-10-17, depois da T12 da spec 005.
 - **Medição das imagens** (spec 003): "antes" (Openverse + Wikimedia) = **82/180 certeiras (45,6%)**; "depois" (Unsplash) = **173/180 (96,1%)**; 0 impróprias nas duas. O usuário usa o botão "Imprópria" para marcar as erradas: confira as imagens antes de registrar.
 - **21st.dev** (spec 005): componentes vêm em Tailwind + lucide, que o `check:ui` proíbe em `src/`. Cada efeito é reescrito em CSS `gw-*` + `motion/react` (já instalado pelo BEDS). Código só de componente MIT, com crédito em `CREDITS.md`. Licença conferida na página `https://21st.dev/<autor>/components/<nome>.md`. O `motion` já vai no pacote final pelo BEDS, e o `Metric` do BEDS já anima números (`numericValue` + `formatValue`).
 - **Contraste do laranja**: `#e8590c` dá 3,3:1 no creme e 3,6:1 com texto branco, o que reprova para texto pequeno. Para texto e para o CTA, usar `--gw-brand-ink` (`#b4430a` no claro, `#ff8a4c` no escuro).
-- **Build hoje**: JS 175,2 KB gzip. O orçamento da spec 005 é de até 217 KB; a linha de base era 157,4 KB.
+- **Build hoje**: JS 175,7 KB gzip. O orçamento da spec 005 é de até 217 KB; a linha de base era 157,4 KB.
 - Nenhuma API paga. Só o Unsplash pede chave (exceção aprovada, protegida pelo intermediário). Nada de depoimentos ou números inventados na landing. A landing diz "8 serviços" (Unsplash, Openverse, Wikimedia, Free Dictionary, Wiktionary, MyMemory, Tatoeba, YouTube).
 
 ## Armadilhas já encontradas

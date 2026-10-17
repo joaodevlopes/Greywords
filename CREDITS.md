@@ -23,6 +23,7 @@ Os componentes abaixo foram encontrados no [21st.dev](https://21st.dev). Nenhum 
 | A3 — Palavra trocando no título | `src/fx/WordRotate.jsx` | [Word Rotate](https://21st.dev/@dillionverma/components/word-rotate) | Dillion Verma | Magic UI | MIT | 2026-10-17 |
 | A6 — Feixe de luz na borda | `src/fx/BorderBeam.jsx` | [Border Beam](https://21st.dev/@dillionverma/components/border-beam) | Dillion Verma | Magic UI | MIT | 2026-10-17 |
 | A5 — Cartão com brilho que segue o mouse | `src/fx/SpotlightCard.jsx` | [Magic Card](https://21st.dev/@dillionverma/components/magic-card) | Dillion Verma | Magic UI | MIT | 2026-10-17 |
+| B1 — Virar o flashcard na revisão | `src/fx/FlipSwap.jsx` | [Flip Card](https://21st.dev/@skyleen77/components/flip-card) | Elliot Sutton | Animate UI | MIT | 2026-10-17 |
 | B4 — Esqueleto com brilho enquanto as imagens carregam | `src/fx/Skeleton.jsx` + `fx.css` (`.gw-fx-skeleton`) | [Skeleton](https://21st.dev/@shadcn/components/skeleton) | shadcn | shadcn/ui | MIT | 2026-10-17 |
 | B2 — Transição entre abas do app | `src/fx/TabTransition.jsx` | [Transition Panel](https://21st.dev/@ibelick/components/transition-panel) | Julien Thibeaut | Motion Primitives | MIT | 2026-10-17 |
 | B5 — Confete ao bater a meta e ao fim da revisão | `src/fx/celebrate.js` | [Confetti](https://21st.dev/@dillionverma/components/confetti) | Dillion Verma | Magic UI | MIT | 2026-10-17 |
