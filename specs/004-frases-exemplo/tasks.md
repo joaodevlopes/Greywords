@@ -53,8 +53,17 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
     - Tatoeba bloqueado (`Network.setBlockedURLs`): "study" e "however" mostram os exemplos do dicionário com o crédito "Dicionário".
     - Claro, escuro e 375 px sem rolagem lateral. Sem erros no console.
 
-- [ ] **T5 — Dados e dicionário**: `migrate()` garante `examples: []` em cada palavra (com teste); detalhe da palavra mostra as frases salvas.
+- [x] **T5 — Dados e dicionário**: `migrate()` garante `examples: []` em cada palavra (com teste); detalhe da palavra mostra as frases salvas.
   *Pronto quando:* palavras antigas carregam sem erro; o detalhe mostra frases, tradução escondida e crédito. — R2.2, R6.1, R6.2
+  *Feito (2026-10-17):*
+  - `migrate()` dá `examples: []` a cada palavra sem a lista e limpa listas malformadas: tira itens sem texto e deixa no máximo 2. Palavras já certas continuam sendo o mesmo objeto. Testes: palavra antiga, lista suja, estado atual sem mudança, sem alterar o objeto salvo e exportação em JSON com as frases (R6.2).
+  - Detalhe da palavra no dicionário: bloco "Frases salvas" (o mesmo `Examples`, só leitura) abaixo da definição, com tradução escondida, ouvir e crédito com link. O aviso de remover agora cita as frases.
+  - `src/dev/demoState.js` ganhou `examples: []` (o teste confere que os dados de exemplo já estão no formato atual).
+  - **Conferido no Edge headless:**
+    - Estado com "river" no formato antigo e "however" com 2 frases (uma do Tatoeba e uma do dicionário).
+    - "river" abre sem erro e é gravado com `examples: []`.
+    - "however" mostra as 2 frases com os créditos "Tatoeba · carlosalberto" (link para a frase) e "Dicionário". A tradução fica escondida até "Ver tradução".
+    - Claro, escuro e 375 px sem rolagem lateral, sem erros no console.
 
 - [ ] **T6 — Revisão com lacuna**: frente com frase e lacuna para palavras abstratas ou sem imagem salva; dica com a tradução da frase; revelar mostra a frase completa destacada; com 2 frases, alterna.
   *Pronto quando:* revisar "however" mostra a lacuna, a dica em português e a resposta completa; palavras com imagem continuam com imagens; palpite e notas funcionam igual. — R4.1–R4.4

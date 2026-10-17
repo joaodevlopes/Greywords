@@ -10,6 +10,25 @@ const LEGACY_KEY = 'lexi:v1'
  * and the day each word was saved, so existing history shows on the calendar.
  * Already-current state comes back unchanged.
  */
+const MAX_EXAMPLES = 2
+const isSentence = (s) => typeof s?.text === 'string' && s.text.trim() !== ''
+
+// Every word gets `examples: []`; words that already have a clean list are kept as they are (same object).
+function withExamples(words) {
+  let changed = false
+  const out = {}
+  for (const [key, w] of Object.entries(words ?? {})) {
+    const list = Array.isArray(w?.examples) ? w.examples : null
+    if (!w || typeof w !== 'object' || (list && list.length <= MAX_EXAMPLES && list.every(isSentence))) {
+      out[key] = w
+      continue
+    }
+    changed = true
+    out[key] = { ...w, examples: (list ?? []).filter(isSentence).slice(0, MAX_EXAMPLES) }
+  }
+  return changed ? out : words
+}
+
 export function migrate(saved) {
   const state = { words: {}, log: [], ...saved }
   if (!Array.isArray(state.goals)) state.goals = []
@@ -27,6 +46,8 @@ export function migrate(saved) {
       if (Array.isArray(ids)) state.hiddenImages[word] = ids.filter((id) => typeof id === 'string')
     }
   }
+  // spec 004, R6.1: example sentences saved with each word (at most 2, only ones with text)
+  state.words = withExamples(state.words)
   if (!Array.isArray(state.activityDays)) {
     const days = new Set()
     for (const r of state.log) if (Number.isFinite(r?.t)) days.add(dayKey(r.t))

@@ -12,7 +12,7 @@ App gratuito (React + Vite, dados só no navegador; um intermediário pequeno gu
 cd C:\Users\joaog\OneDrive\Documentos\englishPlataform
 npm install          # se faltar node_modules
 npm run dev          # http://localhost:5173   (#/ landing · #/app app)
-npm test             # 208 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
+npm test             # 210 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
 npm run build
 npm run check:ui     # contrato do BEDS: precisa dar 0 violations
 ```
@@ -35,9 +35,9 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 ## Onde paramos (próximos passos, em ordem)
 
-Atualizado em 2026-10-17, depois da T4 da spec 004.
+Atualizado em 2026-10-17, depois da T5 da spec 004.
 
-1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 a T3 feitas** (`src/examples.js`; `fetchExamples` no `api.js`, com 2 chamadas no máximo, busca exata e cache; componente `src/components/Examples.jsx`, com prévia no dev em `#/dev/examples`). **T4 feita**: frases na busca (no painel; nas palavras abstratas, no lugar das imagens) e salvar com até 2 frases. Próxima: T5 (`migrate()` com `examples: []` e frases no detalhe do dicionário). Aviso: o Tatoeba estava lento (11 a 25 s) no dia; com 6 s de limite, o app cai nos exemplos do dicionário. Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
+1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 a T3 feitas** (`src/examples.js`; `fetchExamples` no `api.js`, com 2 chamadas no máximo, busca exata e cache; componente `src/components/Examples.jsx`, com prévia no dev em `#/dev/examples`). **T4 feita**: frases na busca (no painel; nas palavras abstratas, no lugar das imagens) e salvar com até 2 frases. **T5 feita**: `migrate()` com `examples: []` e frases no detalhe do dicionário. Próxima: T6 (revisão com lacuna para palavras abstratas ou sem imagem). Aviso: o Tatoeba estava lento (11 a 25 s) no dia; com 6 s de limite, o app cai nos exemplos do dicionário. Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
 2. **Spec 005 (efeitos), etapa B:** T12 (animação ao escolher imagem e esqueleto na busca) está liberada. T13 (virar o flashcard) espera a T6 da 004. A T14 fecha a spec.
 3. **Publicação do site** (ainda não decidido onde):
    - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);
@@ -112,6 +112,7 @@ Atualizado em 2026-10-17, depois da T4 da spec 004.
 - **Tatoeba com palavras comuns:** a relevância põe primeiro frases de 1 a 3 palavras; sem `word_count=4-12` na consulta, "study" ficava sem nenhuma frase boa.
 - **Tatoeba lento:** em 2026-10-17 chegou a levar de 11 a 25 s por chamada (mais tarde, de 1 a 3 s). O app usa 6 s de limite e cai nos exemplos do dicionário. O teste com a API real só roda com `LIVE_APIS=1`.
 - **Marcação de imagens pelo usuário:** ele usa o botão "Imprópria" para as erradas. Antes de registrar "impróprias", olhe as imagens.
+- O **Dialog do BEDS ignora cliques enquanto está abrindo** (`data-phase` diferente de `open`): o clique cai no fundo e fecha o diálogo. Nos roteiros headless, espere cerca de 1,5 s depois de abrir.
 - O `localStorage` é separado por porta: dados de teste em `:5180` não aparecem em `:5173`.
 
 ## Mapa rápido de arquivos novos (o mapa completo está no CLAUDE.md)

@@ -62,7 +62,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `src/brand/palette.css` | Tokens `--gw-*` da paleta (claro/escuro); `contrast.js` + teste conferem AA |
 | `src/App.jsx` | Shell do app: abas Busca / Palavras / Revisão / Vídeos / Progresso, estado e persistência |
 | `src/components/Search.jsx` | Busca: imagens com contexto (espera a definição até 2 s), definição + tradução, escolha de até 3 imagens, "Refinar imagens", "Esconder" imagem, frases de exemplo (no painel; palavra abstrata: no lugar da grade, com "Ver imagens mesmo assim"), salvar com até 2 frases |
-| `src/components/Dictionary.jsx` | Lista de palavras, aviso de revisão, filtro/ordem, detalhe em Dialog, exportar JSON |
+| `src/components/Dictionary.jsx` | Lista de palavras, aviso de revisão, filtro/ordem, detalhe em Dialog (com as frases salvas), exportar JSON |
 | `src/components/Review.jsx` | Sessão de revisão com flashcard, palpite opcional, notas 1–4 |
 | `src/components/Progress.jsx` | Aba Progresso: meta semanal, semana atual, sequência, check-in de hoje |
 | `src/components/MonthCalendar.jsx` | Calendário do mês (do app, sem equivalente no BEDS) |
@@ -92,6 +92,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
       meanings: [{ pos, definition, example }],
       translation: { main, alts } | null,
       images: [{ id, thumb, title, credit, link, source?, creditLink? }], // até 3; source = unsplash | openverse | wikimedia
+      examples: [{ id, text, translation, owner, license, link, source? }], // até 2 frases (spec 004); source = dictionary quando não vem do Tatoeba
       addedAt,                                          // timestamp ms
       srs: { ease, interval, reps, lapses, due },       // due = timestamp ms
     },

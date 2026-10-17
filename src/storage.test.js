@@ -36,13 +36,17 @@ describe('migrate (spec 001, T3)', () => {
     assert.deepEqual(state.activityDays, ['2026-10-14', '2026-10-15', '2026-10-16'])
     assert.deepEqual(state.goals, [])
     assert.deepEqual(state.checkinDays, [])
-    assert.equal(state.words, old.words) // words and log are kept as they were
+    // words only gain the empty sentence list (spec 004); the log is kept as it was
+    assert.deepEqual(state.words, {
+      sun: { ...old.words.sun, examples: [] },
+      river: { ...old.words.river, examples: [] },
+    })
     assert.equal(state.log, old.log)
   })
 
   it('returns an already-migrated state unchanged', () => {
     const current = {
-      words: { sun: { key: 'sun', addedAt: at(2026, 10, 1) } },
+      words: { sun: { key: 'sun', addedAt: at(2026, 10, 1), examples: [{ id: 1, text: 'The sun is hot today.' }] } },
       log: [{ t: at(2026, 10, 2), word: 'sun', q: 4 }],
       goals: [{ from: '2026-10-12', days: 4 }],
       checkinDays: ['2026-10-13'],
@@ -54,6 +58,7 @@ describe('migrate (spec 001, T3)', () => {
       hiddenImages: { sun: ['ov:1'] },
     }
     assert.deepEqual(migrate(current), current)
+    assert.equal(migrate(current).words, current.words)
   })
 
   it('ignores malformed log rows and words without a date', () => {
@@ -61,10 +66,25 @@ describe('migrate (spec 001, T3)', () => {
     assert.deepEqual(state.activityDays, ['2026-10-03'])
   })
 
+  it('gives every word an examples list, keeping at most 2 sentences with text (spec 004, R6.1)', () => {
+    const s1 = { id: 1, text: 'One sun sentence here.' }
+    const s2 = { id: 2, text: 'Two sun sentences here.' }
+    const state = migrate({
+      words: {
+        sun: { key: 'sun', addedAt: at(2026, 10, 1) },
+        river: { key: 'river', addedAt: at(2026, 10, 1), examples: [null, { id: 9, text: '  ' }, s1, s2, { id: 3, text: 'Three.' }] },
+        rain: { key: 'rain', addedAt: at(2026, 10, 1), examples: 'oops' },
+      },
+    })
+    assert.deepEqual(state.words.sun.examples, [])
+    assert.deepEqual(state.words.river.examples, [s1, s2])
+    assert.deepEqual(state.words.rain.examples, [])
+  })
+
   it('does not mutate the saved object', () => {
-    const saved = { words: {}, log: [] }
+    const saved = { words: { sun: { key: 'sun' } }, log: [] }
     migrate(saved)
-    assert.deepEqual(saved, { words: {}, log: [] })
+    assert.deepEqual(saved, { words: { sun: { key: 'sun' } }, log: [] })
   })
 })
 
@@ -75,6 +95,12 @@ describe('serializeState (spec 001, R5.2)', () => {
     assert.deepEqual(out.goals, [{ from: '2026-10-12', days: 4 }])
     assert.deepEqual(out.checkinDays, ['2026-10-15'])
     assert.deepEqual(out.activityDays, ['2026-10-16'])
+  })
+
+  it('exports the sentences saved with each word (spec 004, R6.2)', () => {
+    const sentence = { id: 1, text: 'However, my shoulder hurts.', translation: 'No entanto, meu ombro dói.', owner: 'ana', license: 'CC BY 2.0 FR', link: 'https://tatoeba.org/en/sentences/show/1' }
+    const state = migrate({ words: { however: { key: 'however', examples: [sentence] } } })
+    assert.deepEqual(JSON.parse(serializeState(state)).words.however.examples, [sentence])
   })
 })
 

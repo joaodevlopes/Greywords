@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Badge, Button, Dialog, EmptyState, SearchField, Select, Text } from 'beds'
 import { UNSPLASH_HOME, imageCredit } from '../imageQuery.js'
 import { dueLabel, isDue, status } from '../srs.js'
+import Examples from './Examples.jsx'
 import WordInfo from './WordInfo.jsx'
 
 const SORTS = [
@@ -155,6 +156,7 @@ export default function Dictionary({ words, onRemove, onExport, onGoSearch, onGo
               translation={open.translation}
               showTitle={false}
             />
+            {open.examples?.length > 0 && <Examples word={open.word} sentences={open.examples} title="Frases salvas" />}
             <dl className="gw-facts">
               <div>
                 <dt>Adicionada</dt>
@@ -175,7 +177,7 @@ export default function Dictionary({ words, onRemove, onExport, onGoSearch, onGo
             </dl>
             {confirming && (
               <Text tone="secondary">
-                Remover “{open.word}” tira a palavra e as imagens escolhidas do dicionário. Não dá para desfazer.
+                Remover “{open.word}” tira a palavra, as imagens e as frases escolhidas do dicionário. Não dá para desfazer.
               </Text>
             )}
           </div>

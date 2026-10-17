@@ -84,6 +84,7 @@ export function buildDemoState({ images, now = Date.now() }) {
       meanings: [{ pos: 'noun', definition: w.definition, example: w.example }],
       translation: w.translation,
       images: images[w.word] ? [{ id: `demo-${w.word}`, thumb: images[w.word], title: w.word, credit: 'Greywords', link: '' }] : [],
+      examples: [], // spec 004
       addedAt: now - w.addedDaysAgo * DAY,
       srs: { ...srs, due: dueIn === 0 ? startOfDay(now) : startOfDay(now) + dueIn * DAY },
     }
