@@ -38,7 +38,7 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 Atualizado em 2026-10-17, depois da publicação do site (https://greywords.greywords.workers.dev).
 
 1. **Depois da publicação, a próxima:**
-   - **pedido do modo produção do Unsplash: com o usuário.** Texto, capturas e passo a passo em `unsplash-pedido/PEDIDO.md` (pasta fora do git). Quando vier a resposta, ajustar o que pedirem;
+   - **modo produção do Unsplash: pedido enviado em 2026-10-17**; a análise leva de 5 a 10 dias úteis, e a resposta chega por e-mail. Aprovado, a mesma chave passa a 1.000 por hora, sem mudar código. Se pedirem ajustes, o texto e as capturas estão em `unsplash-pedido/` (fora do git);
    - subir o repositório no GitHub (e pôr o link do `CREDITS.md` no rodapé).
 2. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
 
