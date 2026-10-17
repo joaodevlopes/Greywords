@@ -7,8 +7,14 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
 
 ## Parte 1 — Base (não mexe nas telas existentes)
 
-- [ ] **T1 — Funções em `src/examples.js`**: `wordForms`, `findForm`, `pickExamples`, `highlight`, `cloze`, `fromDictionary`.
+- [x] **T1 — Funções em `src/examples.js`**: `wordForms`, `findForm`, `pickExamples`, `highlight`, `cloze`, `fromDictionary`.
   *Pronto quando:* testes cobrem formas (study/studies/studied/studying, cook/cooked, box/boxes), frase sem forma descartada, filtro de 4 a 12 palavras, ordem (com PT primeiro, depois mais curta), sem repetidas, lacuna e conversão dos exemplos do dicionário. — R1.1, R1.2, R4.1
+  *Feito (2026-10-17):* 11 testes em `src/examples.test.js`.
+  - Formas cobertas: study/studies/studied/studying, cook/cooked (sem "cookked"), box/boxes, stop/stopped, use/used, go/goes; "went" não é adivinhado.
+  - `findForm` só casa a palavra inteira ("Sunday" não conta como "sun").
+  - `pickExamples` descarta frase repetida, não aprovada, sem a palavra ou fora de 4 a 12 palavras; ordem: com tradução primeiro, depois a mais curta.
+  - `cloze`: "___, my shoulder hurts.". `fromDictionary` remove exemplos repetidos.
+  - A frase traz `approved` para o filtro, que é tirado na saída.
 
 - [ ] **T2 — `fetchExamples` em `src/api.js`**: primeira chamada com tradução em português; segunda (sem tradução) só se faltarem frases; exata para palavras gramaticais; timeout de 6 s; cache em memória na sessão.
   *Pronto quando:* testes com `fetch` simulado cobrem o formato devolvido, a segunda chamada só quando precisa, a busca exata, a falha (devolve vazio sem quebrar) e o cache; uma chamada real a "however" devolve frases no formato esperado (avisa cedo se a API "unstable" mudou). — R1.1, R1.2, R1.5, R6.1
