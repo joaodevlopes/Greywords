@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { Button, EmptyState, IconButton, Notice, SearchField, Surface, Text } from 'beds'
 import { fetchDefinition, fetchExamples, fetchImagesFor, fetchTranslation, orTimeout, trackImageUse } from '../api.js'
 import { dictionaryExamples, examplesToSave, mergeExamples, togglePicked } from '../examples.js'
 import { UNSPLASH_HOME, buildQueries, imageCredit, isAbstract, mergeRefined, refineSuggestions } from '../imageQuery.js'
 import { newCard } from '../srs.js'
+import SkeletonGrid from '../fx/Skeleton.jsx'
 import Examples from './Examples.jsx'
 import WordInfo from './WordInfo.jsx'
 
@@ -12,9 +14,12 @@ const MAX_PICK = 3
 const IMAGE_COUNT = 12
 const ABSTRACT_IMAGE_COUNT = 3 // spec 003, R5.1: few images, the definition leads
 const DEF_WAIT_MS = 2000 // spec 003, D2: images wait this long for the definition, then go by the word alone
+// spec 005, B3: a chosen image shrinks a little and its order number pops, both on a short spring
+const PICK_SPRING = { type: 'spring', stiffness: 520, damping: 28 }
 
 export default function Search({ words, hidden = {}, onHide, onSave, seed, onSeedUsed }) {
   const [query, setQuery] = useState('')
+  const reduced = useReducedMotion()
   // images: null = loading; def / translation: undefined = loading, null = not found / failed
   const [result, setResult] = useState(null)
   const [picked, setPicked] = useState([])
@@ -287,11 +292,7 @@ export default function Search({ words, hidden = {}, onHide, onSave, seed, onSee
                   />
                 )}
                 {result.images === null ? (
-                  <div className="gw-grid" aria-hidden="true">
-                    {Array.from({ length: 9 }, (_, i) => (
-                      <div key={i} className="gw-tile-skeleton" />
-                    ))}
-                  </div>
+                  <SkeletonGrid count={IMAGE_COUNT} label="Buscando imagens…" />
                 ) : visible.length ? (
                   <div className="gw-grid" ref={gridRef}>
                     {visible.map((img, index) => {
@@ -306,11 +307,27 @@ export default function Search({ words, hidden = {}, onHide, onSave, seed, onSee
                             aria-pressed={n >= 0}
                             aria-label={`${img.title}${n >= 0 ? `, escolhida em ${n + 1}º` : ''}`}
                           >
-                            <img src={img.thumb} alt="" loading="lazy" onError={() => setBroken((b) => new Set(b).add(img.id))} />
+                            <motion.img
+                              src={img.thumb}
+                              alt=""
+                              loading="lazy"
+                              initial={false}
+                              animate={{ scale: n >= 0 && !reduced ? 0.94 : 1 }}
+                              transition={PICK_SPRING}
+                              onError={() => setBroken((b) => new Set(b).add(img.id))}
+                            />
                             {n >= 0 && (
-                              <span className="gw-tile-badge" aria-hidden="true">
+                              // keyed by the order: when it changes (another image unchosen), the number pops again
+                              <motion.span
+                                key={n}
+                                className="gw-tile-badge"
+                                aria-hidden="true"
+                                initial={reduced ? false : { scale: 0.4, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={PICK_SPRING}
+                              >
                                 {n + 1}
-                              </span>
+                              </motion.span>
                             )}
                           </button>
                           <span className="gw-tile-hide">

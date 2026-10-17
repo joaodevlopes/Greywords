@@ -48,8 +48,18 @@ Cada efeito baseado no 21st.dev ganha um comentário de crédito no topo do arqu
 - [x] **T11 — Celebração**: `canvas-confetti` (B5) ao bater a meta da semana e ao terminar a sessão de revisão, com as cores da paleta e `disableForReducedMotion`.
   - *Pronto quando:* aparece uma vez por evento (não repete ao reabrir a aba); com movimento reduzido só aparece a mensagem; o JS final continua dentro do orçamento. — R4.5, R5.1
 
-- [ ] **T12 — Busca: escolha e esqueleto** (só **depois da T6 da spec 003**): retorno animado ao escolher imagem (B3); esqueleto com brilho enquanto as imagens carregam (B4).
+- [x] **T12 — Busca: escolha e esqueleto** (só **depois da T6 da spec 003**): retorno animado ao escolher imagem (B3); esqueleto com brilho enquanto as imagens carregam (B4).
   - *Pronto quando:* escolher e desfazer a escolha respondem na hora; a ordem da escolha "salta"; o esqueleto tem o mesmo tamanho da grade (sem salto); com movimento reduzido o esqueleto fica parado. — R4.3, R4.4, R4.7
+  - *Feito (2026-10-17):*
+    - **B3:** a imagem escolhida encolhe para 94% dentro do quadro, com mola curta (`motion.img`). O número da ordem entra de 40% a 100% de tamanho e, como usa a ordem como `key`, "salta" de novo quando a ordem muda. Com movimento reduzido, a marca e o número aparecem direto.
+    - **B4:** `src/fx/Skeleton.jsx` mostra 12 quadros, o mesmo número de imagens da busca (antes eram 9, e a grade crescia ao chegar). Um brilho passa em cada quadro, um depois do outro (70 ms de atraso entre eles). O brilho usa `.gw-fx-loop`, então para com movimento reduzido. Um texto só para leitor de tela diz "Buscando imagens…". O "Refinar" usa o mesmo esqueleto.
+    - Crédito do B4 (Skeleton, shadcn/ui, MIT, conferido na página `.md` do 21st.dev) no `CREDITS.md`. O B3 é próprio.
+    - **Conferido no Edge headless**, com a resposta das imagens atrasada 3 s de propósito:
+      - O esqueleto tem 12 quadros e 920 px, a mesma altura da grade final; o brilho roda (`gw-fx-sweep`, atraso de 0,14 s no 3º quadro).
+      - `aria-pressed` muda no mesmo instante do clique. 40 ms depois, o número do 2º quadro ainda está a 62% do tamanho (o "salto"); depois de 600 ms, as imagens escolhidas estão em 94%.
+      - Ao desfazer a 1ª escolha, os números passam de 2 e 3 para 1 e 2; a nova escolha vira 3.
+      - Com movimento reduzido: o esqueleto fica parado, sem escala e sem salto, e escolher continua igual. Sem erros no console.
+      - JS: 175,2 KB gzip, dentro do orçamento de 217 KB.
 
 - [ ] **T13 — Virar o flashcard** (só **depois da T6 da spec 004**, que também mexe na revisão): meia-volta em `rotateY` ao revelar (B1), também com a frente de frase com lacuna.
   - *Pronto quando:* revelar por clique, Espaço ou Enter vira o cartão; as notas 1–4 funcionam durante a animação; o foco vai para o lugar certo depois de virar; com movimento reduzido a troca é direta. — R4.1, R4.7

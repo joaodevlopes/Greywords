@@ -439,3 +439,29 @@
     display: none;
   }
 }
+
+/* ---------- B4 skeleton (spec 005): a light sweep over each placeholder tile ---------- */
+.gw-fx-skeleton {
+  --gw-sweep: rgb(255 255 255 / 0.55);
+}
+
+:root[data-theme='dark'] .gw-fx-skeleton {
+  --gw-sweep: rgb(255 255 255 / 0.06);
+}
+
+.gw-fx-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--gw-sweep), transparent);
+  animation: gw-fx-sweep 1.4s ease-in-out infinite;
+  /* tiles light up one after another, left to right and top to bottom */
+  animation-delay: calc(var(--gw-i, 0) * 70ms);
+}
+
+@keyframes gw-fx-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}

@@ -1113,3 +1113,8 @@ img {
 .gw-flash-sentence-meta .gw-ex-credit {
   margin-inline-start: 0;
 }
+
+/* spec 005, B3: the chosen image shrinks inside its tile; keep its corners round */
+.gw-tile img {
+  border-radius: inherit;
+}
