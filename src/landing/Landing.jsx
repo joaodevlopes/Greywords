@@ -33,7 +33,7 @@ const STEPS = [
   {
     id: 'buscar',
     title: 'Busque a palavra',
-    text: 'Aparecem imagens, a definição em inglês, exemplos e a pronúncia. A tradução fica escondida até você pedir.',
+    text: 'Aparecem imagens, a definição em inglês, frases reais com a palavra e a pronúncia. A tradução fica escondida até você pedir.',
   },
   {
     id: 'escolher',
@@ -43,7 +43,7 @@ const STEPS = [
   {
     id: 'revisar',
     title: 'Revise no dia certo',
-    text: 'Você vê as imagens, tenta lembrar e dá uma nota. O Greywords calcula quando aquela palavra deve voltar.',
+    text: 'Você vê as imagens (ou completa uma frase), tenta lembrar e dá uma nota. O Greywords calcula quando aquela palavra deve voltar.',
   },
 ]
 
@@ -64,7 +64,7 @@ const BENEFITS = [
     id: 'ingles',
     icon: 'Globe',
     title: 'Inglês de verdade',
-    text: 'Definições e frases de exemplo em inglês, com áudio da pronúncia. Você aprende a palavra no contexto em que ela aparece.',
+    text: 'Definições em inglês e frases reais do Tatoeba, com áudio. Você aprende a palavra no contexto em que ela aparece.',
   },
   {
     id: 'dados',
@@ -75,11 +75,6 @@ const BENEFITS = [
 ]
 
 const ROADMAP = [
-  {
-    id: 'frases',
-    title: 'Frases de exemplo',
-    text: 'Frases reais e curtas com a palavra, com tradução escondida, principalmente para palavras sem imagem como "however". Elas também viram revisão com lacuna.',
-  },
   {
     id: 'sync',
     title: 'Usar em mais de um aparelho',
@@ -96,7 +91,7 @@ const FAQ = [
   {
     id: 'gratis',
     q: 'É grátis mesmo?',
-    a: 'Sim. O Greywords usa só serviços gratuitos: Unsplash para fotos (com Openverse e Wikimedia Commons de reserva), Free Dictionary e Wiktionary para definições, MyMemory para tradução.',
+    a: 'Sim. O Greywords usa só serviços gratuitos: Unsplash para fotos (com Openverse e Wikimedia Commons de reserva), Free Dictionary e Wiktionary para definições, MyMemory para tradução e Tatoeba para frases de exemplo.',
   },
   {
     id: 'conta',
@@ -121,7 +116,7 @@ const FAQ = [
   {
     id: 'abstratas',
     q: 'E palavras sem imagem, como “however”?',
-    a: 'Nelas as imagens ajudam pouco. O Greywords mostra a definição e exemplos em inglês, e na revisão a dica usa a definição com a palavra escondida.',
+    a: 'Nelas as imagens ajudam pouco. O Greywords mostra frases reais com a palavra no lugar das imagens, e na revisão você completa a frase com a palavra que falta. Se quiser, dá para ver as imagens mesmo assim.',
   },
   {
     id: 'imagens',
@@ -203,9 +198,10 @@ const SERVICES = [
   { id: 'wikimedia', label: 'Wikimedia Commons', detail: 'imagens (reserva)', x: 13, y: 28 },
   { id: 'dictionary', label: 'Free Dictionary', detail: 'definições e áudio', x: 13, y: 39 },
   { id: 'wiktionary', label: 'Wiktionary', detail: 'definições (reserva)', x: 13, y: 50 },
-  { id: 'mymemory', label: 'MyMemory', detail: 'tradução', x: 87, y: 12 },
+  { id: 'mymemory', label: 'MyMemory', detail: 'tradução', x: 87, y: 6 },
+  { id: 'tatoeba', label: 'Tatoeba', detail: 'frases de exemplo', x: 87, y: 17 },
   { id: 'youtube', label: 'YouTube', detail: 'vídeos do TED', x: 87, y: 28 },
-  { id: 'browser', label: 'Seu navegador', detail: 'onde ficam seus dados', x: 87, y: 44 },
+  { id: 'browser', label: 'Seu navegador', detail: 'onde ficam seus dados', x: 87, y: 45 },
 ]
 
 const STACK = [
@@ -231,8 +227,8 @@ const IMAGE_GROUPS = [
 // Only verifiable numbers (landing honesta). Where each one comes from:
 const NUMBERS = [
   // Unsplash (server/images.js); src/api.js: Openverse, Wikimedia Commons, Free Dictionary, Wiktionary,
-  // MyMemory; VideoDialog.jsx: YouTube. Becomes 8 when Tatoeba lands (spec 004).
-  { id: 'servicos', value: 7, label: 'serviços gratuitos para fotos, definições, tradução e vídeos' },
+  // MyMemory, Tatoeba; VideoDialog.jsx: YouTube.
+  { id: 'servicos', value: 8, label: 'serviços gratuitos para fotos, definições, tradução, frases e vídeos' },
   // No account: data lives in localStorage (src/storage.js); the image Worker keeps no user data.
   { id: 'cadastro', value: 0, label: 'cadastros: suas palavras ficam só no seu navegador' },
   // MAX_PICK in src/components/Search.jsx.
@@ -540,8 +536,8 @@ export default function Landing() {
                   ))}
                 </ul>
                 <figcaption>
-                  A troca de fonte mais que dobrou os acertos. Para palavras como "however", frases de exemplo ensinam mais que
-                  fotos, e vêm aí.
+                  A troca de fonte mais que dobrou os acertos. Para palavras como "however", frases ensinam mais que fotos: nelas,
+                  o Greywords mostra frases reais no lugar das imagens.
                 </figcaption>
               </figure>
             </div>
@@ -637,7 +633,8 @@ export default function Landing() {
             ))}
           </nav>
           <p>
-            Projeto pessoal e gratuito. Fotos do Unsplash; definições e traduções de serviços abertos; créditos dentro do app. Vídeos: TED
+            Projeto pessoal e gratuito. Fotos do Unsplash; definições e traduções de serviços abertos; frases de exemplo do Tatoeba
+            (tatoeba.org), licenças CC BY 2.0 FR e CC0; créditos dentro do app. Vídeos: TED
             (ted.com), licença CC BY–NC–ND 4.0. Lista de palavras comuns: New General Service List (Browne, Culligan e
             Phillips), licença CC BY-SA 4.0.
           </p>

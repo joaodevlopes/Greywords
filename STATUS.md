@@ -35,18 +35,18 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 ## Onde paramos (próximos passos, em ordem)
 
-Atualizado em 2026-10-17, depois da T6 da spec 004.
+Atualizado em 2026-10-17, depois da spec 004 (frases de exemplo).
 
-1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 a T3 feitas** (`src/examples.js`; `fetchExamples` no `api.js`, com 2 chamadas no máximo, busca exata e cache; componente `src/components/Examples.jsx`, com prévia no dev em `#/dev/examples`). **T4 feita**: frases na busca (no painel; nas palavras abstratas, no lugar das imagens) e salvar com até 2 frases. **T5 feita**: `migrate()` com `examples: []` e frases no detalhe do dicionário. **T6 feita**: revisão com frase e lacuna para palavras abstratas ou sem imagem. Próxima: T7 (textos, créditos do Tatoeba, landing com "8 serviços" e o Tatoeba no diagrama, verificação final). Aviso: o Tatoeba estava lento (11 a 25 s) no dia; com 6 s de limite, o app cai nos exemplos do dicionário. Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
-2. **Spec 005 (efeitos), etapa B:** T12 (animação ao escolher imagem e esqueleto na busca) está liberada. T13 (virar o flashcard) está liberada (a T6 da 004 saiu); a frente agora pode ser frase com lacuna. A T14 fecha a spec.
-3. **Publicação do site** (ainda não decidido onde):
+1. **Spec 005 (efeitos), etapa B, a próxima:** T12 (animação ao escolher imagem e esqueleto na busca) e T13 (virar o flashcard; a frente pode ser imagem ou frase com lacuna) estão liberadas. A T14 fecha a spec e refaz as capturas da landing (o app mudou com as frases).
+2. **Publicação do site** (ainda não decidido onde):
    - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);
    - pôr o endereço do Worker no build (`VITE_IMAGES_API`) e em `ALLOWED_ORIGINS`;
    - pedir o modo produção do Unsplash (grátis, cerca de 5.000 buscas por hora), com o endereço do site e capturas do crédito;
    - subir o repositório no GitHub.
-4. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
+3. **Spec 002 (vídeos):** falta a **curadoria manual** (T4, do usuário, com `catalog/SUGESTOES.md` e `catalog/HOW-TO.md`). Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí" e verificar com dados reais (T13).
 
 **Feito recentemente:**
+- **Spec 004 implementada:** frases reais do Tatoeba na busca (no lugar das imagens nas palavras abstratas), até 2 salvas com a palavra, no dicionário e na revisão com lacuna; exemplos do dicionário de reserva. Landing com "8 serviços".
 - **Spec 003 implementada:** imagens do Unsplash por um intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), com crédito, registro de uso e Openverse/Wikimedia de reserva; busca com contexto, "Refinar" e "Esconder". **Medição: 82/180 (45,6%) → 173/180 (96,1%), 0 impróprias.**
 - **Spec 005, etapa A (landing) e T10–T11** prontas e verificadas.
 - **Git:** repositório criado (branch `main`). Commits só com o usuário como autor, sem menção a IA (skill git-autoria-unica). Ainda não está no GitHub.
@@ -59,15 +59,15 @@ Atualizado em 2026-10-17, depois da T6 da spec 004.
 | [001-calendario-meta](specs/001-calendario-meta/requirements.md) | Aba Progresso: meta semanal, check-in, calendário, sequência | implementado |
 | [002-videos-nicho](specs/002-videos-nicho/requirements.md) | Aba Vídeos: talks do TED por nicho e nível, catálogo gerado offline | T1–T3, T6–T11 feitas; T12 quase toda; **faltam T4 (usuário), T5, T13** |
 | [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); falta só publicar o Worker (T9a) |
-| [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | tarefas aprovadas; **próxima spec**, todas as tarefas liberadas |
+| [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | **implementado** (2026-10-17) |
 | [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | etapa A pronta; etapa B: T10–T11 feitas; T12 e T13 liberadas; T14 fecha |
 
 ## O que existe hoje no app
 
 - **Landing** (`#/`): proposta, demo interativa com ilustrações SVG próprias, passos, diferenciais, roadmap, FAQ, créditos.
-- **Busca**: fotos do Unsplash (Openverse e Wikimedia de reserva), "Refinar" e "Esconder", definição (dictionaryapi.dev → Wiktionary), pronúncia, tradução escondida (MyMemory), escolher até 3 imagens.
-- **Palavras** (dicionário): lista, filtro, ordem, detalhe em diálogo, remover com confirmação, exportar JSON.
-- **Revisão**: flashcard com as imagens, palpite opcional, notas 1–4, SM-2 com ajustes estilo Anki.
+- **Busca**: fotos do Unsplash (Openverse e Wikimedia de reserva), "Refinar" e "Esconder", definição (dictionaryapi.dev → Wiktionary), pronúncia, tradução escondida (MyMemory), até 5 frases do Tatoeba (no lugar das imagens nas palavras abstratas), escolher até 3 imagens e 2 frases.
+- **Palavras** (dicionário): lista, filtro, ordem, detalhe em diálogo (com as frases salvas), remover com confirmação, exportar JSON.
+- **Revisão**: flashcard com as imagens (ou frase com lacuna nas palavras abstratas e sem imagem), palpite opcional, notas 1–4, SM-2 com ajustes estilo Anki.
 - **Vídeos**: escolha de nichos e nível, filtros, player do YouTube (sem cookies) com talks do canal TED, "assistido" conta no Progresso, palavras-chave abrem a busca. Sem catálogo real ainda: em `npm run dev` usa um catálogo de exemplo (números fictícios); no site publicado mostra "Vídeos em preparação".
 - **Progresso**: meta semanal, semana atual, semanas seguidas, check-in "Estudei hoje", calendário do mês, métricas das palavras.
 - Tema claro/escuro, funciona em 375 px.
@@ -89,7 +89,7 @@ Atualizado em 2026-10-17, depois da T6 da spec 004.
 - **21st.dev** (spec 005): componentes vêm em Tailwind + lucide, que o `check:ui` proíbe em `src/`. Cada efeito é reescrito em CSS `gw-*` + `motion/react` (já instalado pelo BEDS). Código só de componente MIT, com crédito em `CREDITS.md`. Licença conferida na página `https://21st.dev/<autor>/components/<nome>.md`. O `motion` já vai no pacote final pelo BEDS, e o `Metric` do BEDS já anima números (`numericValue` + `formatValue`).
 - **Contraste do laranja**: `#e8590c` dá 3,3:1 no creme e 3,6:1 com texto branco, o que reprova para texto pequeno. Para texto e para o CTA, usar `--gw-brand-ink` (`#b4430a` no claro, `#ff8a4c` no escuro).
 - **Build hoje**: JS 174,7 KB gzip. O orçamento da spec 005 é de até 217 KB; a linha de base era 157,4 KB.
-- Nenhuma API paga. Só o Unsplash pede chave (exceção aprovada, protegida pelo intermediário). Nada de depoimentos ou números inventados na landing. A landing hoje diz "7 serviços"; passa a 8 quando o Tatoeba entrar.
+- Nenhuma API paga. Só o Unsplash pede chave (exceção aprovada, protegida pelo intermediário). Nada de depoimentos ou números inventados na landing. A landing diz "8 serviços" (Unsplash, Openverse, Wikimedia, Free Dictionary, Wiktionary, MyMemory, Tatoeba, YouTube).
 
 ## Armadilhas já encontradas
 

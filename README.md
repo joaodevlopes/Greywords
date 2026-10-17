@@ -7,9 +7,9 @@ Plataforma gratuita para aprender vocabulário em inglês **pela imagem, não pe
 
 ## Como funciona
 
-1. **Buscar** — digite uma palavra. Aparecem fotos do Unsplash (com Openverse e Wikimedia Commons de reserva), definição em inglês e pronúncia. A tradução fica escondida até você pedir. "Refinar imagens" troca a busca das fotos, e "Esconder" tira uma foto que não serve.
-2. **Escolher** — clique nas até 3 imagens que mais lembram a palavra. Elas viram a frente do flashcard.
-3. **Revisar** — repetição espaçada (SM-2, mesma família do Anki). Você vê as imagens, tenta lembrar a palavra e dá uma nota: Errei / Difícil / Bom / Fácil. O intervalo até a próxima revisão se ajusta.
+1. **Buscar** — digite uma palavra. Aparecem fotos do Unsplash (com Openverse e Wikimedia Commons de reserva), definição em inglês, pronúncia e até 5 frases reais com a palavra (Tatoeba). A tradução fica escondida até você pedir. "Refinar imagens" troca a busca das fotos, e "Esconder" tira uma foto que não serve. Em palavras sem imagem, como "however", as frases aparecem no lugar das fotos.
+2. **Escolher** — clique nas até 3 imagens que mais lembram a palavra. Elas viram a frente do flashcard. Dá para guardar até 2 frases junto.
+3. **Revisar** — repetição espaçada (SM-2, mesma família do Anki). Você vê as imagens (ou, nas palavras abstratas e sem imagem, completa uma frase com lacuna), tenta lembrar a palavra e dá uma nota: Errei / Difícil / Bom / Fácil. O intervalo até a próxima revisão se ajusta.
 4. **Dicionário** — todas as palavras salvas, status (nova / aprendendo / dominada), filtro, detalhe e exportação em JSON.
 5. **Progresso** — meta semanal (1 a 7 dias), check-in "Estudei hoje", calendário dos dias estudados, semanas seguidas com a meta cumprida e as métricas das palavras. Revisar ou salvar uma palavra já conta o dia sozinho.
 6. **Vídeos** — talks do TED nos nichos que você escolhe, ordenados pelo seu nível. O nível (Fácil / Médio / Difícil) é estimado pela transcrição: palavras por minuto e % de palavras fora da lista NGSL das mais comuns. Assistir conta o dia no Progresso, e as palavras-chave do vídeo abrem direto na busca.
@@ -33,6 +33,7 @@ Atalhos na revisão: `Enter` mostra a resposta, `1`–`4` dão a nota.
 | Definição | dictionaryapi.dev | Wiktionary (pedido em paralelo se o primeiro demorar 1,2 s) |
 | Pronúncia | áudio do dictionaryapi.dev | `speechSynthesis` do navegador |
 | Tradução | MyMemory | — |
+| Frases de exemplo | Tatoeba (`word_count=4-12`, tradução em português primeiro) | exemplos do próprio dicionário |
 
 ### Qualidade das imagens (medida)
 
@@ -60,6 +61,7 @@ Passo a passo em [catalog/HOW-TO.md](catalog/HOW-TO.md).
 
 - Efeitos visuais, fontes e ferramentas: [CREDITS.md](CREDITS.md)
 - Vídeos: [TED](https://www.ted.com), licença CC BY–NC–ND 4.0 (transcrições não são publicadas; o catálogo leva só números e palavras soltas)
+- Frases de exemplo: [Tatoeba](https://tatoeba.org), licenças CC BY 2.0 FR e CC0, com o autor e o link de cada frase
 - Lista de palavras comuns: [New General Service List](https://www.newgeneralservicelist.com) (Browne, Culligan e Phillips), CC BY-SA 4.0, em `catalog/ngsl/`
 
 ## Rodar
@@ -85,7 +87,6 @@ Conferir efeitos sem o navegador visível (movimento reduzido, 375 px, hover): `
 
 ## Próximos passos
 
-- Frases de exemplo do Tatoeba na busca e revisão com lacuna (spec 004)
 - Completar a curadoria do catálogo de vídeos (cerca de 5 talks por nicho)
 - Login + sync (Supabase) para usar em mais de um dispositivo
 

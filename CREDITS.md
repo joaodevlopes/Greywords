@@ -1,10 +1,14 @@
 # Créditos
 
-O Greywords usa apenas serviços, dados e código com licença aberta. Os créditos dos serviços (imagens, definições, tradução, vídeos, lista NGSL) estão no rodapé da landing e dentro do app. Este arquivo registra o código e as fontes que serviram de base para o visual.
+O Greywords usa apenas serviços, dados e código com licença aberta. Os créditos dos serviços (imagens, definições, tradução, frases, vídeos, lista NGSL) estão no rodapé da landing e dentro do app. Este arquivo registra o código e as fontes que serviram de base para o visual.
 
 ## Fotos
 
 As fotos da busca vêm do [Unsplash](https://unsplash.com/?utm_source=greywords&utm_medium=referral), pela [API do Unsplash](https://unsplash.com/developers). Cada foto mostra o crédito ao fotógrafo, com link, e salvar uma foto avisa o Unsplash do uso, como pedem as regras da API. As reservas são o [Openverse](https://openverse.org) e o [Wikimedia Commons](https://commons.wikimedia.org), com a licença e o autor de cada imagem.
+
+## Frases de exemplo
+
+As frases vêm do [Tatoeba](https://tatoeba.org), um banco aberto de frases escritas por voluntários, pela API em `api.tatoeba.org`. Cada frase tem licença CC BY 2.0 FR (crédito ao autor) ou CC0; o app mostra o autor e um link para a frase original, e a legenda "Frases: Tatoeba, CC BY 2.0 FR / CC0". Quando o Tatoeba não responde, entram os exemplos do próprio dicionário (Free Dictionary / Wiktionary), marcados como "Dicionário".
 
 ## Efeitos visuais (spec 005)
 

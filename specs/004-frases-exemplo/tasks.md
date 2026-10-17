@@ -1,6 +1,6 @@
 # 004 — Frases de exemplo: tarefas
 
-Status: aprovado (2026-10-17)
+Status: implementado (2026-10-17)
 
 Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run build` passando; as de interface também com `npm run check:ui` (0 violações).
 **Ordem com a spec 003:** T1 a T3 não mexem na busca e podem ser feitas a qualquer momento. T4 em diante só **depois da T6 da spec 003**, porque as duas mexem em `Search.jsx`.
@@ -86,9 +86,48 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
 
 ## Fechamento
 
-- [ ] **T7 — Textos, créditos e verificação final**: crédito do Tatoeba no rodapé da landing e no README; resposta do FAQ sobre palavras sem imagem atualizada; `CLAUDE.md` (mapa e `examples` no modelo de dados); percorrer R1–R6 no navegador (claro, escuro, 375 px) e marcar a spec como `implementado`.
+- [x] **T7 — Textos, créditos e verificação final**: crédito do Tatoeba no rodapé da landing e no README; resposta do FAQ sobre palavras sem imagem atualizada; `CLAUDE.md` (mapa e `examples` no modelo de dados); percorrer R1–R6 no navegador (claro, escuro, 375 px) e marcar a spec como `implementado`.
   *Pronto quando:* todos os critérios conferidos e listados abaixo, com o que não deu para verificar dito explicitamente.
+  *Feito (2026-10-17):*
+  - **Landing:**
+    - "8 serviços gratuitos para fotos, definições, tradução, frases e vídeos" e o Tatoeba no diagrama "Como foi feito".
+    - "Frases de exemplo" saiu do "O que vem por aí", que agora tem 2 itens em 2 colunas.
+    - Passos, diferencial "Inglês de verdade", FAQ ("É grátis mesmo?" e "E palavras sem imagem?") e a legenda da medição falam das frases.
+    - Crédito do Tatoeba no rodapé.
+  - **README:** como funciona, tabela de serviços (Tatoeba, com os exemplos do dicionário de reserva), créditos e próximos passos.
+  - **CREDITS.md:** seção "Frases de exemplo".
+  - **CLAUDE.md:** mapa e `examples` no modelo de dados.
 
 ## Verificação
 
-(preenchido na T7)
+Feita em 2026-10-17 no servidor de desenvolvimento, em Edge headless (o painel do navegador congela quando está oculto). Tatoeba real, e bloqueado para simular falha. Roteiros e resultados no registro de cada tarefa acima.
+
+| Critério | Como foi conferido | Resultado |
+| --- | --- | --- |
+| R1.1 até 5 frases com a palavra destacada | "study" e "however" na busca | 5 frases cada, palavra em `<mark>` (formas como "studies" e "studying" também) |
+| R1.2 curtas e com tradução primeiro | Testes de `pickExamples` e `fetchExamples`; `word_count=4-12` na consulta | ok; "study" deixou de ficar sem frases |
+| R1.3 tradução escondida até pedir | Prévia, busca e dicionário | "Ver tradução" (`aria-expanded`) mostra e esconde |
+| R1.4 sem atrasar o resto | Tempos medidos | "study": imagens em 0,4 s, frases em 2,8 s |
+| R1.5 reserva | Tatoeba bloqueado com `Network.setBlockedURLs` | exemplos do dicionário, com o crédito "Dicionário" |
+| R2.1 escolher favoritas | Escolher a 2ª e a 3ª frase de "study" e salvar | as 2 gravadas, na ordem; sem escolha, a primeira; uma 3ª escolha tira a mais antiga |
+| R2.2 frases no dicionário | Detalhe de "however" | "Frases salvas" com tradução escondida e crédito |
+| R3.1 abstrata: frases no lugar das imagens | "however" | aviso, 5 frases e nenhuma imagem |
+| R3.2 imagens mesmo assim | "Ver imagens mesmo assim" | 3 imagens (nenhuma escolhida), "Refinar" disponível; foco vai para o título das imagens |
+| R4.1 lacuna na frente | Revisão de "however" e "blanket" | "I wanted to go; _____, it rained." (leitor de tela ouve "lacuna"); palavra com imagem ("river") continua com imagem |
+| R4.2 dica com a tradução | "blanket" | "Preciso de um cobertor quente hoje."; sem tradução, a dica é a definição com a palavra escondida |
+| R4.3 frase completa destacada | Verso do cartão | palavra em `<mark>`, "Ouvir a frase" e crédito com link |
+| R4.4 palpite e notas iguais | Palpite + Enter, notas pelo teclado | "Acertou", `log` e `reps` gravados (e corrigido o número da nota que ia para a carta seguinte) |
+| R5.1 ouvir a frase | `speechSynthesis.speak` interceptado na prévia | chamado com a frase e `en-US` |
+| R6.1 dados com migração | Testes de `migrate()`; estado antigo no navegador | palavra antiga abre e ganha `examples: []`; listas sujas limpas, no máximo 2 |
+| R6.2 exportação | Teste de `serializeState` | as frases saem no JSON |
+| R6.3 crédito | Busca, dicionário e revisão | "Tatoeba · autor" com link para a frase; "Frases: Tatoeba, CC BY 2.0 FR / CC0"; rodapé da landing, README e CREDITS |
+
+**Geral:**
+- Claro, escuro e 375 px sem rolagem lateral em todas as telas acima.
+- Landing auditada (`scripts/landing-audit.mjs`, 4 combinações): 0 falhas de contraste e 68 paradas de Tab com foco visível.
+- `npm test` (213 passam, 1 pulado), `npm run check:ui` (0 violações) e `npm run build` ok.
+
+**Não verificado:**
+- O som da voz em si: no headless, só deu para conferir que a voz do navegador é chamada.
+- O teste com a API real (`LIVE_APIS=1`) não rodou no `npm test`; o formato foi conferido por `curl` e pelas buscas reais acima.
+- Os limites de requisição do Tatoeba não são informados. O app faz no máximo 2 chamadas por palavra, com cache na sessão.

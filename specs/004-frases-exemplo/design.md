@@ -1,6 +1,6 @@
 # 004 — Frases de exemplo: design
 
-Status: aprovado (2026-10-17)
+Status: implementado (2026-10-17)
 
 ## Visão geral
 
