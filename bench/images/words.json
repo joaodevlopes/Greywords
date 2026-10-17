@@ -1,0 +1,8 @@
+{
+  "concrete": ["sun", "river", "blanket", "bridge", "apple"],
+  "verbs": ["study", "climb", "whisper", "cook", "swim"],
+  "adjectives": ["stubborn", "tired", "crowded", "shiny"],
+  "abstract": ["freedom", "knowledge"],
+  "grammar": ["however", "although"],
+  "ambiguous": ["bat", "spring"]
+}

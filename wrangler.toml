@@ -1,0 +1,9 @@
+# Cloudflare Worker for the image intermediary (spec 003, T7a/T9a).
+# Deploy:  npx wrangler login  →  npx wrangler secret put UNSPLASH_ACCESS_KEY  →  npx wrangler deploy
+name = "greywords-images"
+main = "worker/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+# Comma-separated sites allowed to read the API from the browser (set when the site has an address).
+ALLOWED_ORIGINS = ""

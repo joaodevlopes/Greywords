@@ -1,0 +1,251 @@
+{
+  "generatedAt": "2026-10-16",
+  "sample": true,
+  "levelRule": {
+    "easy": {
+      "maxWpm": 140,
+      "maxRare": 0.06
+    },
+    "hard": {
+      "minWpm": 170,
+      "minRare": 0.12
+    }
+  },
+  "niches": [
+    {
+      "id": "tech",
+      "label": "Tecnologia"
+    },
+    {
+      "id": "games",
+      "label": "Games"
+    },
+    {
+      "id": "science",
+      "label": "Ciência"
+    },
+    {
+      "id": "food",
+      "label": "Culinária"
+    },
+    {
+      "id": "travel",
+      "label": "Viagem"
+    },
+    {
+      "id": "sports",
+      "label": "Esportes"
+    },
+    {
+      "id": "film",
+      "label": "Cinema e séries"
+    },
+    {
+      "id": "business",
+      "label": "Negócios e dados"
+    }
+  ],
+  "videos": [
+    {
+      "id": "sample:iG9CE55wbtY",
+      "niches": [
+        "science"
+      ],
+      "title": "Do schools kill creativity?",
+      "speaker": "Sir Ken Robinson",
+      "durationSec": 1150,
+      "youtubeId": "iG9CE55wbtY",
+      "tedUrl": "https://www.ted.com/search?q=Do%20schools%20kill%20creativity%3F",
+      "thumb": "https://i.ytimg.com/vi/iG9CE55wbtY/mqdefault.jpg",
+      "wpm": 155,
+      "rareRatio": 0.08,
+      "level": "medium",
+      "keywords": [
+        "creativity",
+        "literacy",
+        "curriculum",
+        "intelligence",
+        "professor",
+        "dancer"
+      ]
+    },
+    {
+      "id": "sample:qp0HIF3SfI4",
+      "niches": [
+        "business"
+      ],
+      "title": "How great leaders inspire action",
+      "speaker": "Simon Sinek",
+      "durationSec": 1080,
+      "youtubeId": "qp0HIF3SfI4",
+      "tedUrl": "https://www.ted.com/search?q=How%20great%20leaders%20inspire%20action",
+      "thumb": "https://i.ytimg.com/vi/qp0HIF3SfI4/mqdefault.jpg",
+      "wpm": 165,
+      "rareRatio": 0.07,
+      "level": "medium",
+      "keywords": [
+        "loyalty",
+        "inspire",
+        "manipulation",
+        "innovator",
+        "visionary"
+      ]
+    },
+    {
+      "id": "sample:Ks-_Mh1QhMc",
+      "niches": [
+        "science"
+      ],
+      "title": "Your body language may shape who you are",
+      "speaker": "Amy Cuddy",
+      "durationSec": 1260,
+      "youtubeId": "Ks-_Mh1QhMc",
+      "tedUrl": "https://www.ted.com/search?q=Your%20body%20language%20may%20shape%20who%20you%20are",
+      "thumb": "https://i.ytimg.com/vi/Ks-_Mh1QhMc/mqdefault.jpg",
+      "wpm": 138,
+      "rareRatio": 0.05,
+      "level": "easy",
+      "keywords": [
+        "posture",
+        "hormone",
+        "testosterone",
+        "nonverbal",
+        "powerless"
+      ]
+    },
+    {
+      "id": "sample:iCvmsMzlF7o",
+      "niches": [
+        "science"
+      ],
+      "title": "The power of vulnerability",
+      "speaker": "Brené Brown",
+      "durationSec": 1220,
+      "youtubeId": "iCvmsMzlF7o",
+      "tedUrl": "https://www.ted.com/search?q=The%20power%20of%20vulnerability",
+      "thumb": "https://i.ytimg.com/vi/iCvmsMzlF7o/mqdefault.jpg",
+      "wpm": 178,
+      "rareRatio": 0.09,
+      "level": "hard",
+      "keywords": [
+        "vulnerability",
+        "shame",
+        "connection",
+        "researcher",
+        "numb"
+      ]
+    },
+    {
+      "id": "sample:arj7oStGLkU",
+      "niches": [
+        "tech"
+      ],
+      "title": "Inside the mind of a master procrastinator",
+      "speaker": "Tim Urban",
+      "durationSec": 840,
+      "youtubeId": "arj7oStGLkU",
+      "tedUrl": "https://www.ted.com/search?q=Inside%20the%20mind%20of%20a%20master%20procrastinator",
+      "thumb": "https://i.ytimg.com/vi/arj7oStGLkU/mqdefault.jpg",
+      "wpm": 132,
+      "rareRatio": 0.04,
+      "level": "easy",
+      "keywords": [
+        "procrastinator",
+        "deadline",
+        "monkey",
+        "panic",
+        "thesis"
+      ]
+    },
+    {
+      "id": "sample:6Af6b_wyiwI",
+      "niches": [
+        "science",
+        "tech"
+      ],
+      "title": "The next outbreak? We are not ready",
+      "speaker": "Bill Gates",
+      "durationSec": 510,
+      "youtubeId": "6Af6b_wyiwI",
+      "tedUrl": "https://www.ted.com/search?q=The%20next%20outbreak%3F%20We%20are%20not%20ready",
+      "thumb": "https://i.ytimg.com/vi/6Af6b_wyiwI/mqdefault.jpg",
+      "wpm": 136,
+      "rareRatio": 0.06,
+      "level": "easy",
+      "keywords": [
+        "epidemic",
+        "outbreak",
+        "vaccine",
+        "virus",
+        "preparedness"
+      ]
+    },
+    {
+      "id": "sample:hVimVzgtD6w",
+      "niches": [
+        "business",
+        "science"
+      ],
+      "title": "The best stats you have ever seen",
+      "speaker": "Hans Rosling",
+      "durationSec": 1170,
+      "youtubeId": "hVimVzgtD6w",
+      "tedUrl": "https://www.ted.com/search?q=The%20best%20stats%20you%20have%20ever%20seen",
+      "thumb": "https://i.ytimg.com/vi/hVimVzgtD6w/mqdefault.jpg",
+      "wpm": 160,
+      "rareRatio": 0.13,
+      "level": "hard",
+      "keywords": [
+        "mortality",
+        "statistics",
+        "income",
+        "database",
+        "visualization"
+      ]
+    },
+    {
+      "id": "sample:dE1DuBesGYM",
+      "niches": [
+        "games"
+      ],
+      "title": "Gaming can make a better world",
+      "speaker": "Jane McGonigal",
+      "durationSec": 1200,
+      "youtubeId": "dE1DuBesGYM",
+      "tedUrl": "https://www.ted.com/search?q=Gaming%20can%20make%20a%20better%20world",
+      "thumb": "https://i.ytimg.com/vi/dE1DuBesGYM/mqdefault.jpg",
+      "wpm": 168,
+      "rareRatio": 0.08,
+      "level": "medium",
+      "keywords": [
+        "gamer",
+        "collaboration",
+        "optimism",
+        "epic",
+        "virtuoso"
+      ]
+    },
+    {
+      "id": "sample:rrkrvAUbU9Y",
+      "niches": [
+        "business"
+      ],
+      "title": "The puzzle of motivation",
+      "speaker": "Dan Pink",
+      "durationSec": 1110,
+      "youtubeId": "rrkrvAUbU9Y",
+      "tedUrl": "https://www.ted.com/search?q=The%20puzzle%20of%20motivation",
+      "thumb": "https://i.ytimg.com/vi/rrkrvAUbU9Y/mqdefault.jpg",
+      "wpm": 172,
+      "rareRatio": 0.07,
+      "level": "hard",
+      "keywords": [
+        "incentive",
+        "autonomy",
+        "mastery",
+        "reward",
+        "motivation"
+      ]
+    }
+  ]
+}

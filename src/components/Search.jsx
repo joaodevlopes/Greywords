@@ -1,0 +1,347 @@
+import { useEffect, useRef, useState } from 'react'
+import { Button, EmptyState, IconButton, Notice, SearchField, Surface, Text } from 'beds'
+import { fetchDefinition, fetchImagesFor, fetchTranslation, orTimeout, trackImageUse } from '../api.js'
+import { UNSPLASH_HOME, buildQueries, imageCredit, isAbstract, mergeRefined, refineSuggestions } from '../imageQuery.js'
+import { newCard } from '../srs.js'
+import WordInfo from './WordInfo.jsx'
+
+const SUGGESTIONS = ['sun', 'whisper', 'river', 'climb', 'blanket', 'thunder', 'stubborn']
+const MAX_PICK = 3
+const IMAGE_COUNT = 12
+const ABSTRACT_IMAGE_COUNT = 3 // spec 003, R5.1: few images, the definition leads
+const DEF_WAIT_MS = 2000 // spec 003, D2: images wait this long for the definition, then go by the word alone
+
+export default function Search({ words, hidden = {}, onHide, onSave, seed, onSeedUsed }) {
+  const [query, setQuery] = useState('')
+  // images: null = loading; def / translation: undefined = loading, null = not found / failed
+  const [result, setResult] = useState(null)
+  const [picked, setPicked] = useState([])
+  // true while the choice is the automatic "first 3"; refining replaces those instead of keeping them
+  const [autoPicked, setAutoPicked] = useState(false)
+  const [broken, setBroken] = useState(() => new Set())
+  const [savedFlash, setSavedFlash] = useState(false)
+  const [refineText, setRefineText] = useState('')
+  const reqId = useRef(0)
+  const refineId = useRef(0)
+  const gridRef = useRef(null)
+  // images the user hid for a word are dropped from every result (spec 003, R1.3)
+  const notHidden = (word, list) => {
+    const ids = new Set(hidden[word] ?? [])
+    return list.filter((img) => !ids.has(img.id))
+  }
+
+  function run(raw) {
+    const word = raw.trim().toLowerCase()
+    if (!word) return
+    setQuery(word)
+    const id = ++reqId.current
+    const existing = words[word]
+    setSavedFlash(false)
+    setRefineText('')
+    refineId.current++
+    setBroken(new Set())
+    setPicked(existing ? existing.images.map((i) => i.id) : [])
+    setAutoPicked(!existing)
+    setResult({ word, images: null, imageError: false, limited: false, abstract: false, refinedBy: null, def: undefined, translation: undefined })
+
+    const patch = (fields) => id === reqId.current && setResult((r) => ({ ...r, ...fields }))
+
+    const defPromise = fetchDefinition(word).catch(() => null)
+    defPromise.then((def) => patch({ def }))
+
+    // spec 003: images are searched once, with the meaning as context when the definition arrives in time
+    orTimeout(defPromise, DEF_WAIT_MS)
+      .then((def) => {
+        const abstract = Boolean(def) && isAbstract(def, word)
+        patch({ abstract })
+        return fetchImagesFor(buildQueries(word, def), abstract ? ABSTRACT_IMAGE_COUNT : IMAGE_COUNT)
+      })
+      .then(({ images, limited }) => {
+        patch({ limited })
+        return notHidden(word, images)
+      })
+      .catch(() => {
+        patch({ imageError: true })
+        return []
+      })
+      .then((found) => {
+        if (id !== reqId.current) return
+        let images = found
+        if (existing) {
+          const savedIds = new Set(existing.images.map((i) => i.id))
+          images = [...existing.images, ...found.filter((i) => !savedIds.has(i.id))]
+        } else {
+          setPicked(found.slice(0, MAX_PICK).map((i) => i.id))
+        }
+        patch({ images })
+      })
+    fetchTranslation(word)
+      .catch(() => null)
+      .then((translation) => patch({ translation }))
+  }
+
+  // spec 003, R3: new images from one query (one request); the word, definition and translation stay,
+  // and the images already chosen stay first in the grid
+  function refine(raw) {
+    const q = raw.trim().toLowerCase()
+    if (!q || !result || result.images === null) return
+    const word = result.word
+    const id = ++refineId.current
+    const current = result.images
+    const keep = autoPicked ? [] : picked
+    setResult((r) => ({ ...r, images: null, imageError: false, refinedBy: q, refineEmpty: false }))
+    fetchImagesFor([q], IMAGE_COUNT)
+      .then(({ images, limited }) => ({ found: notHidden(word, images), limited, error: false }))
+      .catch(() => ({ found: [], limited: false, error: true }))
+      .then(({ found, limited, error }) => {
+        if (id !== refineId.current) return
+        const images = mergeRefined(current, keep, found)
+        if (!keep.length) setPicked(found.slice(0, MAX_PICK).map((i) => i.id))
+        setResult((r) =>
+          r && r.word === word ? { ...r, images, limited, imageError: error && !images.length, refineEmpty: !error && !found.length } : r,
+        )
+      })
+  }
+
+  // a word sent from another tab (video keywords, spec 002 R6.2) is searched right away
+  useEffect(() => {
+    if (!seed?.word) return
+    run(seed.word)
+    onSeedUsed?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed])
+
+  const loading = result && (result.images === null || result.def === undefined || result.translation === undefined)
+
+  function hide(id, index) {
+    const word = result.word
+    setPicked((p) => p.filter((x) => x !== id))
+    onHide?.(word, id)
+    // keep keyboard focus in the grid: the tile that takes this place (or the last one)
+    requestAnimationFrame(() => {
+      const tiles = gridRef.current?.querySelectorAll('.gw-tile')
+      if (tiles?.length) tiles[Math.min(index, tiles.length - 1)].focus()
+    })
+  }
+
+  function togglePick(id) {
+    setAutoPicked(false)
+    setPicked((p) => {
+      if (p.includes(id)) return p.filter((x) => x !== id)
+      return p.length < MAX_PICK ? [...p, id] : [...p.slice(1), id]
+    })
+  }
+
+  function save() {
+    const { word, images, def, translation } = result
+    const existing = words[word]
+    const byId = new Map(images.map((i) => [i.id, i]))
+    const chosen = picked.filter((id) => !broken.has(id)).map((id) => byId.get(id)).filter(Boolean)
+    // spec 003, R1.6: tell Unsplash about each of its photos saved for the first time
+    const alreadySaved = new Set(existing?.images.map((i) => i.id) ?? [])
+    trackImageUse(chosen.filter((img) => !alreadySaved.has(img.id)))
+    onSave({
+      key: word,
+      word,
+      phonetic: def?.phonetic || '',
+      audio: def?.audio || '',
+      meanings: def?.meanings || [],
+      translation,
+      images: chosen,
+      addedAt: existing?.addedAt || Date.now(),
+      srs: existing?.srs || newCard(),
+    })
+    setSavedFlash(true)
+  }
+
+  const hiddenNow = new Set(result ? (hidden[result.word] ?? []) : [])
+  const visible = result?.images?.filter((i) => !broken.has(i.id) && !hiddenNow.has(i.id)) || []
+  const suggestions = result && result.def !== undefined ? refineSuggestions(result.word, result.def) : []
+  const inDict = result && words[result.word]
+
+  return (
+    <section className="gw-search" aria-label="Buscar palavra">
+      <form
+        className="gw-search-bar"
+        onSubmit={(e) => {
+          e.preventDefault()
+          run(query)
+        }}
+      >
+        <SearchField
+          label="Palavra em inglês"
+          value={query}
+          onChange={setQuery}
+          placeholder="Digite uma palavra em inglês…"
+          autoComplete="off"
+          spellCheck={false}
+        />
+        <Button label="Ver" type="submit" variant="primary" disabled={!query.trim()} busy={loading} />
+      </form>
+
+      {!result && (
+        <div className="gw-search-empty">
+          <EmptyState
+            icon="Image"
+            title="Veja antes de traduzir"
+            description={`Busque uma palavra e escolha até ${MAX_PICK} imagens que mais lembram ela. Essas imagens viram a frente do seu flashcard. A tradução fica escondida até você pedir.`}
+          />
+          <div className="gw-chips" role="group" aria-label="Sugestões de palavras">
+            {SUGGESTIONS.map((s) => (
+              <Button key={s} label={s} variant="secondary" compact onClick={() => run(s)} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {result && (
+        <div className="gw-result">
+          <div className="gw-result-images">
+            <p className="gw-hint">
+              Escolha as imagens que mais lembram <strong>{result.word}</strong>{' '}
+              <span className="gw-count">
+                {picked.length}/{MAX_PICK}
+              </span>
+            </p>
+            {result.abstract && (
+              <Notice
+                tone="info"
+                title="Aqui o que ensina é o contexto"
+                description={`"${result.word}" quase não tem imagem. Leia a definição e os exemplos ao lado; mostramos só ${ABSTRACT_IMAGE_COUNT} imagens.`}
+              />
+            )}
+            {result.limited && (
+              <Notice
+                tone="warning"
+                title="O banco de fotos limitou as buscas por agora"
+                description="Algumas imagens podem faltar ou vir de outra fonte. Tente de novo mais tarde."
+              />
+            )}
+            {result.images === null ? (
+              <div className="gw-grid" aria-hidden="true">
+                {Array.from({ length: 9 }, (_, i) => (
+                  <div key={i} className="gw-tile-skeleton" />
+                ))}
+              </div>
+            ) : visible.length ? (
+              <div className="gw-grid" ref={gridRef}>
+                {visible.map((img, index) => {
+                  const n = picked.indexOf(img.id)
+                  return (
+                    <div key={img.id} className="gw-tile-wrap">
+                      <button
+                        type="button"
+                        className="gw-tile"
+                        onClick={() => togglePick(img.id)}
+                        title={imageCredit(img)}
+                        aria-pressed={n >= 0}
+                        aria-label={`${img.title}${n >= 0 ? `, escolhida em ${n + 1}º` : ''}`}
+                      >
+                        <img
+                          src={img.thumb}
+                          alt=""
+                          loading="lazy"
+                          onError={() => setBroken((b) => new Set(b).add(img.id))}
+                        />
+                        {n >= 0 && (
+                          <span className="gw-tile-badge" aria-hidden="true">
+                            {n + 1}
+                          </span>
+                        )}
+                      </button>
+                      <span className="gw-tile-hide">
+                        <IconButton label="Esconder esta imagem" icon="X" onClick={() => hide(img.id, index)} />
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : result.imageError ? (
+              <Notice tone="error" title="Não deu para buscar imagens" description="Os bancos de imagens não responderam. Tente buscar de novo." />
+            ) : (
+              <Notice tone="info" title="Nenhuma imagem encontrada" description="Palavras abstratas costumam não ter imagem. A definição ao lado ajuda." />
+            )}
+            {result.refineEmpty && (
+              <Notice
+                tone="info"
+                title={`Nenhuma imagem nova para "${result.refinedBy}"`}
+                description="Tente outras palavras em inglês ou uma das sugestões."
+              />
+            )}
+            <div className="gw-refine">
+              <p className="gw-refine-title">
+                {result.refinedBy ? (
+                  <>
+                    Mostrando imagens de <strong>{result.refinedBy}</strong>. Refinar de novo:
+                  </>
+                ) : (
+                  'Imagens fora do tema? Refine a busca:'
+                )}
+              </p>
+              {suggestions.length > 0 && (
+                <div className="gw-refine-chips" role="group" aria-label="Sugestões para refinar as imagens">
+                  {suggestions.map((s) => (
+                    <Button key={s} label={s} variant="secondary" compact onClick={() => refine(s)} disabled={result.images === null} />
+                  ))}
+                </div>
+              )}
+              <form
+                className="gw-refine-form"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  refine(refineText)
+                }}
+              >
+                <SearchField
+                  label="Refinar imagens"
+                  value={refineText}
+                  onChange={setRefineText}
+                  placeholder={`Em inglês, ex.: ${result.word} close up`}
+                  autoComplete="off"
+                  spellCheck={false}
+                />
+                <Button label="Refinar" type="submit" disabled={!refineText.trim() || result.images === null} />
+              </form>
+            </div>
+            {visible.some((img) => img.source === 'unsplash') ? (
+              <p className="gw-image-credit">
+                Fotos:{' '}
+                <a href={UNSPLASH_HOME} target="_blank" rel="noreferrer">
+                  Unsplash
+                </a>
+                . Passe o mouse para ver o fotógrafo.
+              </p>
+            ) : (
+              <Text variant="caption" tone="secondary">
+                Imagens do Openverse e Wikimedia Commons, com licenças abertas. Passe o mouse para ver o autor.
+              </Text>
+            )}
+          </div>
+
+          <aside className="gw-result-panel">
+            <Surface role="panel">
+              <div className="gw-panel-body">
+                <WordInfo
+                  key={result.word}
+                  word={result.word}
+                  phonetic={result.def?.phonetic}
+                  audio={result.def?.audio}
+                  meanings={result.def?.meanings}
+                  loadingDef={result.def === undefined}
+                  translation={result.translation}
+                />
+                <Button
+                  label={savedFlash ? 'Salvo no dicionário' : inDict ? 'Atualizar imagens' : 'Salvar no dicionário'}
+                  icon={savedFlash ? 'Check' : 'Bookmark'}
+                  variant="primary"
+                  onClick={save}
+                  disabled={loading}
+                />
+              </div>
+            </Surface>
+          </aside>
+        </div>
+      )}
+    </section>
+  )
+}

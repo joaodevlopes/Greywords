@@ -1,0 +1,18 @@
+node_modules
+dist
+
+# TED transcripts are pasted by hand and must not be published (spec 002)
+catalog/transcripts/*
+!catalog/transcripts/README.md
+
+# Image benchmark output (spec 003)
+bench/images/out/
+bench/images/cache/
+
+# Local secrets (Unsplash access key, spec 003)
+.env.local
+.env.*.local
+
+# Local tool state
+.claude/
+.wrangler/

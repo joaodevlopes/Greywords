@@ -1,0 +1,441 @@
+/* Effects layer (spec 005). App-owned "gw-fx-*" classes; loops are CSS, entrances use motion/react.
+   Credits for each effect: CREDITS.md. */
+
+/* Any continuous animation carries .gw-fx-loop. useOnScreen() sets data-fx-paused on the nearest
+   container when it leaves the viewport or the tab is hidden (R5.3). These two state rules use
+   !important on purpose: effects declare the `animation` shorthand with more specific selectors,
+   which would otherwise reset the play state. */
+[data-fx-paused='true'] .gw-fx-loop,
+[data-fx-paused='true'] .gw-fx-loop::before,
+[data-fx-paused='true'] .gw-fx-loop::after,
+.gw-fx-loop[data-fx-paused='true'],
+.gw-fx-loop[data-fx-paused='true']::before,
+.gw-fx-loop[data-fx-paused='true']::after {
+  animation-play-state: paused !important;
+}
+
+/* ---------- A2 text effect ---------- */
+.gw-fx-text-word {
+  display: inline-block;
+}
+
+/* ---------- A3 word rotate ---------- */
+.gw-fx-rotate {
+  display: inline-grid;
+  justify-items: center;
+  vertical-align: bottom;
+}
+
+.gw-fx-rotate > * {
+  grid-area: 1 / 1;
+}
+
+.gw-fx-rotate-sizer {
+  visibility: hidden;
+}
+
+.gw-fx-rotate-word {
+  display: inline-block;
+}
+
+/* ---------- A6 border beam ---------- */
+.gw-fx-beam {
+  position: absolute;
+  inset: -1px;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) padding-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+.gw-fx-beam-light {
+  position: absolute;
+  width: 160px;
+  aspect-ratio: 1;
+  background: linear-gradient(to left, var(--gw-brand), var(--gw-terracotta) 40%, transparent);
+  offset-path: rect(0 auto auto 0 round 160px);
+  animation: gw-fx-beam 9s linear infinite;
+}
+
+@keyframes gw-fx-beam {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+/* ---------- A9 shimmer (perimeter light on the CTA) ---------- */
+.gw-fx-shimmer {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.gw-fx-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: -150% -20%;
+  z-index: -2;
+  background: conic-gradient(from 0deg, transparent 0 70%, rgb(255 255 255 / 0.85) 82%, transparent 94%);
+  animation: gw-fx-spin 3.2s linear infinite;
+}
+
+.gw-fx-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--gw-cta-bg);
+}
+
+@keyframes gw-fx-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* ---------- A5 spotlight card ---------- */
+.gw-fx-spot {
+  position: relative;
+  isolation: isolate;
+}
+
+/* soft glow inside the card */
+.gw-fx-spot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    320px circle at var(--gw-x, 50%) var(--gw-y, 50%),
+    color-mix(in oklab, var(--gw-brand) 12%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* brighter ring on the border under the cursor */
+.gw-fx-spot::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: radial-gradient(
+      220px circle at var(--gw-x, 50%) var(--gw-y, 50%),
+      var(--gw-brand),
+      transparent 70%
+    )
+    border-box;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) padding-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .gw-fx-spot::before,
+  .gw-fx-spot::after {
+    transition: opacity 250ms ease-out;
+  }
+
+  .gw-fx-spot:hover::before,
+  .gw-fx-spot:hover::after {
+    opacity: 1;
+  }
+}
+
+/* ---------- A10 browser frame ---------- */
+.gw-fx-browser {
+  overflow: hidden;
+  border: 1px solid var(--gw-border);
+  border-radius: var(--es-radius-14);
+  background: var(--gw-raised);
+  /* fixed dark shadow: --gw-ink turns cream in the dark theme and would glow */
+  box-shadow:
+    0 1px 2px rgb(30 18 10 / 0.08),
+    0 12px 32px -12px rgb(30 18 10 / 0.28);
+}
+
+.gw-fx-browser-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--es-space-6);
+  padding: var(--es-space-4) var(--es-space-6);
+  border-bottom: 1px solid var(--gw-border);
+  background: var(--gw-surface);
+}
+
+.gw-fx-browser-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.gw-fx-browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gw-border-strong);
+}
+
+.gw-fx-browser-url {
+  justify-self: center;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 2px var(--es-space-8);
+  border-radius: var(--es-radius-full);
+  background: var(--gw-raised);
+  color: var(--gw-ink-soft);
+  font: 400 12px/18px var(--es-font);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gw-fx-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.gw-fx-shot-dark,
+:root[data-theme='dark'] .gw-fx-shot-light {
+  display: none;
+}
+
+:root[data-theme='dark'] .gw-fx-shot-dark {
+  display: block;
+}
+
+/* ---------- A12 animated beams (hub diagram) ---------- */
+.gw-fx-hub {
+  position: relative;
+  aspect-ratio: 100 / 56;
+}
+
+.gw-fx-hub-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gw-fx-hub-line,
+.gw-fx-hub-light {
+  fill: none;
+  stroke-linecap: round;
+}
+
+/* stroke widths in viewBox units: 100 units ≈ the 1040px content width, so 0.15 ≈ 1.5px */
+.gw-fx-hub-line {
+  stroke: var(--gw-border-strong);
+  stroke-width: 0.15;
+}
+
+.gw-fx-hub-light {
+  stroke: var(--gw-brand);
+  stroke-width: 0.3;
+  stroke-dasharray: 12 88;
+  stroke-dashoffset: 100;
+  animation: gw-fx-hub-flow 3.6s linear infinite;
+}
+
+@keyframes gw-fx-hub-flow {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.gw-fx-hub-nodes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gw-fx-hub-node,
+.gw-fx-hub-center {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.gw-fx-hub-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 132px;
+  padding: var(--es-space-5) var(--es-space-8);
+  border: 1px solid var(--gw-border);
+  border-radius: var(--es-radius-14);
+  background: var(--gw-raised);
+  text-align: center;
+}
+
+.gw-fx-hub-node strong {
+  color: var(--gw-ink);
+  font: 500 14px/20px var(--es-font);
+}
+
+.gw-fx-hub-node span {
+  color: var(--gw-ink-soft);
+  font: 400 12px/16px var(--es-font);
+}
+
+@media (max-width: 720px) {
+  .gw-fx-hub {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--es-space-8);
+  }
+
+  .gw-fx-hub-lines {
+    display: none;
+  }
+
+  .gw-fx-hub-center,
+  .gw-fx-hub-node {
+    position: static;
+    transform: none;
+  }
+
+  .gw-fx-hub-nodes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--es-space-4);
+    width: 100%;
+  }
+
+  .gw-fx-hub-node {
+    min-width: 0;
+  }
+}
+
+/* ---------- A7 marquee ---------- */
+.gw-fx-marquee {
+  --gw-marquee-gap: 16px;
+  position: relative;
+}
+
+.gw-fx-marquee-viewport {
+  display: flex;
+  gap: var(--gw-marquee-gap);
+  overflow: hidden;
+  padding-block: 4px;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.gw-fx-marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--gw-marquee-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: gw-fx-marquee var(--gw-marquee-duration, 40s) linear infinite;
+}
+
+.gw-fx-marquee:hover .gw-fx-marquee-group {
+  animation-play-state: paused;
+}
+
+.gw-fx-marquee-toggle {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 1040px;
+  margin: var(--es-space-4) auto 0;
+  padding-inline: var(--es-space-10);
+}
+
+@keyframes gw-fx-marquee {
+  to {
+    transform: translateX(calc(-100% - var(--gw-marquee-gap)));
+  }
+}
+
+/* ---------- A8 number ticker ---------- */
+.gw-fx-ticker-digits {
+  display: inline-grid;
+  font-variant-numeric: tabular-nums;
+}
+
+.gw-fx-ticker-digits > * {
+  grid-area: 1 / 1;
+  text-align: center;
+}
+
+.gw-fx-ticker-sizer {
+  visibility: hidden;
+}
+
+/* ---------- A13 dot pattern ---------- */
+.gw-fx-dots {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--gw-border-strong) 1px, transparent 1.4px);
+  background-size: 18px 18px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+
+/* Less motion requested: loops stop on their first frame (R5.1). Each effect may refine this. */
+@media (prefers-reduced-motion: reduce) {
+  :root .gw-fx-loop,
+  :root .gw-fx-loop::before,
+  :root .gw-fx-loop::after {
+    animation: none !important;
+  }
+
+  /* A6: a still orange border instead of the travelling beam. */
+  :root .gw-fx-beam {
+    background: color-mix(in oklab, var(--gw-brand) 55%, transparent);
+  }
+
+  :root .gw-fx-beam-light {
+    display: none;
+  }
+
+  /* A7: a still list the user can scroll sideways; no loop copy, no pause button. */
+  :root .gw-fx-marquee-viewport {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  :root .gw-fx-marquee-copy,
+  :root .gw-fx-marquee-toggle {
+    display: none;
+  }
+
+  /* A12: still lines, no travelling light. */
+  :root .gw-fx-hub-light {
+    display: none;
+  }
+
+  /* A9: no perimeter light. */
+  :root .gw-fx-shimmer::before {
+    display: none;
+  }
+}

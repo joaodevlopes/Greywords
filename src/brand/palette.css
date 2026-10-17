@@ -1,0 +1,37 @@
+/* Greywords palette (spec 005, D1 "quente e editorial"). App-owned tokens: they paint the app's own
+   surfaces and highlights and never redefine BEDS --es-* tokens. Contrast pairs are checked by
+   src/brand/palette.test.js; keep both themes in sync when a value changes. */
+
+:root {
+  --gw-bg: #fbf6ee;
+  --gw-surface: #f4eadb;
+  --gw-raised: #fffcf7;
+  --gw-ink: #2e211a;
+  --gw-ink-soft: #6b5446;
+  --gw-brand: #e8590c;
+  --gw-brand-ink: #b4430a;
+  --gw-terracotta: #9c3d1b;
+  --gw-cta-bg: #b4430a;
+  --gw-cta-fg: #ffffff;
+  --gw-border: #e7d8c4;
+  --gw-border-strong: #cdb69b;
+  --gw-hover: #efe2cf;
+
+  --gw-font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+}
+
+:root[data-theme='dark'] {
+  --gw-bg: #1a1512;
+  --gw-surface: #251f1a;
+  --gw-raised: #2a231e;
+  --gw-ink: #f5ece0;
+  --gw-ink-soft: #c4b3a1;
+  --gw-brand: #e8590c;
+  --gw-brand-ink: #ff8a4c;
+  --gw-terracotta: #e07a52;
+  --gw-cta-bg: #ff8a4c;
+  --gw-cta-fg: #1a1512;
+  --gw-border: #3a3029;
+  --gw-border-strong: #57483d;
+  --gw-hover: #2f2721;
+}

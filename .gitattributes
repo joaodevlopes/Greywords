@@ -1,0 +1,5 @@
+# Keep LF line endings in the repository and the working copy (the project is edited on Windows)
+* text=auto eol=lf
+*.webp binary
+*.png binary
+*.woff2 binary

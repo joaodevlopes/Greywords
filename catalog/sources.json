@@ -1,0 +1,13 @@
+{
+  "niches": [
+    { "id": "tech", "label": "Tecnologia" },
+    { "id": "games", "label": "Games" },
+    { "id": "science", "label": "Ciência" },
+    { "id": "food", "label": "Culinária" },
+    { "id": "travel", "label": "Viagem" },
+    { "id": "sports", "label": "Esportes" },
+    { "id": "film", "label": "Cinema e séries" },
+    { "id": "business", "label": "Negócios e dados" }
+  ],
+  "talks": []
+}
