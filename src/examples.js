@@ -88,3 +88,19 @@ export function fromDictionary(meanings) {
   }
   return list
 }
+
+/**
+ * Choose / unchoose a sentence (D3, at most `max`, 2 by default). Choosing one more than `max` drops the
+ * oldest choice, like the image picker.
+ */
+export function togglePicked(picked, id, max = 2) {
+  const list = picked ?? []
+  if (list.includes(id)) return list.filter((x) => x !== id)
+  return list.length < max ? [...list, id] : [...list.slice(list.length - max + 1), id]
+}
+
+/** Short credit shown under each sentence (R6.3): "Tatoeba · autor", "Tatoeba" (CC0) or "Dicionário". */
+export function exampleCredit(sentence) {
+  if (sentence?.source === 'dictionary') return 'Dicionário'
+  return sentence?.owner ? `Tatoeba · ${sentence.owner}` : 'Tatoeba'
+}

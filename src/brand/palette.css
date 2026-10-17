@@ -16,6 +16,7 @@
   --gw-border: #e7d8c4;
   --gw-border-strong: #cdb69b;
   --gw-hover: #efe2cf;
+  --gw-mark: #fbdcc2;
 
   --gw-font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 }
@@ -34,4 +35,5 @@
   --gw-border: #3a3029;
   --gw-border-strong: #57483d;
   --gw-hover: #2f2721;
+  --gw-mark: #5a3119;
 }

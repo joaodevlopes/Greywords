@@ -26,8 +26,14 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
   - O teste automático com a API real fica fora do `npm test` (`LIVE_APIS=1 npm test`). Na hora do teste, o Tatoeba estava levando de 11 a mais de 25 s por chamada, então ele foi pulado; na prática, nesses momentos o app mostra os exemplos do dicionário (R1.5).
   - **Se o Tatoeba continuar lento:** passar pelo mesmo intermediário das imagens, com cache de 24 h. Fica como ideia, fora desta spec.
 
-- [ ] **T3 — Componente `src/components/Examples.jsx`**: frase com a palavra destacada, "Ver tradução" por frase, "Ouvir frase", crédito com link, modo de escolha (até 2).
+- [x] **T3 — Componente `src/components/Examples.jsx`**: frase com a palavra destacada, "Ver tradução" por frase, "Ouvir frase", crédito com link, modo de escolha (até 2).
   *Pronto quando:* renderizado com frases de teste numa página do modo dev, funciona no teclado, em claro, escuro e 375 px. — R1.3, R5.1, R6.3
+  *Feito (2026-10-17):*
+  - `Examples.jsx` recebe `word`, `sentences` e, no modo de escolha, `picked` + `onTogglePick` (até 2). Cada frase tem a palavra em `<mark>`, "Ver tradução" (`Button` com `aria-expanded`, só quando há tradução), "Ouvir a frase N" (`IconButton`, voz do navegador) e "Escolher a frase N para salvar" (`IconToggleButton`). Crédito por frase ("Tatoeba · autor", "Tatoeba" ou "Dicionário") com link em nova aba, e a legenda "Frases: Tatoeba, CC BY 2.0 FR / CC0" quando alguma frase vem do Tatoeba.
+  - Funções novas em `examples.js`, testadas: `togglePicked` (a terceira escolha tira a mais antiga, como nas imagens) e `exampleCredit`.
+  - Token `--gw-mark` (fundo do destaque) na paleta, com o par de contraste no teste.
+  - Página de prévia só no `npm run dev`: `#/dev/examples` (`src/dev/ExamplesPreview.jsx`, frases e autores fictícios). Ela fica fora do build (conferido no `dist`).
+  - **Conferido no Edge headless:** Tab passa por tradução, ouvir, escolher e crédito em ordem, com foco visível; Enter abre a tradução e Espaço escolhe. Com 3 escolhas ficam as 2 últimas, e o aviso diz "2 de 2 escolhidas". O menor contraste é 5,47:1 no claro e 6,62:1 no escuro. Em 375 px, sem rolagem lateral.
 
 ## Parte 2 — Telas (depois da T6 da spec 003)
 

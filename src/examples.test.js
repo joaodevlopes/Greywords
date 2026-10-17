@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { cloze, findForm, fromDictionary, highlight, pickExamples, wordForms } from './examples.js'
+import { cloze, exampleCredit, findForm, fromDictionary, highlight, pickExamples, togglePicked, wordForms } from './examples.js'
 
 const s = (id, text, translation = null, extra = {}) => ({ id, text, translation, owner: 'u', license: 'CC BY 2.0 FR', link: `https://tatoeba.org/en/sentences/show/${id}`, ...extra })
 
@@ -101,5 +101,24 @@ describe('fromDictionary (R1.5)', () => {
     assert.deepEqual(list, [
       { id: 'dict:1', text: 'The party, however, was a disaster.', translation: null, owner: null, license: null, link: null, source: 'dictionary' },
     ])
+  })
+})
+
+describe('togglePicked (spec 004, D3)', () => {
+  it('adds up to 2, removes on a second click and drops the oldest past the limit', () => {
+    assert.deepEqual(togglePicked([], 1), [1])
+    assert.deepEqual(togglePicked([1], 2), [1, 2])
+    assert.deepEqual(togglePicked([1, 2], 3), [2, 3])
+    assert.deepEqual(togglePicked([1, 2], 1), [2])
+    assert.deepEqual(togglePicked(undefined, 'a'), ['a'])
+    assert.deepEqual(togglePicked(['a'], 'b', 1), ['b'])
+  })
+})
+
+describe('exampleCredit (spec 004, R6.3)', () => {
+  it('names Tatoeba and the author, or the dictionary', () => {
+    assert.equal(exampleCredit(s(1, 'I like to cook.')), 'Tatoeba · u')
+    assert.equal(exampleCredit(s(2, 'I like to cook.', null, { owner: null, license: 'CC0 1.0' })), 'Tatoeba')
+    assert.equal(exampleCredit(fromDictionary([{ example: 'She cooks well.' }])[0]), 'Dicionário')
   })
 })

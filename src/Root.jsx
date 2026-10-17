@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { DesignSystemProvider } from 'beds'
 import App from './App.jsx'
 import Landing from './landing/Landing.jsx'
+
+// Dev-only preview page (left out of the build): #/dev/examples
+const ExamplesPreview = import.meta.env.DEV ? lazy(() => import('./dev/ExamplesPreview.jsx')) : null
 
 export const BRAND_COLOR = '#e8590c'
 const THEME_KEY = 'greywords:theme'
@@ -18,7 +21,11 @@ function initialTheme() {
 }
 
 // Hash routing keeps the app working on any static host: "#/app" is the app, anything else the landing.
-const routeFromHash = () => (window.location.hash.startsWith('#/app') ? 'app' : 'landing')
+function routeFromHash() {
+  const hash = window.location.hash
+  if (ExamplesPreview && hash.startsWith('#/dev/examples')) return 'dev-examples'
+  return hash.startsWith('#/app') ? 'app' : 'landing'
+}
 
 export default function Root() {
   const [theme, setTheme] = useState(initialTheme)
@@ -46,7 +53,15 @@ export default function Root() {
 
   return (
     <DesignSystemProvider theme={theme} brandColor={BRAND_COLOR} onThemeChange={setTheme}>
-      {route === 'app' ? <App /> : <Landing />}
+      {route === 'dev-examples' ? (
+        <Suspense fallback={null}>
+          <ExamplesPreview />
+        </Suspense>
+      ) : route === 'app' ? (
+        <App />
+      ) : (
+        <Landing />
+      )}
     </DesignSystemProvider>
   )
 }

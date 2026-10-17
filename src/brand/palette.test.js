@@ -18,6 +18,7 @@ const TEXT = [
   ['brand-ink', 'raised'],
   ['terracotta', 'bg'],
   ['cta-fg', 'cta-bg'],
+  ['ink', 'mark'],
 ]
 const GRAPHIC = [
   ['brand', 'bg'],
