@@ -63,7 +63,7 @@ npm run catalog        # gera public/catalog.json (ver catalog/HOW-TO.md)
 | `src/App.jsx` | Shell do app: abas Busca / Palavras / Revisão / Vídeos / Progresso, estado e persistência |
 | `src/components/Search.jsx` | Busca: imagens com contexto (espera a definição até 2 s), definição + tradução, escolha de até 3 imagens, "Refinar imagens", "Esconder" imagem, frases de exemplo (no painel; palavra abstrata: no lugar da grade, com "Ver imagens mesmo assim"), salvar com até 2 frases |
 | `src/components/Dictionary.jsx` | Lista de palavras, aviso de revisão, filtro/ordem, detalhe em Dialog (com as frases salvas), exportar JSON |
-| `src/components/Review.jsx` | Sessão de revisão com flashcard, palpite opcional, notas 1–4 |
+| `src/components/Review.jsx` | Sessão de revisão com flashcard, palpite opcional, notas 1–4; frente com frase e lacuna para palavras abstratas ou sem imagem (spec 004) |
 | `src/components/Progress.jsx` | Aba Progresso: meta semanal, semana atual, sequência, check-in de hoje |
 | `src/components/MonthCalendar.jsx` | Calendário do mês (do app, sem equivalente no BEDS) |
 | `src/components/WordMetrics.jsx` | Métricas das palavras (total, para revisar, aprendendo, dominadas, acerto) |

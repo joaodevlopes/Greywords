@@ -65,8 +65,24 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
     - "however" mostra as 2 frases com os créditos "Tatoeba · carlosalberto" (link para a frase) e "Dicionário". A tradução fica escondida até "Ver tradução".
     - Claro, escuro e 375 px sem rolagem lateral, sem erros no console.
 
-- [ ] **T6 — Revisão com lacuna**: frente com frase e lacuna para palavras abstratas ou sem imagem salva; dica com a tradução da frase; revelar mostra a frase completa destacada; com 2 frases, alterna.
+- [x] **T6 — Revisão com lacuna**: frente com frase e lacuna para palavras abstratas ou sem imagem salva; dica com a tradução da frase; revelar mostra a frase completa destacada; com 2 frases, alterna.
   *Pronto quando:* revisar "however" mostra a lacuna, a dica em português e a resposta completa; palavras com imagem continuam com imagens; palpite e notas funcionam igual. — R4.1–R4.4
+  *Feito (2026-10-17):*
+  - `reviewSentence(card, abstract)` em `examples.js` (testada) escolhe a frase da frente:
+    - só para palavra abstrata (`isAbstract`, mesmo com imagem salva) ou sem imagem;
+    - só frases que contêm a palavra;
+    - com 2 frases, alterna por `srs.reps % 2`;
+    - sem frase, a frente continua como antes (imagens, ou a definição com a palavra escondida).
+  - Frente: frase com a lacuna "_____" (leitor de tela ouve "lacuna"). A dica mostra a tradução da frase quando há; sem tradução, mostra a definição com a palavra escondida.
+  - Verso: a frase completa com a palavra destacada, "Ouvir a frase" e o crédito com link, acima do bloco da palavra. Palpite e notas não mudaram.
+  - **Bug antigo corrigido no caminho:** dar nota pelo teclado (1 a 4) digitava o número no campo de palpite da carta seguinte ("Você escreveu “3”"). Agora a tecla de nota usa `preventDefault`.
+  - **Conferido no Edge headless** com 4 palavras para revisar:
+    - "however" (abstrata, com imagem e 2 frases, `reps` 1): mostra a 2ª frase com lacuna e nenhuma imagem. A dica é a definição, porque essa frase não tem tradução. Palpite "however" + Enter dá "Acertou", e o verso destaca a palavra e mostra o crédito.
+    - "river" (com imagem): continua com a imagem.
+    - "blanket" (sem imagem, com frase): lacuna, e a dica "Preciso de um cobertor quente hoje.".
+    - "thunder" (sem imagem e sem frase): a definição, como antes.
+    - Notas pelo teclado gravam o `log` e somam `reps`.
+    - Claro, escuro e 375 px sem rolagem lateral, sem erros no console.
 
 ## Fechamento
 

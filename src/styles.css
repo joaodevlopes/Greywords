@@ -1080,3 +1080,36 @@ img {
   outline-offset: 4px;
   border-radius: 4px;
 }
+
+/* ---------- review with a sentence (spec 004, D4) ---------- */
+.gw-flash-sentence {
+  display: grid;
+  gap: var(--es-space-4);
+  padding: var(--es-space-10) var(--es-space-4);
+}
+
+.gw-flash-cloze {
+  margin: 0;
+  text-align: center;
+  color: var(--gw-ink);
+  font: 400 22px/1.5 var(--es-font);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.gw-flash-blank {
+  color: var(--gw-brand-ink);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.gw-flash-sentence-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--es-space-4);
+}
+
+.gw-flash-sentence-meta .gw-ex-credit {
+  margin-inline-start: 0;
+}

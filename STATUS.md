@@ -12,7 +12,7 @@ App gratuito (React + Vite, dados só no navegador; um intermediário pequeno gu
 cd C:\Users\joaog\OneDrive\Documentos\englishPlataform
 npm install          # se faltar node_modules
 npm run dev          # http://localhost:5173   (#/ landing · #/app app)
-npm test             # 210 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
+npm test             # 214 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
 npm run build
 npm run check:ui     # contrato do BEDS: precisa dar 0 violations
 ```
@@ -35,10 +35,10 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 ## Onde paramos (próximos passos, em ordem)
 
-Atualizado em 2026-10-17, depois da T5 da spec 004.
+Atualizado em 2026-10-17, depois da T6 da spec 004.
 
-1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 a T3 feitas** (`src/examples.js`; `fetchExamples` no `api.js`, com 2 chamadas no máximo, busca exata e cache; componente `src/components/Examples.jsx`, com prévia no dev em `#/dev/examples`). **T4 feita**: frases na busca (no painel; nas palavras abstratas, no lugar das imagens) e salvar com até 2 frases. **T5 feita**: `migrate()` com `examples: []` e frases no detalhe do dicionário. Próxima: T6 (revisão com lacuna para palavras abstratas ou sem imagem). Aviso: o Tatoeba estava lento (11 a 25 s) no dia; com 6 s de limite, o app cai nos exemplos do dicionário. Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
-2. **Spec 005 (efeitos), etapa B:** T12 (animação ao escolher imagem e esqueleto na busca) está liberada. T13 (virar o flashcard) espera a T6 da 004. A T14 fecha a spec.
+1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 a T3 feitas** (`src/examples.js`; `fetchExamples` no `api.js`, com 2 chamadas no máximo, busca exata e cache; componente `src/components/Examples.jsx`, com prévia no dev em `#/dev/examples`). **T4 feita**: frases na busca (no painel; nas palavras abstratas, no lugar das imagens) e salvar com até 2 frases. **T5 feita**: `migrate()` com `examples: []` e frases no detalhe do dicionário. **T6 feita**: revisão com frase e lacuna para palavras abstratas ou sem imagem. Próxima: T7 (textos, créditos do Tatoeba, landing com "8 serviços" e o Tatoeba no diagrama, verificação final). Aviso: o Tatoeba estava lento (11 a 25 s) no dia; com 6 s de limite, o app cai nos exemplos do dicionário. Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
+2. **Spec 005 (efeitos), etapa B:** T12 (animação ao escolher imagem e esqueleto na busca) está liberada. T13 (virar o flashcard) está liberada (a T6 da 004 saiu); a frente agora pode ser frase com lacuna. A T14 fecha a spec.
 3. **Publicação do site** (ainda não decidido onde):
    - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);
    - pôr o endereço do Worker no build (`VITE_IMAGES_API`) e em `ALLOWED_ORIGINS`;
@@ -60,7 +60,7 @@ Atualizado em 2026-10-17, depois da T5 da spec 004.
 | [002-videos-nicho](specs/002-videos-nicho/requirements.md) | Aba Vídeos: talks do TED por nicho e nível, catálogo gerado offline | T1–T3, T6–T11 feitas; T12 quase toda; **faltam T4 (usuário), T5, T13** |
 | [003-imagens-certeiras](specs/003-imagens-certeiras/requirements.md) | Imagens pelo significado (Unsplash + reserva), sem conteúdo impróprio, com medição | **implementado** (45,6% → 96,1%); falta só publicar o Worker (T9a) |
 | [004-frases-exemplo](specs/004-frases-exemplo/requirements.md) | Frases reais do Tatoeba na busca e revisão com lacuna | tarefas aprovadas; **próxima spec**, todas as tarefas liberadas |
-| [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | etapa A pronta; etapa B: T10–T11 feitas; T12 liberada; T13 espera a T6 da 004; T14 fecha |
+| [005-identidade-efeitos](specs/005-identidade-efeitos/requirements.md) | Paleta própria, landing mais informativa, efeitos inspirados no 21st.dev | etapa A pronta; etapa B: T10–T11 feitas; T12 e T13 liberadas; T14 fecha |
 
 ## O que existe hoje no app
 

@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { cloze, dictionaryExamples, exampleCredit, examplesToSave, findForm, fromDictionary, highlight, mergeExamples, pickExamples, togglePicked, wordForms } from './examples.js'
+import { cloze, dictionaryExamples, exampleCredit, examplesToSave, findForm, fromDictionary, highlight, mergeExamples, pickExamples, reviewSentence, togglePicked, wordForms } from './examples.js'
 
 const s = (id, text, translation = null, extra = {}) => ({ id, text, translation, owner: 'u', license: 'CC BY 2.0 FR', link: `https://tatoeba.org/en/sentences/show/${id}`, ...extra })
 
@@ -161,5 +161,27 @@ describe('examplesToSave (spec 004, D3)', () => {
   it('keeps the dictionary source mark', () => {
     const dict = fromDictionary([{ example: 'She cooks very well indeed.' }])
     assert.equal(examplesToSave(dict, [])[0].source, 'dictionary')
+  })
+})
+
+describe('reviewSentence (spec 004, D4)', () => {
+  const a = s(1, 'However, my shoulder hurts.', 'No entanto, meu ombro dói.')
+  const b = s(2, 'I wanted to go; however, it rained.')
+  const card = (extra) => ({ word: 'however', images: [], examples: [a, b], srs: { reps: 0 }, ...extra })
+  it('uses a sentence for abstract words and words without images', () => {
+    assert.equal(reviewSentence(card(), false), a)
+    assert.equal(reviewSentence(card({ images: [{ id: 'x' }] }), true), a)
+  })
+  it('keeps the images for concrete words that have them', () => {
+    assert.equal(reviewSentence(card({ images: [{ id: 'x' }] }), false), null)
+  })
+  it('takes turns between 2 sentences on each review', () => {
+    assert.equal(reviewSentence(card({ srs: { reps: 1 } }), true), b)
+    assert.equal(reviewSentence(card({ srs: { reps: 2 } }), true), a)
+  })
+  it('skips sentences without the word and returns null with none', () => {
+    assert.equal(reviewSentence(card({ examples: [s(3, 'Nothing to see here.'), b] }), true), b)
+    assert.equal(reviewSentence(card({ examples: [] }), true), null)
+    assert.equal(reviewSentence(card({ examples: undefined }), true), null)
   })
 })

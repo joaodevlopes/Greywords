@@ -139,3 +139,15 @@ export function examplesToSave(list, picked, saved = [], max = 2) {
   const chosen = (picked ?? []).map((id) => byId.get(id)).filter(Boolean)
   return (chosen.length ? chosen : list.slice(0, 1)).slice(0, max).map(toSaved)
 }
+
+/**
+ * Sentence for the front of the review card (D4), or null to keep the images / definition. Used for
+ * abstract words and words saved without images, when a saved sentence contains the word. With 2
+ * sentences, they take turns on each review (srs.reps % 2).
+ */
+export function reviewSentence(card, abstract) {
+  if (!abstract && card?.images?.length) return null
+  const usable = (card?.examples ?? []).filter((s) => findForm(s.text, card.word))
+  if (!usable.length) return null
+  return usable[(card.srs?.reps ?? 0) % usable.length]
+}

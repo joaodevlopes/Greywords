@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Badge, Button, EmptyState, ProgressBar, Surface, Text, TextField } from 'beds'
+import { Badge, Button, EmptyState, IconButton, ProgressBar, Surface, Text, TextField } from 'beds'
 import { dueLabel, grade, intervalLabel, isDue } from '../srs.js'
+import { exampleCredit, highlight, reviewSentence } from '../examples.js'
 import { celebrate } from '../fx/celebrate.js'
+import { isAbstract } from '../imageQuery.js'
 import { speak } from '../speak.js'
 import WordInfo from './WordInfo.jsx'
 
@@ -73,7 +75,11 @@ export default function Review({ words, onGrade, onGoSearch }) {
         reveal()
       } else if (revealed) {
         const g = GRADES.find((x) => x.key === e.key)
-        if (g) answer(g.q)
+        if (g) {
+          // the next card focuses its guess field: without this, the digit lands in it
+          e.preventDefault()
+          answer(g.q)
+        }
       }
     }
     window.addEventListener('keydown', onKey)
@@ -102,6 +108,18 @@ export default function Review({ words, onGrade, onGoSearch }) {
 
   const correct = revealed && guess && normalize(guess) === normalize(card.word)
   const firstDef = card.meanings[0]
+  // spec 004, D4: abstract words and words without images are reviewed by completing a saved sentence
+  const sentence = reviewSentence(card, isAbstract(card, card.word))
+  const parts = sentence && highlight(sentence.text, card.word)
+  const maskedDef = firstDef && (
+    <>
+      <em>{firstDef.pos}</em> — {mask(firstDef.definition, card.word)}
+    </>
+  )
+  // the hint: the sentence's translation when there is one (R4.2), otherwise the definition
+  let hintText = null
+  if (sentence?.translation) hintText = <span lang="pt-BR">{sentence.translation}</span>
+  else if (sentence || card.images.length > 0) hintText = maskedDef
   const total = session.done + live.length
 
   return (
@@ -112,7 +130,37 @@ export default function Review({ words, onGrade, onGoSearch }) {
 
       <Surface role="panel">
         <div className={`gw-flash ${revealed ? 'is-revealed' : ''}`}>
-          {card.images.length > 0 ? (
+          {sentence ? (
+            <div className="gw-flash-sentence">
+              <p className="gw-flash-cloze" lang="en">
+                {parts.before}
+                {revealed ? (
+                  <mark className="gw-ex-mark">{parts.match}</mark>
+                ) : (
+                  <span className="gw-flash-blank">
+                    <span aria-hidden="true">_____</span>
+                    <span className="gw-visually-hidden">lacuna</span>
+                  </span>
+                )}
+                {parts.after}
+              </p>
+              {revealed && (
+                <div className="gw-flash-sentence-meta">
+                  <IconButton label="Ouvir a frase" icon="Play" onClick={() => speak(sentence.text)} />
+                  <span className="gw-ex-credit">
+                    {sentence.link ? (
+                      <a href={sentence.link} target="_blank" rel="noreferrer">
+                        {exampleCredit(sentence)}
+                        <span className="gw-visually-hidden"> (abre em nova aba)</span>
+                      </a>
+                    ) : (
+                      exampleCredit(sentence)
+                    )}
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : card.images.length > 0 ? (
             <div className={`gw-flash-imgs n${card.images.length}`}>
               {card.images.map((img) => (
                 <img key={img.id} src={img.thumb} alt="" />
@@ -124,12 +172,10 @@ export default function Review({ words, onGrade, onGoSearch }) {
 
           {!revealed && (
             <>
-              {card.images.length > 0 && firstDef && (
+              {hintText && (
                 <div>
                   {hint ? (
-                    <Text tone="secondary">
-                      <em>{firstDef.pos}</em> — {mask(firstDef.definition, card.word)}
-                    </Text>
+                    <Text tone="secondary">{hintText}</Text>
                   ) : (
                     <Button label="Mostrar dica" variant="ghost" compact icon="CircleHelp" onClick={() => setHint(true)} />
                   )}
