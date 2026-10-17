@@ -12,7 +12,7 @@ App gratuito (React + Vite, sem servidor, dados no navegador) para aprender voca
 cd C:\Users\joaog\OneDrive\Documentos\englishPlataform
 npm install          # se faltar node_modules
 npm run dev          # http://localhost:5173   (#/ landing · #/app app)
-npm test             # 191 testes de lógica
+npm test             # 197 testes de lógica (LIVE_APIS=1 inclui o teste com a API real do Tatoeba)
 npm run build
 npm run check:ui     # contrato do BEDS: precisa dar 0 violations
 ```
@@ -23,7 +23,7 @@ Fluxo de trabalho: **método de spec** (requisitos → design → tarefas → c�
 
 Atualizado em 2026-10-17, depois da T11a da spec 003.
 
-1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 feita** (`src/examples.js`, 11 testes). Próxima: T2 (`fetchExamples` no `api.js`, Tatoeba). Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
+1. **Spec 004 (frases de exemplo), a próxima:** tarefas aprovadas e todas liberadas (a T6 da 003 já saiu). **T1 e T2 feitas** (`src/examples.js`; `fetchExamples` no `api.js`, com 2 chamadas no máximo, busca exata e cache). Próxima: T3 (componente `Examples.jsx`). Aviso: o Tatoeba estava lento (11 a 25 s) no dia; com 6 s de limite, o app cai nos exemplos do dicionário. Quando o Tatoeba entrar, trocar "7 serviços" para 8 na landing (`NUMBERS` em `Landing.jsx`) e incluir o Tatoeba no diagrama.
 2. **Spec 005 (efeitos), etapa B:** T12 (animação ao escolher imagem e esqueleto na busca) está liberada. T13 (virar o flashcard) espera a T6 da 004. A T14 fecha a spec.
 3. **Publicação do site** (ainda não decidido onde):
    - publicar o Worker (T9a da 003; o usuário cria a conta grátis no Cloudflare);

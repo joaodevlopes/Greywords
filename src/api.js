@@ -1,6 +1,7 @@
-// All free, no API key: Openverse + Wikimedia Commons (images),
-// dictionaryapi.dev + Wiktionary (definitions), MyMemory (translation).
-// Free APIs can hang, so every call has a timeout and a fallback.
+// All free: Unsplash through the image intermediary (its key never reaches the browser), Openverse +
+// Wikimedia Commons as fallback (images), dictionaryapi.dev + Wiktionary (definitions), MyMemory
+// (translation), Tatoeba (example sentences). Free APIs can hang, so every call has a timeout and a fallback.
+import { pickExamples } from './examples.js'
 
 // Image intermediary (spec 003, R1.4–R1.7): the Vite plugin at /api/images in `npm run dev`,
 // VITE_IMAGES_API (the Cloudflare Worker) in production, none in Node (tests, image benchmark).
@@ -214,6 +215,64 @@ async function fetchWiktionary(word) {
     )
     .slice(0, 4)
   return meanings.length ? { phonetic: '', audio: '', meanings } : null
+}
+
+// ---------- example sentences (spec 004): Tatoeba ----------
+// The API is called "unstable", so everything about its shape lives here; on any failure the caller
+// shows the dictionary's own examples instead (R1.5).
+
+const TATOEBA = 'https://api.tatoeba.org/unstable/sentences'
+const examplesCache = new Map()
+
+function tatoebaSentence(d) {
+  const pt = (d.translations ?? []).flat().filter((t) => t?.lang === 'por' && !t.is_unapproved)
+  const translation = (pt.find((t) => t.is_direct) ?? pt[0])?.text ?? null
+  return {
+    id: d.id,
+    text: d.text,
+    translation,
+    owner: d.owner ?? null,
+    license: d.license ?? null,
+    link: `https://tatoeba.org/en/sentences/show/${d.id}`,
+    approved: !d.is_unapproved,
+  }
+}
+
+/**
+ * Up to `max` example sentences for a word (R1.1, R1.2, D1, D2): first the ones with a Portuguese
+ * translation (one small call, about 9 KB); a second call without translations only if fewer than
+ * `max` good ones came back. `exact` (grammar words) matches the word itself, not its variations.
+ * Kept in memory for the session, so reopening a word costs nothing. Never throws: [] on failure.
+ */
+export async function fetchExamples(word, { exact = false, max = 5 } = {}) {
+  const w = String(word ?? '').trim().toLowerCase()
+  if (!w) return []
+  const key = `${w}|${exact}`
+  if (examplesCache.has(key)) return examplesCache.get(key)
+
+  const base = { lang: 'eng', q: exact ? `=${w}` : w, sort: 'relevance', limit: '30' }
+  const url = (extra) => `${TATOEBA}?${new URLSearchParams({ ...base, ...extra })}`
+  let answered = false
+  let found = []
+  try {
+    const d = await getJSON(url({ 'trans:lang': 'por', showtrans: 'matching' }), 6000)
+    found = (d.data ?? []).map(tatoebaSentence)
+    answered = true
+  } catch {
+    // Tatoeba down or slow: try the lighter call below
+  }
+  let picked = pickExamples(found, w, max)
+  if (picked.length < max) {
+    try {
+      const d = await getJSON(url({ showtrans: 'none' }), 6000)
+      picked = pickExamples([...found, ...(d.data ?? []).map(tatoebaSentence)], w, max)
+      answered = true
+    } catch {
+      // keep what the first call gave
+    }
+  }
+  if (answered) examplesCache.set(key, picked)
+  return picked
 }
 
 export async function fetchTranslation(word) {

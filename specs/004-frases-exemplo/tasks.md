@@ -16,8 +16,15 @@ Uma tarefa por vez, nesta ordem. Cada uma termina com `npm test` e `npm run buil
   - `cloze`: "___, my shoulder hurts.". `fromDictionary` remove exemplos repetidos.
   - A frase traz `approved` para o filtro, que é tirado na saída.
 
-- [ ] **T2 — `fetchExamples` em `src/api.js`**: primeira chamada com tradução em português; segunda (sem tradução) só se faltarem frases; exata para palavras gramaticais; timeout de 6 s; cache em memória na sessão.
+- [x] **T2 — `fetchExamples` em `src/api.js`**: primeira chamada com tradução em português; segunda (sem tradução) só se faltarem frases; exata para palavras gramaticais; timeout de 6 s; cache em memória na sessão.
   *Pronto quando:* testes com `fetch` simulado cobrem o formato devolvido, a segunda chamada só quando precisa, a busca exata, a falha (devolve vazio sem quebrar) e o cache; uma chamada real a "however" devolve frases no formato esperado (avisa cedo se a API "unstable" mudou). — R1.1, R1.2, R1.5, R6.1
+  *Feito (2026-10-17):*
+  - `fetchExamples(word, { exact, max })` faz uma chamada com tradução em português e, só se vierem menos de 5 frases boas, uma segunda sem tradução. Busca exata (`=palavra`) quando `exact`. Timeout de 6 s por chamada, cache na sessão (falha não vai para o cache) e nunca lança erro.
+  - A tradução usada é a primeira em português aprovada, de preferência a direta.
+  - 6 testes com `fetch` simulado em `src/api.examples.test.js`.
+  - **Chamada real:** o formato foi conferido com `curl` (`data[]` com `translations[]`, `owner`, `license`, `is_unapproved`). Ex.: "However, my shoulder hurts." → "No entanto, meu ombro dói.", de carlosalberto, CC BY 2.0 FR.
+  - O teste automático com a API real fica fora do `npm test` (`LIVE_APIS=1 npm test`). Na hora do teste, o Tatoeba estava levando de 11 a mais de 25 s por chamada, então ele foi pulado; na prática, nesses momentos o app mostra os exemplos do dicionário (R1.5).
+  - **Se o Tatoeba continuar lento:** passar pelo mesmo intermediário das imagens, com cache de 24 h. Fica como ideia, fora desta spec.
 
 - [ ] **T3 — Componente `src/components/Examples.jsx`**: frase com a palavra destacada, "Ver tradução" por frase, "Ouvir frase", crédito com link, modo de escolha (até 2).
   *Pronto quando:* renderizado com frases de teste numa página do modo dev, funciona no teclado, em claro, escuro e 375 px. — R1.3, R5.1, R6.3
