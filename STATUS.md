@@ -39,17 +39,17 @@ Atualizado em 2026-10-17, depois da publicação do site (https://greywords.grey
 
 1. **Depois da publicação, a próxima:**
    - **modo produção do Unsplash: pedido enviado em 2026-10-17**; a análise leva de 5 a 10 dias úteis, e a resposta chega por e-mail. Aprovado, a mesma chave passa a 1.000 por hora, sem mudar código. Se pedirem ajustes, o texto e as capturas estão em `unsplash-pedido/` (fora do git);
-   - subir o repositório no GitHub (e pôr o link do `CREDITS.md` no rodapé).
+   - pôr o link do `CREDITS.md` no GitHub no rodapé da landing (o repositório já está no ar).
 2. **Spec 002 (vídeos), curadoria simplificada:** os 24 talks (3 por nicho) já estão no `catalog/sources.json`, com o vídeo conferido. **Falta o usuário colar as transcrições** na página `#/dev/curadoria` (`npm run dev`), cerca de 1 min por talk. Depois: `npm run catalog`, calibrar os níveis (T5), tirar "Vídeos do seu nicho" do "O que vem por aí", publicar o site de novo e verificar com dados reais (T13).
 
 **Feito recentemente:**
+- **Repositório no GitHub:** https://github.com/joaodevlopes/Greywords (público, branch `main`, remoto `origin`). Antes do envio, uma varredura confirmou que a chave do Unsplash e outros segredos não estão em nenhum arquivo nem no histórico. Commits só com o usuário como autor.
 - **Site publicado** em https://greywords.greywords.workers.dev (Worker com arquivos estáticos) e intermediário de imagens em `https://greywords-images.greywords.workers.dev`, na conta Cloudflare do usuário. Publicar de novo: `npm run deploy:site` e `npm run deploy:images`.
 - **Crédito do Unsplash visível com links** na busca, na revisão e no dicionário (`UnsplashCredit.jsx`), como pedem as regras da API. Antes, a busca só mostrava o fotógrafo ao passar o mouse, e a revisão não tinha crédito.
 - **Cache das buscas no Workers KV** (24 h): palavra já buscada não gasta a cota do Unsplash; `X-Greywords-Cache` diz hit/miss.
 - **Spec 005 implementada:** etapa B no app (paleta, abas, métricas, confete, escolha de imagem com mola, esqueleto com brilho e cartão que vira), verificada em claro, escuro, movimento reduzido e 375 px. JS 175,7 KB gzip.
 - **Spec 004 implementada:** frases reais do Tatoeba na busca (no lugar das imagens nas palavras abstratas), até 2 salvas com a palavra, no dicionário e na revisão com lacuna; exemplos do dicionário de reserva. Landing com "8 serviços".
 - **Spec 003 implementada:** imagens do Unsplash por um intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), com crédito, registro de uso e Openverse/Wikimedia de reserva; busca com contexto, "Refinar" e "Esconder". **Medição: 82/180 (45,6%) → 173/180 (96,1%), 0 impróprias.**
-- **Git:** repositório criado (branch `main`). Commits só com o usuário como autor, sem menção a IA (skill git-autoria-unica). Ainda não está no GitHub.
 
 ## Specs
 
