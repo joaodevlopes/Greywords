@@ -1,104 +1,89 @@
 # Greywords
 
-Plataforma gratuita para aprender vocabulário em inglês **pela imagem, não pela tradução**.
+**Vocabulário em inglês pela imagem, não pela tradução.** Você busca uma palavra, escolhe as fotos que mais lembram ela e revisa no dia certo, com repetição espaçada.
 
-- `#/` — landing page explicando o sistema
-- `#/app` — o app
+### 👉 [greywords.greywords.workers.dev](https://greywords.greywords.workers.dev)
 
-## Como funciona
+Grátis, sem cadastro e sem anúncios. Suas palavras ficam só no seu navegador.
 
-1. **Buscar** — digite uma palavra. Aparecem fotos do Unsplash (com Openverse e Wikimedia Commons de reserva), definição em inglês, pronúncia e até 5 frases reais com a palavra (Tatoeba). A tradução fica escondida até você pedir. "Refinar imagens" troca a busca das fotos, e "Esconder" tira uma foto que não serve. Em palavras sem imagem, como "however", as frases aparecem no lugar das fotos.
-2. **Escolher** — clique nas até 3 imagens que mais lembram a palavra. Elas viram a frente do flashcard. Dá para guardar até 2 frases junto.
-3. **Revisar** — repetição espaçada (SM-2, mesma família do Anki). Você vê as imagens (ou, nas palavras abstratas e sem imagem, completa uma frase com lacuna), tenta lembrar a palavra e dá uma nota: Errei / Difícil / Bom / Fácil. O intervalo até a próxima revisão se ajusta.
-4. **Dicionário** — todas as palavras salvas, status (nova / aprendendo / dominada), filtro, detalhe e exportação em JSON.
-5. **Progresso** — meta semanal (1 a 7 dias), check-in "Estudei hoje", calendário dos dias estudados, semanas seguidas com a meta cumprida e as métricas das palavras. Revisar ou salvar uma palavra já conta o dia sozinho.
-6. **Vídeos** — talks do TED nos nichos que você escolhe, ordenados pelo seu nível. O nível (Fácil / Médio / Difícil) é estimado pela transcrição: palavras por minuto e % de palavras fora da lista NGSL das mais comuns. Assistir conta o dia no Progresso, e as palavras-chave do vídeo abrem direto na busca.
-
-Atalhos na revisão: `Enter` mostra a resposta, `1`–`4` dão a nota.
-
-## Stack
-
-- React + Vite, sem backend
-- Interface com o design system [BEDS](https://github.com/meunomeebero/beds) `0.2.0-rc.2`, instalado pelo arquivo imutável da release (hash no `package-lock.json`)
-  - Componentes do BEDS para controles (botões, campos, abas, diálogo, métricas, badges, estados vazios)
-  - Layout e identidade (landing, grids, cor de marca `#e8590c`) são do app e só leem os tokens `--es-*`
-- Identidade própria: paleta quente em tokens `--gw-*` (`src/brand/palette.css`, contraste AA conferido por teste) e títulos em Fraunces
-- Efeitos com [Motion](https://motion.dev) e CSS próprio (`src/fx/`), reescritos a partir de componentes MIT do [21st.dev](https://21st.dev); todos respeitam `prefers-reduced-motion` e pausam fora da tela
-- Dados no `localStorage` (exportáveis em JSON)
-- APIs gratuitas, todas com timeout e alternativa de reserva. Só o Unsplash pede chave, e ela fica num intermediário (`server/images.js`: plugin do Vite no dev, Worker do Cloudflare em produção), nunca no navegador:
-
-| Dado | Principal | Reserva |
+| Revisão | Progresso | Palavras |
 | --- | --- | --- |
-| Imagens | Unsplash (pelo intermediário) | Openverse (só fotos), depois Wikimedia Commons |
-| Definição | dictionaryapi.dev | Wiktionary (pedido em paralelo se o primeiro demorar 1,2 s) |
-| Pronúncia | áudio do dictionaryapi.dev | `speechSynthesis` do navegador |
-| Tradução | MyMemory | — |
-| Frases de exemplo | Tatoeba (`word_count=4-12`, tradução em português primeiro) | exemplos do próprio dicionário |
+| ![Cartão de revisão com fotos](public/landing/review-light.webp) | ![Meta semanal e calendário](public/landing/progress-light.webp) | ![Dicionário de palavras salvas](public/landing/words-light.webp) |
 
-### Qualidade das imagens (medida)
+## Por que pela imagem
 
-20 palavras de teste, 9 imagens cada, marcadas sem ver o título ([medição completa](specs/003-imagens-certeiras/medicao.md)):
+Quem aprende "sun" ligando a palavra ao português ("sol") faz um desvio a cada vez que lê. O Greywords liga a palavra direto à ideia: a frente do flashcard são as fotos que **você** escolheu, e a tradução fica escondida até você pedir. A revisão espaçada (SM-2, a mesma família do Anki) traz cada palavra de volta pouco antes de você esquecer.
+
+## O que dá para fazer
+
+- **Buscar uma palavra:** fotos do Unsplash, definição em inglês, pronúncia e até 5 frases reais com a palavra (Tatoeba), com a tradução escondida. "Refinar" troca as fotos e "Esconder" tira uma que não serve.
+- **Palavras sem imagem**, como "however": as frases aparecem no lugar das fotos, e na revisão você completa a frase com a palavra que falta.
+- **Revisar:** o cartão vira ao revelar; palpite opcional, notas de 1 a 4 pelo teclado.
+- **Progresso:** meta semanal, calendário dos dias estudados, semanas seguidas e taxa de acerto.
+- **Exportar** tudo em JSON.
+
+## O ângulo de dados: imagens certeiras de 45,6% para 96,1%
+
+A primeira versão buscava fotos em bancos abertos (Openverse e Wikimedia), e muitas não tinham nada a ver com a palavra. Para medir em vez de achar, montei um teste: **20 palavras × 9 imagens**, em 6 grupos (substantivos concretos, verbos, adjetivos, palavras ambíguas, abstratas e gramaticais), marcadas como certeiras ou não **sem ver o título**.
 
 | Fonte | Certeiras | Impróprias |
 | --- | --- | --- |
 | Openverse + Wikimedia (antes) | 82/180 (45,6%) | 0 |
-| Unsplash (depois) | 173/180 (96,1%) | 0 |
+| Unsplash, com a definição como contexto (depois) | **173/180 (96,1%)** | 0 |
 
-Para rodar o intermediário no `npm run dev`, crie `.env.local` com `UNSPLASH_ACCESS_KEY=...` (Access Key de um app em [unsplash.com/developers](https://unsplash.com/developers)). Sem ela, o app usa o Openverse.
+A busca também passou a usar o significado: espera a definição por até 2 s e monta a consulta pela classe gramatical ("person studying" para o verbo "study"). Os números por grupo e o método estão em [specs/003-imagens-certeiras/medicao.md](specs/003-imagens-certeiras/medicao.md).
 
-### Catálogo de vídeos (pipeline offline)
+## Como foi feito
 
-O app não chama nenhuma API de vídeo. Um script roda no computador de quem faz a curadoria e gera `public/catalog.json`:
+- **React 19 + Vite**, JavaScript, sem backend próprio: os dados ficam no `localStorage`.
+- **Design system [BEDS](https://github.com/meunomeebero/beds)** para os controles. Layout, paleta quente (tokens `--gw-*` com contraste AA conferido por teste) e títulos em Fraunces são do app.
+- **Efeitos** com [Motion](https://motion.dev) e CSS próprio, reescritos a partir de componentes MIT do [21st.dev](https://21st.dev). Todos respeitam "reduzir movimento" e pausam fora da tela.
+- **Revisão espaçada** SM-2 com ajustes no estilo do Anki.
+- **Testes automáticos** da lógica com `node:test` (220+ testes).
+- **Hospedagem grátis no Cloudflare:** o site é um Worker com arquivos estáticos, e um segundo Worker guarda a chave do Unsplash, para que ela nunca chegue ao navegador. Esse segundo Worker também mantém as buscas por 24 h no Workers KV.
 
-1. `catalog/sources.json`: talks escolhidos à mão (slug do TED, título, palestrante, duração, ID no YouTube, nichos)
-2. `catalog/transcripts/`: transcrições coladas à mão (fora do git; os Termos do TED proíbem coleta automática e hospedagem)
-3. `npm run catalog:check`: valida tudo e confere no oEmbed do YouTube que o vídeo é do canal oficial do TED
-4. `npm run catalog`: tokeniza, lematiza com a NGSL, calcula palavras/min e % de palavras pouco comuns, classifica o nível, escolhe palavras-chave e mostra a distribuição para calibrar os cortes
+Serviços usados (todos gratuitos, com tempo limite e reserva):
 
-Passo a passo em [catalog/HOW-TO.md](catalog/HOW-TO.md).
+| Dado | Principal | Reserva |
+| --- | --- | --- |
+| Fotos | Unsplash (pelo Worker) | Openverse, depois Wikimedia Commons |
+| Definição e pronúncia | Free Dictionary (dictionaryapi.dev) | Wiktionary; voz do navegador |
+| Tradução | MyMemory | — |
+| Frases de exemplo | Tatoeba | exemplos do próprio dicionário |
+| Vídeos | YouTube (canal oficial do TED) | — |
 
-### Créditos
+## Em construção
 
-- Efeitos visuais, fontes e ferramentas: [CREDITS.md](CREDITS.md)
-- Vídeos: [TED](https://www.ted.com), licença CC BY–NC–ND 4.0 (transcrições não são publicadas; o catálogo leva só números e palavras soltas)
-- Frases de exemplo: [Tatoeba](https://tatoeba.org), licenças CC BY 2.0 FR e CC0, com o autor e o link de cada frase
-- Lista de palavras comuns: [New General Service List](https://www.newgeneralservicelist.com) (Browne, Culligan e Phillips), CC BY-SA 4.0, em `catalog/ngsl/`
+- **Vídeos do TED por nicho e nível.** A aba está pronta: o nível de cada talk é estimado pela transcrição (palavras por minuto e % de palavras fora das 2.809 mais comuns da lista NGSL). Falta a curadoria manual das transcrições, porque os Termos do TED proíbem coletá-las por programa. Até lá, a aba mostra "Vídeos em preparação".
+- **Dados mais seguros:** importar o backup, app instalável no celular e lembrete de estudo.
 
-## No ar
-
-https://greywords.greywords.workers.dev. Hospedado na conta grátis do Cloudflare: o site é um Worker só com arquivos estáticos (`wrangler.site.toml`), e o intermediário de imagens é outro Worker (`wrangler.toml`).
-
-```bash
-npm run deploy:site     # build + publicar o site
-npm run deploy:images   # publicar o intermediário (a chave fica em: npx wrangler secret put UNSPLASH_ACCESS_KEY)
-```
-
-## Rodar
+## Rodar no seu computador
 
 ```bash
 npm install
-npm run dev
+npm run dev          # http://localhost:5173  (#/ landing · #/app app)
+npm test             # testes de lógica
+npm run check:ui     # contrato do design system
+npm run build
 ```
 
-Checagem do contrato do BEDS (sem sobrescrever estilos internos do design system):
+As fotos do Unsplash no modo de desenvolvimento pedem um arquivo `.env.local` com `UNSPLASH_ACCESS_KEY=...` (uma Access Key grátis em [unsplash.com/developers](https://unsplash.com/developers)). Sem ele, o app usa o Openverse.
+
+Publicar, com a conta do Cloudflare configurada:
 
 ```bash
-npm run check:ui
+npm run deploy:site     # build + site
+npm run deploy:images   # Worker das fotos (a chave fica em: npx wrangler secret put UNSPLASH_ACCESS_KEY)
 ```
 
-Capturas do app usadas na landing (`public/landing/`), com palavras de exemplo e o Edge em modo headless, com o servidor de desenvolvimento rodando:
+## Como o projeto é organizado
 
-```bash
-node scripts/capture.mjs
-```
+Cada funcionalidade passou por requisitos, design e tarefas antes do código, com os critérios conferidos no navegador ao final. Os documentos estão em [specs/](specs/README.md).
 
-Conferir efeitos sem o navegador visível (movimento reduzido, 375 px, hover): `node scripts/edge-check.mjs <url> <script.js> [reduced|mobile|hover]`.
+## Créditos
 
-## Próximos passos
-
-- Completar a curadoria do catálogo de vídeos (cerca de 5 talks por nicho)
-- Login + sync (Supabase) para usar em mais de um dispositivo
-
-## Desenvolvimento
-
-Contexto do projeto e regras: [CLAUDE.md](CLAUDE.md). Features novas seguem o método de spec: [specs/](specs/README.md).
+- Fotos: [Unsplash](https://unsplash.com/?utm_source=greywords&utm_medium=referral), com crédito ao fotógrafo em cada foto.
+- Frases: [Tatoeba](https://tatoeba.org), licenças CC BY 2.0 FR e CC0, com autor e link de cada frase.
+- Vídeos: [TED](https://www.ted.com), licença CC BY–NC–ND 4.0. As transcrições não são publicadas.
+- Lista de palavras comuns: [New General Service List](https://www.newgeneralservicelist.com) (Browne, Culligan e Phillips), CC BY-SA 4.0.
+- Efeitos visuais, fontes e bibliotecas: [CREDITS.md](CREDITS.md).
